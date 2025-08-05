@@ -1,0 +1,75 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.modal {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modalTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--n-900);
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.modalMessage {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--n-700);
+  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.modalButtons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.modalCancel,
+.modalConfirm {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  min-width: 148px;
+  min-height: 54px;
+}
+
+.modalCancel {
+  background-color: var(--n-200);
+  color: var(--n-800);
+}
+
+.modalCancel:hover {
+  background-color: var(--n-300);
+}
+
+.modalConfirm {
+  background-color: var(--primaryjogak-1);
+  color: white;
+}
+
+.modalConfirm:hover {
+  background-color: var(--primarymain-800);
+}
