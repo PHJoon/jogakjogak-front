@@ -41,19 +41,19 @@ function reducer(state: State, action: string): State {
 }
 
 export function JobList({
-                          registerDate = "2025년 01월 07일",
-                          title = "2025 상반기 신입 개발자 채용",
-                          company = "카카오",
-                          state: stateProp = "default",
-                          className = "",
-                          completedCount = "0",
-                          totalCount = "30",
-                          dDay = undefined,
-                          apply,
-                          onClick,
-                          onApplyComplete,
-                          onDelete,
-                        }: Props) {
+  registerDate = "2025년 01월 07일",
+  title = "2025 상반기 신입 개발자 채용",
+  company = "카카오",
+  state: stateProp = "default",
+  className = "",
+  completedCount = "0",
+  totalCount = "30",
+  dDay = undefined,
+  apply,
+  onClick,
+  onApplyComplete,
+  onDelete,
+}: Props) {
   const [state, dispatch] = useReducer(reducer, {
     state: stateProp,
     originalState: stateProp,
@@ -97,7 +97,6 @@ export function JobList({
   }
 
   const getDDayClassName = () => {
-    console.log(dDay)
     if (apply) {
       return 'dDay-apply';
     }
@@ -113,7 +112,6 @@ export function JobList({
       return 'dDay-default';
     }
   };
-
 
   return (
       <div

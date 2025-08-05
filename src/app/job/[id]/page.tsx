@@ -567,6 +567,7 @@ export default function JobDetailPage() {
     return { completed, total };
   };
 
+
   const dDayChipColor = (num: number | undefined) => {
     console.log(num);
     if (num === undefined){

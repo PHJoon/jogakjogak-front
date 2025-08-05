@@ -8,10 +8,10 @@ interface Props {
   dDay?: number;
 }
 
-export function DDayChip({ 
-  state = "default", 
+export function DDayChip({
+  state = "default",
   className = "",
-  dDay = 52 
+  dDay = 52
 }: Props) {
   switch (className) {
     case "dayover":

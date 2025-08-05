@@ -72,6 +72,7 @@ export async function PATCH(
           headers: {
             'Authorization': `Bearer ${accessToken}`,
           }
+
         }
     );
 
