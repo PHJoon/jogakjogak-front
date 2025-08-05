@@ -65,17 +65,14 @@ export async function PATCH(
       );
     }
 
-    const body = await request.json();
-
     const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL || 'https://api.jogakjogak.com'}/jds/${jdId}/apply`,
         {
           method: 'PATCH',
           headers: {
             'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body),
+          }
+
         }
     );
 
@@ -97,10 +94,6 @@ export async function PATCH(
     );
   }
 }
-
-
-
-
 
 export async function DELETE(
   request: NextRequest,

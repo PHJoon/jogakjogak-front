@@ -101,7 +101,6 @@
   position: relative;
   flex: 1;
   align-self: stretch;
-  flex-grow: 1;
   background-color: var(--n-300);
   border-radius: 10px;
   overflow: hidden;
@@ -134,7 +133,6 @@
   position: relative;
   flex: 1;
   align-self: stretch;
-  flex-grow: 1;
   background-color: var(--red-2);
   border-radius: 10px;
   overflow: hidden;

@@ -56,7 +56,6 @@
   align-items: center;
   display: flex;
   flex: 1;
-  flex-grow: 1;
   gap: 10px;
   position: relative;
 }
@@ -275,7 +274,6 @@
   align-self: stretch;
   background-color: var(--n-500);
   flex: 1;
-  flex-grow: 1;
   position: relative;
 }
 
@@ -283,7 +281,6 @@
   align-self: stretch;
   background-color: var(--n-300);
   flex: 1;
-  flex-grow: 1;
   position: relative;
 }
 
@@ -339,9 +336,9 @@
 
 .state-done .dDayChip2 {
   background: linear-gradient(
-    135deg,
-    rgba(52, 131, 250, 1) 0%,
-    rgba(133, 181, 252, 1) 100%
+          135deg,
+          rgba(52, 131, 250, 1) 0%,
+          rgba(133, 181, 252, 1) 100%
   );
 }
 

@@ -25,7 +25,6 @@
   align-items: center;
   display: flex;
   flex: 1;
-  flex-grow: 1;
   gap: 8px;
   position: relative;
 }
@@ -55,7 +54,6 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  flex-grow: 1;
   justify-content: center;
   position: relative;
   gap: 4px;

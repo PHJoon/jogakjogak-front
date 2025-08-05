@@ -1,7 +1,6 @@
 .segment {
   align-self: stretch;
   flex: 1;
-  flex-grow: 1;
   position: relative;
   transition: background-color 0.2s ease;
 }

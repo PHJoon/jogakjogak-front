@@ -172,15 +172,11 @@ export default function DashboardPage() {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          applyAt: new Date().toISOString()
-        })
+        }
       });
 
       if (response.ok) {
-        setSnackbar({ isOpen: true, message: '지원 완료로 표시되었습니다.', type: 'success' });
+        setSnackbar({ isOpen: true, message: '지원 상태가 변경되었습니다.', type: 'success' });
         // 목록 새로고침
         const sort = sortOrder === 'latest' ? 'createdAt,desc' : 'createdAt,asc';
         fetchJdsData(sort);

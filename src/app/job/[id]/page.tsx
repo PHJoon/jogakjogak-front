@@ -78,7 +78,7 @@ export default function JobDetailPage() {
   const router = useRouter();
   const params = useParams();
   const jdId = params.id as string;
-  
+
   const [jdDetail, setJdDetail] = useState<JDDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [todosByCategory, setTodosByCategory] = useState<{ [key: string]: TodoItem[] }>({});
@@ -105,7 +105,7 @@ export default function JobDetailPage() {
           const data = await response.json();
           if (data.data) {
             setJdDetail(data.data);
-            
+
             // 카테고리별로 투두 그룹화
             const grouped = data.data.toDoLists.reduce((acc: { [key: string]: TodoItem[] }, todo: TodoItem) => {
               if (!acc[todo.category]) acc[todo.category] = [];
@@ -132,11 +132,11 @@ export default function JobDetailPage() {
 
   const toggleBookmark = async () => {
     if (!jdDetail) return;
-    
+
     // 즉시 UI 업데이트 (Optimistic update)
     const newBookmarkState = !jdDetail.bookmark;
     setJdDetail({ ...jdDetail, bookmark: newBookmarkState });
-    
+
     try {
       const accessToken = tokenManager.getAccessToken();
       const response = await fetch(`/api/jds/${jdId}/bookmark`, {
@@ -169,6 +169,9 @@ export default function JobDetailPage() {
   };
 
   const calculateDDay = (endedAt: string) => {
+    if (!endedAt) {
+      return undefined;
+    }
     const endDate = new Date(endedAt);
     const today = new Date();
     const diffTime = endDate.getTime() - today.getTime();
@@ -189,7 +192,7 @@ export default function JobDetailPage() {
     const date = new Date(dateString);
     const now = new Date();
     const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
+
     if (diffInSeconds < 86400) {
       return '오늘 수정';
     } else {
@@ -248,14 +251,14 @@ export default function JobDetailPage() {
   // 알림 모달 확인 핸들러
   const handleNotificationConfirm = async (isEnabled: boolean) => {
     setShowNotificationModal(false);
-    
+
     if (!jdDetail || isTogglingAlarm) return;
-    
+
     // 알림 상태가 변경되는 경우에만 API 호출
     if (jdDetail.alarmOn !== isEnabled) {
       setIsTogglingAlarm(true);
       setJdDetail({ ...jdDetail, alarmOn: isEnabled });
-      
+
       try {
         const accessToken = tokenManager.getAccessToken();
         const response = await fetch(`/api/jds/${jdId}/alarm`, {
@@ -336,17 +339,17 @@ export default function JobDetailPage() {
 
       if (response.ok) {
         const responseData = await response.json();
-        
+
         // 로컬 상태 업데이트 - 실제 응답 구조에 맞춰서 (응답에서는 done 필드 사용)
         if (jdDetail && responseData.data) {
           const updatedTodos = jdDetail.toDoLists.map(todoItem =>
-            todoItem.checklist_id === todo.checklist_id 
-              ? { ...todoItem, done: responseData.data.done !== undefined ? responseData.data.done : newStatus }
-              : todoItem
+              todoItem.checklist_id === todo.checklist_id
+                  ? { ...todoItem, done: responseData.data.done !== undefined ? responseData.data.done : newStatus }
+                  : todoItem
           );
-          
+
           setJdDetail({ ...jdDetail, toDoLists: updatedTodos });
-          
+
           // 카테고리별 그룹화도 업데이트
           const grouped = updatedTodos.reduce((acc: { [key: string]: TodoItem[] }, todo: TodoItem) => {
             if (!acc[todo.category]) acc[todo.category] = [];
@@ -396,7 +399,7 @@ export default function JobDetailPage() {
           const detailData = await detailResponse.json();
           if (detailData.data) {
             setJdDetail(detailData.data);
-            
+
             // 카테고리별로 투두 그룹화
             const grouped = detailData.data.toDoLists.reduce((acc: { [key: string]: TodoItem[] }, todo: TodoItem) => {
               if (!acc[todo.category]) acc[todo.category] = [];
@@ -439,7 +442,7 @@ export default function JobDetailPage() {
           const detailData = await detailResponse.json();
           if (detailData.data) {
             setJdDetail(detailData.data);
-            
+
             // 카테고리별로 투두 그룹화
             const grouped = detailData.data.toDoLists.reduce((acc: { [key: string]: TodoItem[] }, todo: TodoItem) => {
               if (!acc[todo.category]) acc[todo.category] = [];
@@ -484,7 +487,7 @@ export default function JobDetailPage() {
           const detailData = await detailResponse.json();
           if (detailData.data) {
             setJdDetail(detailData.data);
-            
+
             // 카테고리별로 투두 그룹화
             const grouped = detailData.data.toDoLists.reduce((acc: { [key: string]: TodoItem[] }, todo: TodoItem) => {
               if (!acc[todo.category]) acc[todo.category] = [];
@@ -538,11 +541,7 @@ export default function JobDetailPage() {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          applyAt: new Date().toISOString()
-        })
+        }
       });
 
       if (response.ok) {
@@ -568,13 +567,16 @@ export default function JobDetailPage() {
     return { completed, total };
   };
 
-  const dDayChipColor = (num: number) => {
+
+  const dDayChipColor = (num: number | undefined) => {
+    console.log(num);
+    if (num === undefined){
+     return 'anytime';
+    }
     if (num <= 0) {
       return 'dayover';
     } else if (num === 0) {
       return 'day0';
-    } else if (!num) {
-      return "anytime";
     } else {
       return 'defalut';
     }
@@ -582,259 +584,259 @@ export default function JobDetailPage() {
 
   if (isLoading) {
     return (
-      <>
-        <Header backgroundColor="white" showLogout={true} />
-        <main className={styles.main}>
-          <div className={styles.container}>
-            <div style={{ textAlign: 'center', padding: '50px' }}>로딩 중...</div>
-          </div>
-        </main>
-        <Footer />
-      </>
+        <>
+          <Header backgroundColor="white" showLogout={true} />
+          <main className={styles.main}>
+            <div className={styles.container}>
+              <div style={{ textAlign: 'center', padding: '50px' }}>로딩 중...</div>
+            </div>
+          </main>
+          <Footer />
+        </>
     );
   }
 
   if (!jdDetail) {
     return (
-      <>
-        <Header backgroundColor="white" showLogout={true} />
-        <main className={styles.main}>
-          <div className={styles.container}>
-            <div style={{ textAlign: 'center', padding: '50px' }}>채용공고를 찾을 수 없습니다.</div>
-          </div>
-        </main>
-        <Footer />
-      </>
+        <>
+          <Header backgroundColor="white" showLogout={true} />
+          <main className={styles.main}>
+            <div className={styles.container}>
+              <div style={{ textAlign: 'center', padding: '50px' }}>채용공고를 찾을 수 없습니다.</div>
+            </div>
+          </main>
+          <Footer />
+        </>
     );
   }
 
   const { completed, total } = calculateCompletionRate();
 
   return (
-    <>
-      <Header backgroundColor="white" showLogout={true} />
-      <main className={styles.main}>
-        <div className={styles.header}>
-          <div className={styles.leftSection}>
-            <button className={styles.backButton} onClick={handleBack}>
-              <Image
-                  src={arrowBackIcon}
-                  alt="뒤로가기"
-                  width={18.17}
-                  height={17.69}
-              />
-            </button>
-          </div>
+      <>
+        <Header backgroundColor="white" showLogout={true} />
+        <main className={styles.main}>
+          <div className={styles.header}>
+            <div className={styles.leftSection}>
+              <button className={styles.backButton} onClick={handleBack}>
+                <Image
+                    src={arrowBackIcon}
+                    alt="뒤로가기"
+                    width={18.17}
+                    height={17.69}
+                />
+              </button>
+            </div>
 
-          <div className={styles.rightSection}>
-            <button
-                className={styles.actionButton}
-                onClick={() => {
-                  if (jdDetail.jdUrl) {
-                    window.open(jdDetail.jdUrl, '_blank');
-                  }
-                }}
-            >
-              <span className={styles.actionButtonText}>채용공고 보기</span>
-            </button>
-
-            <button
-                className={`${styles.iconButton} ${jdDetail.bookmark ? styles.bookmarked : ''}`}
-                onClick={toggleBookmark}
-            >
-              <Image
-                  src={bookmarkIcon}
-                  alt="북마크"
-                  width={21.33}
-                  height={24}
-                  style={{ opacity: jdDetail.bookmark ? 1 : 0.7 }}
-              />
-            </button>
-
-            <div ref={moreMenuRef} style={{ position: 'relative' }}>
+            <div className={styles.rightSection}>
               <button
-                  className={styles.iconButton}
-                  onClick={() => setShowMoreMenu(!showMoreMenu)}
+                  className={styles.actionButton}
+                  onClick={() => {
+                    if (jdDetail.jdUrl) {
+                      window.open(jdDetail.jdUrl, '_blank');
+                    }
+                  }}
+              >
+                <span className={styles.actionButtonText}>채용공고 보기</span>
+              </button>
+
+              <button
+                  className={`${styles.iconButton} ${jdDetail.bookmark ? styles.bookmarked : ''}`}
+                  onClick={toggleBookmark}
               >
                 <Image
-                    src={moreIcon}
-                    alt="더보기"
+                    src={bookmarkIcon}
+                    alt="북마크"
                     width={21.33}
-                    height={5.33}
+                    height={24}
+                    style={{ opacity: jdDetail.bookmark ? 1 : 0.7 }}
                 />
               </button>
 
-              {/* More menu dropdown */}
-              {showMoreMenu && (
-                  <div className={styles.moreMenu}>
-                    <button
-                        className={styles.moreMenuItem}
-                        onClick={() => {
-                          setShowMoreMenu(false);
-                          handleApplyComplete();
-                        }}
-                    >
-                      지원 완료
-                    </button>
-                    <button
-                        className={styles.moreMenuItem}
-                        onClick={() => {
-                          setShowMoreMenu(false);
-                          setIsDeleting(true);
-                        }}
-                    >
-                      삭제하기
-                    </button>
+              <div ref={moreMenuRef} style={{ position: 'relative' }}>
+                <button
+                    className={styles.iconButton}
+                    onClick={() => setShowMoreMenu(!showMoreMenu)}
+                >
+                  <Image
+                      src={moreIcon}
+                      alt="더보기"
+                      width={21.33}
+                      height={5.33}
+                  />
+                </button>
+
+                {/* More menu dropdown */}
+                {showMoreMenu && (
+                    <div className={styles.moreMenu}>
+                      <button
+                          className={styles.moreMenuItem}
+                          onClick={() => {
+                            setShowMoreMenu(false);
+                            handleApplyComplete();
+                          }}
+                      >
+                        {!jdDetail.applyAt ? "지원 완료": "지원 완료 취소"}
+                      </button>
+                      <button
+                          className={styles.moreMenuItem}
+                          onClick={() => {
+                            setShowMoreMenu(false);
+                            setIsDeleting(true);
+                          }}
+                      >
+                        삭제하기
+                      </button>
+                    </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className={styles.container}>
+            {/* Header with navigation */}
+
+
+            {/* Job details */}
+            <div className={styles.jobDetails}>
+              <div className={styles.jobDetailsTop}>
+                <div className={styles.jobDetailsLeft}>
+                  <DDayChip
+                      alarm={jdDetail.alarmOn ? "on" : "off"}
+                      state="default"
+                      className={dDayChipColor(calculateDDay(jdDetail.endedAt))}
+                      dDay={calculateDDay(jdDetail.endedAt)}
+                  />
+                  <div className={styles.modifiedInfo}>
+                    <div className={styles.modifiedText}>{formatTimeAgo(jdDetail.updatedAt)}</div>
                   </div>
-              )}
+                </div>
+                <div className={styles.jobDetailsRight}>
+                  <div className={styles.registerInfo}>
+                    <div className={styles.registerText}>등록일</div>
+                    <div className={styles.separator}>|</div>
+                    <div className={styles.registerText}>{formatDate(jdDetail.createdAt)}</div>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.jobDetailsBottom}>
+                <div className={styles.jobTitle}>{jdDetail.title}</div>
+                <div className={styles.companyName}>{jdDetail.companyName}</div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className={styles.container}>
-          {/* Header with navigation */}
 
-
-          {/* Job details */}
-          <div className={styles.jobDetails}>
-            <div className={styles.jobDetailsTop}>
-              <div className={styles.jobDetailsLeft}>
-                <DDayChip 
-                  alarm={jdDetail.alarmOn ? "on" : "off"}
-                  state="default"
-                  className={dDayChipColor(calculateDDay(jdDetail.endedAt))}
-                  dDay={calculateDDay(jdDetail.endedAt)}
+            {/* Progress tracker */}
+            <div className={styles.progressTracker}>
+              <div className={styles.progressContent}>
+                <div className={styles.progressHeader}>
+                  <div className={styles.progressTitle}>완료한 조각</div>
+                  <p className={styles.progressCount}>
+                    <span className={styles.progressCountActive}>{completed}</span>
+                    <span className={styles.progressCountTotal}> / {total}</span>
+                  </p>
+                </div>
+                <ProgressBar
+                    total={total}
+                    completed={completed}
+                    className={styles.progressBarInstance}
                 />
-                <div className={styles.modifiedInfo}>
-                  <div className={styles.modifiedText}>{formatTimeAgo(jdDetail.updatedAt)}</div>
+              </div>
+              <button
+                  className={styles.notificationBtn}
+                  onClick={handleAlarmButtonClick}
+                  disabled={isTogglingAlarm}
+              >
+                <Image
+                    src={alarmIcon}
+                    alt="알림"
+                    width={14.2}
+                    height={13.1}
+                />
+                <div className={styles.notificationBtnText}>
+                  {jdDetail.alarmOn ? '알림 중' : '알림 신청'}
                 </div>
-              </div>
-              <div className={styles.jobDetailsRight}>
-                <div className={styles.registerInfo}>
-                  <div className={styles.registerText}>등록일</div>
-                  <div className={styles.separator}>|</div>
-                  <div className={styles.registerText}>{formatDate(jdDetail.createdAt)}</div>
+              </button>
+            </div>
+
+            {/* Jogak Categories */}
+            <div className={styles.jogakCategories}>
+              {CATEGORIES.map(({ value: category }) => {
+                const todos = todosByCategory[category] || [];
+                return (
+                    <JogakCategory
+                        key={category}
+                        state="active"
+                        title={CATEGORY_TITLES[category] || category}
+                        initialItems={todos.map(todo => ({
+                          id: todo.checklist_id.toString(),
+                          text: todo.title,
+                          completed: todo.done,
+                          content: todo.content,
+                          fullTodo: todo
+                        }))}
+                        checkboxColor={CATEGORY_COLORS[category]}
+                        icon={CATEGORY_ICONS[category]}
+                        className={styles.jogakCategoryInstance}
+                        category={category}
+                        categories={CATEGORIES}
+                        onItemToggle={(itemId) => {
+                          const todo = todos.find(t => t.checklist_id.toString() === itemId);
+                          if (todo) {
+                            toggleTodoComplete(todo, !todo.done);
+                          }
+                        }}
+                        onItemEdit={(itemId, data) => {
+                          editTodo(itemId, data);
+                        }}
+                        onItemDelete={(itemId) => {
+                          deleteTodo(itemId);
+                        }}
+                        onItemAdd={(data) => {
+                          addTodo(data);
+                        }}
+                    />
+                );
+              })}
+            </div>
+
+            {/* Memo Box */}
+            <MemoBox
+                placeholder="해당 조각에 대해 메모해보세요."
+                maxLength={1000}
+                className={styles.memoBoxInstance}
+                initialValue={jdDetail.memo || ''}
+                onChange={handleMemoChange}
+            />
+            {isSavingMemo && (
+                <div style={{ textAlign: 'right', marginTop: '4px', fontSize: '12px', color: '#999' }}>
+                  저장 중...
                 </div>
-              </div>
-            </div>
-            <div className={styles.jobDetailsBottom}>
-              <div className={styles.jobTitle}>{jdDetail.title}</div>
-              <div className={styles.companyName}>{jdDetail.companyName}</div>
-            </div>
+            )}
           </div>
+        </main>
+        <Footer />
 
-          {/* Progress tracker */}
-          <div className={styles.progressTracker}>
-            <div className={styles.progressContent}>
-              <div className={styles.progressHeader}>
-                <div className={styles.progressTitle}>완료한 조각</div>
-                <p className={styles.progressCount}>
-                  <span className={styles.progressCountActive}>{completed}</span>
-                  <span className={styles.progressCountTotal}> / {total}</span>
-                </p>
-              </div>
-              <ProgressBar
-                total={total}
-                completed={completed}
-                className={styles.progressBarInstance}
-              />
-            </div>
-            <button 
-              className={styles.notificationBtn}
-              onClick={handleAlarmButtonClick}
-              disabled={isTogglingAlarm}
-            >
-              <Image 
-                src={alarmIcon}
-                alt="알림"
-                width={14.2}
-                height={13.1}
-              />
-              <div className={styles.notificationBtnText}>
-                {jdDetail.alarmOn ? '알림 중' : '알림 신청'}
-              </div>
-            </button>
-          </div>
+        {/* Delete confirmation modal */}
+        <DeleteConfirmModal
+            isOpen={isDeleting}
+            onClose={() => setIsDeleting(false)}
+            onConfirm={handleDelete}
+        />
 
-          {/* Jogak Categories */}
-          <div className={styles.jogakCategories}>
-            {CATEGORIES.map(({ value: category }) => {
-              const todos = todosByCategory[category] || [];
-              return (
-              <JogakCategory 
-                key={category}
-                state="active"
-                title={CATEGORY_TITLES[category] || category}
-                initialItems={todos.map(todo => ({
-                  id: todo.checklist_id.toString(),
-                  text: todo.title,
-                  completed: todo.done,
-                  content: todo.content,
-                  fullTodo: todo
-                }))}
-                checkboxColor={CATEGORY_COLORS[category]}
-                icon={CATEGORY_ICONS[category]}
-                className={styles.jogakCategoryInstance}
-                category={category}
-                categories={CATEGORIES}
-                onItemToggle={(itemId) => {
-                  const todo = todos.find(t => t.checklist_id.toString() === itemId);
-                  if (todo) {
-                    toggleTodoComplete(todo, !todo.done);
-                  }
-                }}
-                onItemEdit={(itemId, data) => {
-                  editTodo(itemId, data);
-                }}
-                onItemDelete={(itemId) => {
-                  deleteTodo(itemId);
-                }}
-                onItemAdd={(data) => {
-                  addTodo(data);
-                }}
-              />
-              );
-            })}
-          </div>
+        {/* Notification Modal */}
+        <NotificationModal
+            isOpen={showNotificationModal}
+            onClose={() => setShowNotificationModal(false)}
+            onConfirm={handleNotificationConfirm}
+            initialEnabled={jdDetail.alarmOn}
+        />
 
-          {/* Memo Box */}
-          <MemoBox 
-            placeholder="해당 조각에 대해 메모해보세요."
-            maxLength={1000}
-            className={styles.memoBoxInstance}
-            initialValue={jdDetail.memo || ''}
-            onChange={handleMemoChange}
-          />
-          {isSavingMemo && (
-            <div style={{ textAlign: 'right', marginTop: '4px', fontSize: '12px', color: '#999' }}>
-              저장 중...
-            </div>
-          )}
-        </div>
-      </main>
-      <Footer />
-      
-      {/* Delete confirmation modal */}
-      <DeleteConfirmModal
-        isOpen={isDeleting}
-        onClose={() => setIsDeleting(false)}
-        onConfirm={handleDelete}
-      />
-      
-      {/* Notification Modal */}
-      <NotificationModal
-        isOpen={showNotificationModal}
-        onClose={() => setShowNotificationModal(false)}
-        onConfirm={handleNotificationConfirm}
-        initialEnabled={jdDetail.alarmOn}
-      />
-      
-      {/* Snackbar */}
-      <Snackbar
-        message={snackbar.message}
-        isOpen={snackbar.isOpen}
-        onClose={() => setSnackbar({ ...snackbar, isOpen: false })}
-        type={snackbar.type}
-      />
-    </>
+        {/* Snackbar */}
+        <Snackbar
+            message={snackbar.message}
+            isOpen={snackbar.isOpen}
+            onClose={() => setSnackbar({ ...snackbar, isOpen: false })}
+            type={snackbar.type}
+        />
+      </>
   );
 }
