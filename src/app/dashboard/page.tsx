@@ -25,7 +25,8 @@ interface Resume {
 interface JobDescription {
   jd_id: number;
   title: string;
-  isBookmark: boolean;
+  bookmark: boolean;
+  alarmOn: boolean;
   companyName: string;
   total_pieces: number;
   completed_pieces: number;
@@ -93,11 +94,10 @@ export default function DashboardPage() {
         }
       });
       const data = await response.json();
-      
+
       if (data.data) {
         setResume(data.data.resume);
         setJds(data.data.jds || []);
-        
         // 이력서가 없는 경우 모달 표시
         if (!data.data.resume) {
           setShowNoResumeModal(true);
@@ -144,7 +144,7 @@ export default function DashboardPage() {
         setSnackbar({ isOpen: true, message: '채용공고가 삭제되었습니다.', type: 'success' });
         // 목록 새로고침
         const sort = sortOrder === 'latest' ? 'createdAt,desc' : 'createdAt,asc';
-        fetchJdsData(sort);
+        await fetchJdsData(sort);
         setDeletingJobId(null);
       } else {
         setSnackbar({ isOpen: true, message: '채용공고 삭제에 실패했습니다.', type: 'error' });
@@ -170,7 +170,7 @@ export default function DashboardPage() {
         setSnackbar({ isOpen: true, message: '지원 상태가 변경되었습니다.', type: 'success' });
         // 목록 새로고침
         const sort = sortOrder === 'latest' ? 'createdAt,desc' : 'createdAt,asc';
-        fetchJdsData(sort);
+        await fetchJdsData(sort);
       } else {
         setSnackbar({ isOpen: true, message: '지원 완료 처리에 실패했습니다.', type: 'error' });
       }
@@ -244,7 +244,6 @@ export default function DashboardPage() {
                 {(() => {
                   const startIndex = currentPage === 1 ? 0 : (currentPage - 1) * itemsPerPage - 1;
                   const endIndex = currentPage === 1 ? itemsPerPage - 1 : startIndex + itemsPerPage;
-                  
                   return jds
                     .slice(startIndex, endIndex)
                     .map((jd) => (
@@ -257,7 +256,8 @@ export default function DashboardPage() {
                       completedCount={String(jd.completed_pieces)}
                       totalCount={String(jd.total_pieces)}
                       dDay={calculateDDay(jd.endedAt)}
-                      apply={!!jd.applyAt}
+                      isApply={!!jd.applyAt}
+                      isAlarmOn={jd.alarmOn}
                       onClick={() => handleJobClick(jd.jd_id)}
                       onApplyComplete={() => handleApplyComplete(jd.jd_id)}
                       onDelete={() => setDeletingJobId(jd.jd_id)}
