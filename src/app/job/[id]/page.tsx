@@ -1,26 +1,25 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { useRouter, useParams } from "next/navigation";
-import Image from "next/image";
+import {useCallback, useEffect, useRef, useState} from "react";
+import {useParams, useRouter} from "next/navigation";
+import Image, {StaticImageData} from "next/image";
 import styles from "./page.module.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { ProgressBar } from "@/components/ProgressBar";
-import { DDayChip } from "@/components/DDayChip";
-import { JogakCategory } from "@/components/JogakCategory";
-import { MemoBox } from "@/components/MemoBox";
+import {ProgressBar} from "@/components/ProgressBar";
+import {DDayChip} from "@/components/DDayChip";
+import {JogakCategory} from "@/components/JogakCategory";
+import {MemoBox} from "@/components/MemoBox";
 import arrowBackIcon from "@/assets/images/ic_arrow_back.svg";
 import alarmIcon from "@/assets/images/ic_alarm.svg";
 import bookmarkIcon from "@/assets/images/ic_add_to_bookmark.svg";
 import moreIcon from "@/assets/images/ic_more.svg";
 import contentEmphasisIcon from "@/assets/images/content-emphasis-and-reorganization.svg";
 import scheduleIcon from "@/assets/images/employment-schedule-and-others.svg";
-import { tokenManager } from "@/utils/auth";
-import { StaticImageData } from "next/image";
+import {tokenManager} from "@/utils/auth";
 import NotificationModal from "@/components/NotificationModal";
 import Snackbar from "@/components/Snackbar";
-import { DeleteConfirmModal } from "@/components/DeleteConfirmModal";
+import {DeleteConfirmModal} from "@/components/DeleteConfirmModal";
 
 interface TodoItem {
   checklist_id: number;
@@ -173,8 +172,7 @@ export default function JobDetailPage() {
     const endDate = new Date(endedAt);
     const today = new Date();
     const diffTime = endDate.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays > 0 ? diffDays : 0;
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
   const formatDate = (dateString: string) => {
@@ -570,6 +568,18 @@ export default function JobDetailPage() {
     return { completed, total };
   };
 
+  const dDayChipColor = (num: number) => {
+    if (num <= 0) {
+      return 'dayover';
+    } else if (num === 0) {
+      return 'day0';
+    } else if (!num) {
+      return "anytime";
+    } else {
+      return 'defalut';
+    }
+  }
+
   if (isLoading) {
     return (
       <>
@@ -691,6 +701,7 @@ export default function JobDetailPage() {
                 <DDayChip 
                   alarm={jdDetail.alarmOn ? "on" : "off"}
                   state="default"
+                  className={dDayChipColor(calculateDDay(jdDetail.endedAt))}
                   dDay={calculateDDay(jdDetail.endedAt)}
                 />
                 <div className={styles.modifiedInfo}>

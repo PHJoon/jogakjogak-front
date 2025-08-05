@@ -74,8 +74,32 @@
   position: relative;
 }
 
-.dDayText {
+.dDay-anytime {
+  background-color: #60C255;
+}
+
+.dDay-0 {
+  background-color: #CE494A;
+}
+
+.dDay-dayover {
+  background-color: #C8D3DF;
+}
+
+.dDay-over1 {
+  background-color: #F57F7F;
+}
+
+.dDay-apply {
+  background-color: #3483FA;
+}
+
+.dDay-default .dDayText{
   color: var(--primaryjogak-1);
+}
+
+.dDayText {
+  color: white;
   font-family: var(--label-2-medium-font-family);
   font-size: var(--label-2-medium-font-size);
   font-style: var(--label-2-medium-font-style);

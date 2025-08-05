@@ -49,6 +49,59 @@ export async function GET(
   }
 }
 
+export async function PATCH(
+    request: NextRequest,
+    { params }: { params: Promise<{ jdId: string }> }
+) {
+  try {
+    const { jdId } = await params;
+    const authHeader = request.headers.get('authorization');
+    const accessToken = authHeader?.replace('Bearer ', '');
+
+    if (!accessToken) {
+      return NextResponse.json(
+          { code: 401, message: 'Unauthorized' },
+          { status: 401 }
+      );
+    }
+
+    const body = await request.json();
+
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL || 'https://api.jogakjogak.com'}/jds/${jdId}/apply`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return NextResponse.json(
+          { code: response.status, message: data.message || 'Failed to patch JD' },
+          { status: response.status }
+      );
+    }
+
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error('JD patch error:', error);
+    return NextResponse.json(
+        { code: 500, message: 'Internal server error' },
+        { status: 500 }
+    );
+  }
+}
+
+
+
+
+
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ jdId: string }> }

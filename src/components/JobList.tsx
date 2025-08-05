@@ -13,6 +13,7 @@ interface Props {
   completedCount?: string;
   totalCount?: string | number;
   dDay?: number;
+  apply: boolean;
   onClick?: () => void;
   onApplyComplete?: () => void;
   onDelete?: () => void;
@@ -47,7 +48,8 @@ export function JobList({
   className = "",
   completedCount = "0",
   totalCount = "30",
-  dDay = 52,
+  dDay = undefined,
+  apply,
   onClick,
   onApplyComplete,
   onDelete,
@@ -79,6 +81,38 @@ export function JobList({
     };
   }, [showMoreMenu]);
 
+  const dDayCheck = () => {
+    if (apply) {
+      return '지원완료';
+    }
+    if (dDay === undefined) {
+      return "상시채용";
+    }else if (dDay >= 0) {
+      return `D-${dDay}`;
+    }else if (dDay === 0) {
+      return "오늘 마감";
+    }else {
+      return "지원마감";
+    }
+  }
+
+  const getDDayClassName = () => {
+    if (apply) {
+      return 'dDay-apply';
+    }
+    if (dDay === undefined) {
+      return 'dDay-anytime';
+    } else if (dDay === 0) {
+      return 'dDay-0';
+    } else if (dDay >= 1 && dDay <= 7) {
+      return 'dDay-over1';
+    } else if (dDay < 0) {
+      return 'dDay-dayover';
+    } else {
+      return 'dDay-default';
+    }
+  };
+
   return (
     <div
       className={`${styles.jobList} ${styles[`state-${state.state}`]} ${className}`}
@@ -91,8 +125,8 @@ export function JobList({
           <div className={styles.frame2}>
             <div className={styles.dDayChipWrapper}>
               {["default", "hover"].includes(state.state) && (
-                <div className={styles.dDayChip}>
-                  <span className={styles.dDayText}>D-{dDay}</span>
+                <div className={`${styles.dDayChip} ${styles[getDDayClassName()]}`}>
+                  <span className={styles.dDayText}>{dDayCheck()}</span>
                 </div>
               )}
               {["dayover", "done"].includes(state.state) && (

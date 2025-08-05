@@ -13,6 +13,10 @@
   background-color: var(--primarymain-200);
 }
 
+.dayover {
+  background-color: #C8D3DF;
+}
+
 .alarm {
   background-color: var(--semantic-error);
 }
