@@ -114,11 +114,14 @@ export default function DashboardPage() {
   };
 
   const calculateDDay = (endedAt: string) => {
+    if (!endedAt) {
+      return undefined;
+    }
     const endDate = new Date(endedAt);
     const today = new Date();
     const diffTime = endDate.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays > 0 ? diffDays : 0;
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
   };
 
   const formatDate = (dateString: string) => {
@@ -170,15 +173,11 @@ export default function DashboardPage() {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          applyAt: new Date().toISOString()
-        })
+        }
       });
 
       if (response.ok) {
-        setSnackbar({ isOpen: true, message: '지원 완료로 표시되었습니다.', type: 'success' });
+        setSnackbar({ isOpen: true, message: '지원 상태가 변경되었습니다.', type: 'success' });
         // 목록 새로고침
         const sort = sortOrder === 'latest' ? 'createdAt,desc' : 'createdAt,asc';
         fetchJdsData(sort);
@@ -268,6 +267,7 @@ export default function DashboardPage() {
                       completedCount={String(jd.completed_pieces)}
                       totalCount={String(jd.total_pieces)}
                       dDay={calculateDDay(jd.endedAt)}
+                      apply={!!jd.applyAt}
                       onClick={() => handleJobClick(jd.jd_id)}
                       onApplyComplete={() => handleApplyComplete(jd.jd_id)}
                       onDelete={() => setDeletingJobId(jd.jd_id)}

@@ -56,7 +56,6 @@
   align-items: center;
   display: flex;
   flex: 1;
-  flex-grow: 1;
   gap: 10px;
   position: relative;
 }
@@ -74,8 +73,32 @@
   position: relative;
 }
 
-.dDayText {
+.dDay-anytime {
+  background-color: #60C255;
+}
+
+.dDay-0 {
+  background-color: #CE494A;
+}
+
+.dDay-dayover {
+  background-color: #C8D3DF;
+}
+
+.dDay-over1 {
+  background-color: #F57F7F;
+}
+
+.dDay-apply {
+  background-color: #3483FA;
+}
+
+.dDay-default .dDayText{
   color: var(--primaryjogak-1);
+}
+
+.dDayText {
+  color: white;
   font-family: var(--label-2-medium-font-family);
   font-size: var(--label-2-medium-font-size);
   font-style: var(--label-2-medium-font-style);
@@ -251,7 +274,6 @@
   align-self: stretch;
   background-color: var(--n-500);
   flex: 1;
-  flex-grow: 1;
   position: relative;
 }
 
@@ -259,7 +281,6 @@
   align-self: stretch;
   background-color: var(--n-300);
   flex: 1;
-  flex-grow: 1;
   position: relative;
 }
 
@@ -315,9 +336,9 @@
 
 .state-done .dDayChip2 {
   background: linear-gradient(
-    135deg,
-    rgba(52, 131, 250, 1) 0%,
-    rgba(133, 181, 252, 1) 100%
+          135deg,
+          rgba(52, 131, 250, 1) 0%,
+          rgba(133, 181, 252, 1) 100%
   );
 }
 

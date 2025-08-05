@@ -12,7 +12,6 @@
 .segmentInstance {
   align-self: stretch !important;
   flex: 1 !important;
-  flex-grow: 1 !important;
   height: unset !important;
   width: unset !important;
 }

@@ -164,7 +164,6 @@
   box-sizing: border-box;
   display: flex;
   flex: 1;
-  flex-grow: 1;
   gap: 8px;
   justify-content: center;
   overflow: hidden;

@@ -13,9 +13,33 @@ export function DDayChip({
   className = "",
   dDay = 52 
 }: Props) {
-  return (
-    <div className={`${styles.chip} ${styles[state]} ${className}`}>
-      <span className={styles.text}>D-{dDay}</span>
-    </div>
-  );
+  switch (className) {
+    case "dayover":
+      return (
+          <div className={`${styles.chip} ${styles[state]} ${className}`}>
+            <span className={styles.text}>지원마감</span>
+          </div>
+      );
+    case "day0":
+      return (
+          <div className={`${styles.chip} ${styles[state]} ${className}`}>
+            <span className={styles.text}>오늘 마감</span>
+          </div>
+      );
+    case "anytime":
+      return (
+          <div className={`${styles.chip} ${styles[state]} ${className}`}>
+            <span className={styles.text}>상시채용</span>
+          </div>
+      );
+    default:
+      return (
+          <div className={`${styles.chip} ${styles[state]} ${className}`}>
+            <span className={styles.text}>D-{dDay}</span>
+          </div>
+      );
+  }
+
+
+
 }
