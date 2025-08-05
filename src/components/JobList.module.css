@@ -90,7 +90,11 @@
 }
 
 .dDay-apply {
-  background-color: #3483FA;
+  background: linear-gradient(
+          135deg,
+          rgba(52, 131, 250, 1) 0%,
+          rgba(133, 181, 252, 1) 100%
+  );
 }
 
 .dDay-default .dDayText{

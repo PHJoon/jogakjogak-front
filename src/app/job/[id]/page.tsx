@@ -560,7 +560,6 @@ export default function JobDetailPage() {
 
 
   const dDayChipColor = (num: number | undefined) => {
-    console.log(num);
     if (num === undefined){
      return 'dDay-anytime';
     }
