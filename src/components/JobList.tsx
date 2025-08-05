@@ -87,7 +87,7 @@ export function JobList({
     }
     if (dDay === undefined) {
       return "상시채용";
-    }else if (dDay >= 0) {
+    }else if (dDay > 0) {
       return `D-${dDay}`;
     }else if (dDay === 0) {
       return "오늘 마감";
