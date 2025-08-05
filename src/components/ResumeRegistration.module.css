@@ -68,10 +68,10 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 1600px) {
+@media (max-width: 1580px) {
   .resumeDesktop {
     width: calc(100% - 40px);
-    max-width: 1560px;
+    max-width: 1580px;
     margin: 0 auto;
   }
 
@@ -81,7 +81,7 @@
   }
 }
 
-@media (min-width: 769px) and (max-width: 1600px) {
+@media (min-width: 769px) and (max-width: 1580px) {
   .resumeDesktop {
     margin: 0 20px;
     width: calc(100% - 40px);

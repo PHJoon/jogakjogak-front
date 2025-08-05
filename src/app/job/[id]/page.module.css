@@ -360,7 +360,7 @@
 .notificationBtnText {
   color: var(--primaryjogak-1);
   font-family: var(--headline-2-bold-font-family);
-  font-size: var(--headline-2-bold-font-size);
+  font-size: 16px;
   font-style: var(--headline-2-bold-font-style);
   font-weight: var(--headline-2-bold-font-weight);
   letter-spacing: var(--headline-2-bold-letter-spacing);
@@ -408,6 +408,7 @@
 
   .jobDetailsBottom {
     flex-direction: column;
+    align-items: flex-start;
     gap: 8px;
   }
 }
