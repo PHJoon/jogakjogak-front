@@ -12,6 +12,7 @@ import { tokenManager } from "@/utils/auth";
 import NoResumeModal from "@/components/NoResumeModal";
 import Snackbar from "@/components/Snackbar";
 import { DeleteConfirmModal } from "@/components/DeleteConfirmModal";
+import { calculateDDay } from "@/utils/calculateDDay";
 
 interface Resume {
   resumeId: number;
@@ -111,16 +112,6 @@ export default function DashboardPage() {
 
   const handleJobClick = (jdId: number) => {
     router.push(`/job/${jdId}`);
-  };
-
-  const calculateDDay = (endedAt: string) => {
-    if (!endedAt) {
-      return undefined;
-    }
-    const endDate = new Date(endedAt);
-    const today = new Date();
-    const diffTime = endDate.getTime() - today.getTime();
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
   const formatDate = (dateString: string) => {

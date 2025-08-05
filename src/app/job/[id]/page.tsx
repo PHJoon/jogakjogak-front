@@ -20,6 +20,7 @@ import {tokenManager} from "@/utils/auth";
 import NotificationModal from "@/components/NotificationModal";
 import Snackbar from "@/components/Snackbar";
 import {DeleteConfirmModal} from "@/components/DeleteConfirmModal";
+import {calculateDDay} from "@/utils/calculateDDay";
 
 interface TodoItem {
   checklist_id: number;
@@ -166,16 +167,6 @@ export default function JobDetailPage() {
       setJdDetail({ ...jdDetail, bookmark: !newBookmarkState });
       console.error('Error toggling bookmark:', error);
     }
-  };
-
-  const calculateDDay = (endedAt: string) => {
-    if (!endedAt) {
-      return undefined;
-    }
-    const endDate = new Date(endedAt);
-    const today = new Date();
-    const diffTime = endDate.getTime() - today.getTime();
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
   const formatDate = (dateString: string) => {
@@ -571,14 +562,16 @@ export default function JobDetailPage() {
   const dDayChipColor = (num: number | undefined) => {
     console.log(num);
     if (num === undefined){
-     return 'anytime';
+     return 'dDay-anytime';
     }
-    if (num <= 0) {
-      return 'dayover';
+    if (num < 0) {
+      return 'dDay-dayover';
     } else if (num === 0) {
-      return 'day0';
+      return 'dDay-day0';
+    } else if (num > 0 && num <= 7) {
+      return 'dDay-over1';
     } else {
-      return 'defalut';
+      return 'dDay-default';
     }
   }
 

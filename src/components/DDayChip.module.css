@@ -22,7 +22,7 @@
 }
 
 .text {
-  color: var(--primaryjogak-1);
+  color: white;
   font-family: var(--label-2-medium-font-family);
   font-size: var(--label-2-medium-font-size);
   font-style: var(--label-2-medium-font-style);
@@ -30,4 +30,28 @@
   letter-spacing: var(--label-2-medium-letter-spacing);
   line-height: var(--label-2-medium-line-height);
   white-space: nowrap;
+}
+
+.dDay-anytime {
+  background-color: #60C255;
+}
+
+.dDay-day0 {
+  background-color: #CE494A;
+}
+
+.dDay-dayover {
+  background-color: #C8D3DF;
+}
+
+.dDay-over1 {
+  background-color: #F57F7F;
+}
+
+.dDay-apply {
+  background-color: #3483FA;
+}
+
+.dDay-default .text{
+  color: var(--primaryjogak-1);
 }
