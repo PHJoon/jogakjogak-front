@@ -16,6 +16,7 @@
   box-sizing: border-box;
 }
 
+
 .container h1 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
@@ -39,6 +40,10 @@
   .jobSection {
     flex-direction: column;
     gap: 10px;
+  }
+  .container {
+    padding: 12px 0;
+    gap: 8px;
   }
 }
 
@@ -65,7 +70,7 @@
 
 .resumeLoading {
   width: calc(100% - 40px);
-  max-width: 1570px;
+  max-width: 1580px;
   margin: 0 20px;
 }
 
