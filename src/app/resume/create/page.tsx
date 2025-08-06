@@ -1,26 +1,34 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useCallback, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Image from "next/image";
-import styles from "./page.module.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import { Button } from "@/components/Button";
-import arrowBackIcon from "@/assets/images/ic_arrow_back.svg";
-import arrowDropDownIcon from "@/assets/images/ic_drop_down.svg";
-import chatInfoIcon from "@/assets/images/ic_chat_info.svg";
-import { tokenManager } from "@/utils/auth";
+import { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
+import styles from './page.module.css';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import { Button } from '@/components/Button';
+import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
+import arrowDropDownIcon from '@/assets/images/ic_drop_down.svg';
+import chatInfoIcon from '@/assets/images/ic_chat_info.svg';
+import { tokenManager } from '@/utils/auth';
+import { ConfirmModal } from '@/components/ConfirmModal';
 
 function ResumeCreateContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const resumeId = searchParams.get('id');
-  const [resumeTitle, setResumeTitle] = useState("나의 이력서");
-  const [resumeText, setResumeText] = useState("");
+  const [resumeTitle, setResumeTitle] = useState('나의 이력서');
+  const [resumeText, setResumeText] = useState('');
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  // 뒤로가기 확인 모달 상태
+  const [isBackConfirmModalOpen, setBackConfirmModalOpen] = useState(false);
+  // 기존 이력서 내용 - 변경 여부 확인용
+  const [resumeContents, setResumeContents] = useState({
+    title: '나의 이력서',
+    content: '',
+  });
 
   const fetchResume = useCallback(async () => {
     setIsLoading(true);
@@ -28,15 +36,19 @@ function ResumeCreateContent() {
       const accessToken = tokenManager.getAccessToken();
       const response = await fetch(`/api/resume/${resumeId}`, {
         headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
+          'Authorization': `Bearer ${accessToken}`,
+        },
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         if (data.data) {
           setResumeTitle(data.data.title || '나의 이력서');
           setResumeText(data.data.content || '');
+          setResumeContents({
+            title: data.data.title || '나의 이력서',
+            content: data.data.content || '',
+          });
         }
       }
     } catch (error) {
@@ -46,6 +58,14 @@ function ResumeCreateContent() {
     }
   }, [resumeId]);
 
+  // 이력서 내용 변경 여부 확인
+  const hasUnsavedChanges = useMemo(() => {
+    return (
+      resumeContents.title !== resumeTitle ||
+      resumeContents.content !== resumeText
+    );
+  }, [resumeContents, resumeTitle, resumeText]);
+
   // resumeId가 있으면 기존 이력서 불러오기
   useEffect(() => {
     if (resumeId) {
@@ -53,7 +73,26 @@ function ResumeCreateContent() {
     }
   }, [resumeId, fetchResume]);
 
+  // 브라우저 새로고침 시 확인창 띄우기
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasUnsavedChanges) {
+        e.preventDefault();
+      }
+    };
+    if (typeof window !== 'undefined') {
+      window.addEventListener('beforeunload', handleBeforeUnload);
+    }
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [hasUnsavedChanges]);
+
   const handleBack = () => {
+    if (hasUnsavedChanges) {
+      setBackConfirmModalOpen(true);
+      return;
+    }
     router.back();
   };
 
@@ -71,7 +110,7 @@ function ResumeCreateContent() {
 
   const handleSubmit = async () => {
     if (!resumeTitle.trim() || !resumeText.trim()) {
-      alert("제목과 내용을 입력해주세요.");
+      alert('제목과 내용을 입력해주세요.');
       return;
     }
 
@@ -80,32 +119,45 @@ function ResumeCreateContent() {
       const accessToken = tokenManager.getAccessToken();
       const url = resumeId ? `/api/resume/${resumeId}` : '/api/resume';
       const method = resumeId ? 'PATCH' : 'POST';
-      
+
       const response = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`
+          'Authorization': `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           title: resumeTitle,
-          content: resumeText
-        })
+          content: resumeText,
+        }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        alert(resumeId ? "이력서가 성공적으로 수정되었습니다." : "이력서가 성공적으로 등록되었습니다.");
+        alert(
+          resumeId
+            ? '이력서가 성공적으로 수정되었습니다.'
+            : '이력서가 성공적으로 등록되었습니다.'
+        );
         router.push('/dashboard');
       } else if (response.status === 409) {
-        alert("이미 이력서가 등록되어 있습니다.");
+        alert('이미 이력서가 등록되어 있습니다.');
       } else {
-        alert(data.message || (resumeId ? "이력서 수정에 실패했습니다." : "이력서 등록에 실패했습니다."));
+        alert(
+          data.message ||
+            (resumeId
+              ? '이력서 수정에 실패했습니다.'
+              : '이력서 등록에 실패했습니다.')
+        );
       }
     } catch (error) {
       console.error('Resume submission error:', error);
-      alert(resumeId ? "이력서 수정 중 오류가 발생했습니다." : "이력서 등록 중 오류가 발생했습니다.");
+      alert(
+        resumeId
+          ? '이력서 수정 중 오류가 발생했습니다.'
+          : '이력서 등록 중 오류가 발생했습니다.'
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -113,20 +165,31 @@ function ResumeCreateContent() {
 
   return (
     <>
-      <Header backgroundColor="white" showLogout={true} />
+      <Header
+        backgroundColor='white'
+        showLogout={true}
+      />
       <main className={styles.main}>
         <div className={styles.container}>
           <div className={styles.header}>
-            <button className={styles.backButton} onClick={handleBack}>
-              <Image 
+            <button
+              className={styles.backButton}
+              onClick={handleBack}
+            >
+              <Image
                 src={arrowBackIcon}
-                alt="뒤로가기"
+                alt='뒤로가기'
                 width={15.57}
                 height={15.16}
               />
             </button>
-            <h1 className={styles.title}>{resumeId ? '나의 이력서 수정하기' : '나의 이력서 만들기'}</h1>
-            <Button variant="disabled" className={styles.pdfButton}>
+            <h1 className={styles.title}>
+              {resumeId ? '나의 이력서 수정하기' : '나의 이력서 만들기'}
+            </h1>
+            <Button
+              variant='disabled'
+              className={styles.pdfButton}
+            >
               PDF로 불러오기
             </Button>
           </div>
@@ -142,20 +205,22 @@ function ResumeCreateContent() {
                 <div className={styles.resumeSection}>
                   <div className={styles.resumeHeader}>
                     <input
-                      type="text"
+                      type='text'
                       className={styles.resumeTitleInput}
                       value={resumeTitle}
                       onChange={handleTitleChange}
                       maxLength={30}
                     />
-                    <span className={styles.counter}>{resumeTitle.length}/30</span>
+                    <span className={styles.counter}>
+                      {resumeTitle.length}/30
+                    </span>
                   </div>
                 </div>
 
                 <div className={styles.inputSection}>
                   <textarea
                     className={styles.textarea}
-                    placeholder="갖고 있는 이력서 내용을 복사/붙여넣기 하면 한번에 정리해드릴게요."
+                    placeholder='갖고 있는 이력서 내용을 복사/붙여넣기 하면 한번에 정리해드릴게요.'
                     maxLength={5000}
                     value={resumeText}
                     onChange={handleTextChange}
@@ -168,62 +233,79 @@ function ResumeCreateContent() {
             )}
 
             <div className={styles.helpSection}>
-              <div className={styles.helpHeader} onClick={toggleHelp}>
+              <div
+                className={styles.helpHeader}
+                onClick={toggleHelp}
+              >
                 <div className={styles.helpContent}>
-                  <Image 
+                  <Image
                     src={chatInfoIcon}
-                    alt="도움말"
+                    alt='도움말'
                     width={16.67}
                     height={15.51}
                     className={styles.helpIcon}
                   />
                   <span className={styles.helpText}>
-                    {isHelpOpen ? '이력서에 이런 내용을 포함하면 좋아요.' : '이력서에 어떤걸 넣을지 모르겠나요?'}
+                    {isHelpOpen
+                      ? '이력서에 이런 내용을 포함하면 좋아요.'
+                      : '이력서에 어떤걸 넣을지 모르겠나요?'}
                   </span>
                 </div>
-                <Image 
+                <Image
                   src={arrowDropDownIcon}
-                  alt="펼치기"
+                  alt='펼치기'
                   width={8.6}
                   height={4.7}
-                  className={`${styles.dropdownIcon} ${isHelpOpen ? styles.rotated : ''}`}
+                  className={`${styles.dropdownIcon} ${
+                    isHelpOpen ? styles.rotated : ''
+                  }`}
                 />
               </div>
-              
+
               {isHelpOpen && (
                 <div className={styles.helpExpanded}>
                   <div className={styles.helpGuide}>
                     <p>간단한 자기소개 문구</p>
-                    
+
                     <p>🎓 학력</p>
-                    <p className={styles.helpSubtext}>- 상태(재학 중 / 졸업 예정 / 졸업)</p>
-                    <p className={styles.helpSubtext}>- 입학 년월 ~ 졸업 년월</p>
+                    <p className={styles.helpSubtext}>
+                      - 상태(재학 중 / 졸업 예정 / 졸업)
+                    </p>
+                    <p className={styles.helpSubtext}>
+                      - 입학 년월 ~ 졸업 년월
+                    </p>
                     <p className={styles.helpSubtext}>- 학교명</p>
                     <p className={styles.helpSubtext}>- 전공</p>
-                    
+
                     <p>🏅 어학 및 자격증</p>
                     <p className={styles.helpSubtext}>- 자격 명과 취득일</p>
-                    
+
                     <p>🧳 경력사항</p>
                     <p className={styles.helpSubtext}>- 상태(재직 중 / 퇴사)</p>
-                    <p className={styles.helpSubtext}>- 입사 년월 ~ 퇴사 년월</p>
+                    <p className={styles.helpSubtext}>
+                      - 입사 년월 ~ 퇴사 년월
+                    </p>
                     <p className={styles.helpSubtext}>- 회사명</p>
                     <p className={styles.helpSubtext}>- 부서명</p>
                     <p className={styles.helpSubtext}>- 업무 역할</p>
-                    
+
                     <p>🏆 수상 및 대외활동</p>
                     <p className={styles.helpSubtext}>- 연도</p>
                     <p className={styles.helpSubtext}>- 활동명 or 수상내역</p>
-                    
+
                     <p>📁 상세 경력 Or 프로젝트 경험</p>
                     <p className={styles.helpSubtext}>- 업체명 / 프로젝트명</p>
                     <p className={styles.helpSubtext}>- 프로젝트 소개</p>
                     <p className={styles.helpSubtext}>- 본인의 역할</p>
-                    <p className={styles.helpSubtext}>- 수행 내용(업무 과정, 기여 성과 등)</p>
-                    
+                    <p className={styles.helpSubtext}>
+                      - 수행 내용(업무 과정, 기여 성과 등)
+                    </p>
+
                     <p>💻 보유 능력 / 스킬</p>
-                    <p className={styles.helpSubtext}>- 주요 기술 및 툴: (예: Python, Excel, Adobe XD 등)</p>
-                    
+                    <p className={styles.helpSubtext}>
+                      - 주요 기술 및 툴: (예: Python, Excel, Adobe XD 등)
+                    </p>
+
                     <p>✍️ 나의 장단점 작성</p>
                     <p className={styles.helpSubtext}>- 강점:</p>
                     <p className={styles.helpSubtext}>- 보완할 점:</p>
@@ -232,18 +314,35 @@ function ResumeCreateContent() {
               )}
             </div>
 
-            <button 
+            <button
               className={styles.completeButton}
               onClick={handleSubmit}
               disabled={isSubmitting || isLoading}
             >
               <span className={styles.completeButtonText}>
-                {isLoading ? '불러오는 중...' : isSubmitting ? (resumeId ? '수정 중...' : '등록 중...') : '완료하기'}
+                {isLoading
+                  ? '불러오는 중...'
+                  : isSubmitting
+                  ? resumeId
+                    ? '수정 중...'
+                    : '등록 중...'
+                  : '완료하기'}
               </span>
             </button>
           </div>
         </div>
       </main>
+
+      <ConfirmModal
+        isOpen={isBackConfirmModalOpen}
+        onClose={() => router.back()}
+        onConfirm={() => setBackConfirmModalOpen(false)}
+        title='이전 화면으로 가시겠어요?'
+        message='작성 중인 내용이 모두 지워져요.'
+        cancelText='이전 화면'
+        confirmText='계속 작성'
+      />
+
       <Footer />
     </>
   );
