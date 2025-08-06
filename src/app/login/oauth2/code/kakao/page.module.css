@@ -1,0 +1,63 @@
+.dots {
+  position: relative;
+  width: 40px;
+  height: 8px;
+}
+
+.dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: var(--primaryjogak-1);
+  border-radius: 4px;
+}
+
+.dot1 {
+  left: 0;
+  animation: dotJump 1.5s ease-in-out infinite;
+  animation-delay: 0.1s;
+}
+
+.dot2 {
+  left: 16px;
+  animation: dotJump 1.5s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+.dot3 {
+  left: 32px;
+  animation: dotJump 1.5s ease-in-out infinite;
+  animation-delay: -0.1s;
+}
+
+@keyframes dotJump {
+  0%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-12px);
+  }
+}
+
+.loadingText{
+  font-size: 20px;
+  color: var(--primaryjogak-1);
+  font-weight: 500;
+  margin-top: 10px;
+  font-family: 'Pretendard', sans-serif;
+  text-align: center;
+  animation: checkAppear 1.5s ease-in-out infinite;
+  animation-delay: -0.1s;
+}
+
+@keyframes checkAppear {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

@@ -3,6 +3,7 @@
 import { useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import { tokenManager } from '@/utils/auth';
+import styles from './page.module.css';
 
 function KakaoCallbackContent() {
   const router = useRouter();
@@ -55,30 +56,48 @@ function KakaoCallbackContent() {
   }, [router]);
 
   return (
-    <div style={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      height: '100vh',
-      fontFamily: 'Pretendard'
-    }}>
-      <p>로그인 처리 중...</p>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        gap: '20px',
+        height: '100vh',
+        fontFamily: 'Pretendard',
+      }}
+    >
+      <div className={styles.dots}>
+        <div className={`${styles.dot} ${styles.dot1}`}></div>
+        <div className={`${styles.dot} ${styles.dot2}`}></div>
+        <div className={`${styles.dot} ${styles.dot3}`}></div>
+      </div>
+      <p className={styles.loadingText}>로그인 처리 중</p>
     </div>
   );
 }
 
 export default function KakaoCallback() {
   return (
-    <Suspense 
+    <Suspense
       fallback={
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          alignItems: 'center', 
-          height: '100vh',
-          fontFamily: 'Pretendard'
-        }}>
-          <p>로딩 중...</p>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+            gap: '20px',
+            height: '100vh',
+            fontFamily: 'Pretendard',
+          }}
+        >
+          <div className={styles.dots}>
+            <div className={`${styles.dot} ${styles.dot1}`}></div>
+            <div className={`${styles.dot} ${styles.dot2}`}></div>
+            <div className={`${styles.dot} ${styles.dot3}`}></div>
+          </div>
+          <p className={styles.loadingText}>로딩 중</p>
         </div>
       }
     >
