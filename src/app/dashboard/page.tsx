@@ -326,6 +326,11 @@ export default function DashboardPage() {
         isOpen={!!deletingJobId}
         onClose={() => setDeletingJobId(null)}
         onConfirm={() => deletingJobId && handleJobDelete(deletingJobId)}
+        title='정말 삭제하시겠습니까?'
+        message='저장한 내용이 모두 없어져요.'
+        cancelText='취소'
+        confirmText='삭제'
+        highlightedText='삭제'
       />
     </>
   );
