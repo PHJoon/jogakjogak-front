@@ -7,6 +7,7 @@ import styles from "./JogakModal.module.css";
 import { JogakDetailModal } from "./JogakDetailModal";
 import { Button } from "./Button";
 import { TodoEditModal } from "./TodoEditModal";
+import { extractDateTime } from '@/utils/extractDateTime';
 
 interface JogakItem {
   id: string;
@@ -151,7 +152,7 @@ export function JogakModal({
                   description={item.content}
                   onClick={() => onItemToggle?.(item.id)}
                   checkboxColor={checkboxColor}
-                  completedAt={item.completed ? "24.12.15 14:30:00" : undefined}
+                  completedAt={item.completed && item.fullTodo ? extractDateTime(item.fullTodo.updatedAt) : undefined}
                   onEdit={() => handleEditClick(item)}
                   onDelete={() => handleDeleteClick(item)}
                   isExpanded={expandedItemId === item.id}

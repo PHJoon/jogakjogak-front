@@ -363,7 +363,8 @@ export default function JobDetailPage() {
                   done:
                     responseData.data.done !== undefined
                       ? responseData.data.done
-                      : newStatus,
+                    : newStatus,
+                  updatedAt: responseData.data.updatedAt,
                 }
               : todoItem
           );
