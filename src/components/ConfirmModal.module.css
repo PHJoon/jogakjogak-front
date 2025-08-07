@@ -14,30 +14,37 @@
 .modal {
   background: white;
   border-radius: 16px;
-  padding: 32px;
-  max-width: 400px;
-  width: 90%;
+  padding: 24px 24px 16px 24px;
+  width: 356px;
+  min-height: 176px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .modalTitle {
   font-size: 18px;
   font-weight: 700;
+  font-style: Bold;
   color: var(--n-900);
   margin-bottom: 8px;
   text-align: center;
+  line-height: 145%;
+  letter-spacing: -0.02%;
 }
 
 .modalMessage {
   font-size: 16px;
   font-weight: 500;
+  font-style: Medium;
   color: var(--n-700);
   text-align: center;
-  line-height: 1.5;
+  line-height: 150%;
   margin-bottom: 24px;
+  letter-spacing: 0.57%;
 }
 
 .modalButtons {
+  width: 100%;
+  height: 54px;
   display: flex;
   gap: 12px;
   justify-content: center;
@@ -49,11 +56,15 @@
   border-radius: 8px;
   font-size: 17px;
   font-weight: 700;
+  font-style: Bold;
+  line-height: 141%;
+  letter-spacing: 0%;
+  text-align: center;
   cursor: pointer;
   transition: all 0.2s;
   border: none;
-  min-width: 148px;
-  min-height: 54px;
+  width: 148px;
+  height: 100%;
 }
 
 .modalCancel {

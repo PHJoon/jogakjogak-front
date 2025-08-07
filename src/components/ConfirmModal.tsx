@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { Fragment } from 'react';
 import styles from './ConfirmModal.module.css';
 
 interface Props {
@@ -31,10 +31,10 @@ export function ConfirmModal({
         <h3 className={styles.modalTitle}>{title}</h3>
         <p className={styles.modalMessage}>
           {message.split('\n').map((line, index) => (
-            <React.Fragment key={index}>
+            <Fragment key={index}>
               {line}
               {index < message.split('\n').length - 1 && <br />}
-            </React.Fragment>
+            </Fragment>
           ))}
         </p>
         <div className={styles.modalButtons}>
