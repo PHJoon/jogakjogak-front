@@ -493,3 +493,140 @@
 .notificationBtn.alarmOn .notificationBtnText {
   color: #ffffff;
 }
+
+
+/* Skeleton styles */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--n-200) 25%,
+    var(--n-300) 50%,
+    var(--n-200) 75%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton--header button {
+  cursor: none;
+}
+
+.skeleton--header {
+  .actionButton {
+      background-color: var(--n-300);
+  }
+
+  .actionButtonText {
+    color: var(--n-600);
+  }
+}
+
+.skeleton--container {
+  max-width: 1066px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.skeleton--jobDetails {
+  height: 82px;
+  width: 100%;
+  margin-bottom: 12px;
+  border-radius: 12px;
+}
+.skeleton--progressTracker {
+  height: 90px;
+  width: 100%;
+  margin-bottom: 12px;
+  border-radius: 12px;
+}
+.skeleton--jogakCategories {
+  height: 498px;
+  display: flex;
+  width: 100%;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.skeleton--jogakItem {
+  flex: 1;
+  height: 100%;
+  border-radius: 12px;
+}
+.skeleton--memobox {
+  height: 104px;
+  width: 100%;
+  border-radius: 12px;
+}
+
+@media screen and (max-width: 768px) {
+  .main {
+    padding-top: 56px;
+  }
+
+  .header {
+    height: 56px;
+    padding: 0 8px;
+  }
+
+  .leftSection {
+    gap: 8px;
+  }
+
+  .backButton {
+    width: 40px;
+    height: 40px;
+  }
+
+  .rightSection {
+    gap: 8px;
+  }
+
+  .actionButton {
+    height: 24px;
+  }
+
+  .iconButton {
+    height: 40px;
+    width: 40px;
+  }
+
+  .skeleton--container {
+    padding: 8px 16px;
+  }
+
+  .skeleton--jobDetails {
+    height: 82px;
+    margin-bottom: 8px;
+  }
+
+  .skeleton--progressTracker {
+    height: 138px;
+    margin-bottom: 8px;
+  }
+
+  .skeleton--jogakCategories {
+    flex-direction: column;
+    height: auto;
+    gap: 8px;
+  }
+
+  .skeleton--jogakItem {
+    height: 178px;
+    width: 100%;
+    flex: none;
+  }
+
+  .skeleton--memobox {
+    height: 110px;
+    width: 100%;
+    margin-bottom: 121px;
+  }
+}
