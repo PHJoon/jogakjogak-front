@@ -5,18 +5,18 @@
   flex-direction: column;
   gap: 16px;
   max-width: 375px;
+  width: 375px;
   overflow: hidden;
   padding: 20px 24px;
   position: relative;
-  width: 375px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 824px) {
   .jobList {
-    max-width: 100%;
-    width: calc(100% - 32px);
+    max-width: 777px;
+    width: 100%;
   }
 }
 
@@ -74,30 +74,30 @@
 }
 
 .dDay-anytime {
-  background-color: #60C255;
+  background-color: #60c255;
 }
 
 .dDay-0 {
-  background-color: #CE494A;
+  background-color: #ce494a;
 }
 
 .dDay-dayover {
-  background-color: #C8D3DF;
+  background-color: #c8d3df;
 }
 
 .dDay-over1 {
-  background-color: #F57F7F;
+  background-color: #f57f7f;
 }
 
 .dDay-apply {
   background: linear-gradient(
-          135deg,
-          rgba(52, 131, 250, 1) 0%,
-          rgba(133, 181, 252, 1) 100%
+    135deg,
+    rgba(52, 131, 250, 1) 0%,
+    rgba(133, 181, 252, 1) 100%
   );
 }
 
-.dDay-default .dDayText{
+.dDay-default .dDayText {
   color: var(--primaryjogak-1);
 }
 
@@ -340,9 +340,9 @@
 
 .state-done .dDayChip2 {
   background: linear-gradient(
-          135deg,
-          rgba(52, 131, 250, 1) 0%,
-          rgba(133, 181, 252, 1) 100%
+    135deg,
+    rgba(52, 131, 250, 1) 0%,
+    rgba(133, 181, 252, 1) 100%
   );
 }
 
