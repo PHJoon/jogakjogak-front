@@ -6,7 +6,7 @@ import styles from './DeleteConfirmModal.module.css';
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: () => void | Promise<void>;
   title: string;
   message: string;
   cancelText?: string;

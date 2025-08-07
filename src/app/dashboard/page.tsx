@@ -130,7 +130,9 @@ export default function DashboardPage() {
   };
 
   // 채용공고 삭제 핸들러
-  const handleJobDelete = async (jobId: number) => {
+  const handleJobDelete = async (jobId: number | null) => {
+    if (!jobId) return;
+
     try {
       const accessToken = tokenManager.getAccessToken();
       const response = await fetch(`/api/jds/${jobId}`, {
@@ -325,7 +327,7 @@ export default function DashboardPage() {
       <DeleteConfirmModal
         isOpen={!!deletingJobId}
         onClose={() => setDeletingJobId(null)}
-        onConfirm={() => deletingJobId && handleJobDelete(deletingJobId)}
+        onConfirm={() => handleJobDelete(deletingJobId)}
         title='정말 삭제하시겠습니까?'
         message='저장한 내용이 모두 없어져요.'
         cancelText='취소'
