@@ -184,7 +184,7 @@ function ResumeCreateContent() {
             ? '이력서 내용이 유효하지 않아요'
             : '이력서 등록 오류',
           modalContent:
-            data.message ? '이력서 내용이 유효하지 않거나\n의미 없는 반복 문자를 포함합니다.' :
+            data.message ? '반복된 내용이 있어 올바른 작성이 필요해요.' :
             (resumeId
               ? '이력서 수정에 실패했습니다.'
               : '이력서 등록에 실패했습니다.'),
