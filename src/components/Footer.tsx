@@ -5,19 +5,19 @@ import logo from "@/assets/images/logo.svg";
 import emailIcon from "@/assets/images/ico_email.svg";
 import styles from "./Footer.module.css";
 import { tokenManager } from "@/utils/auth";
+import { DeleteConfirmModal } from './DeleteConfirmModal';
+import { useState } from 'react';
 
 interface FooterProps {
   backgroundColor?: 'transparent' | 'white';
 }
 
 export default function Footer({ backgroundColor }: FooterProps = { backgroundColor: 'white' }) {
+  const [isWithDrawalModalOpen, setIsWithDrawalModalOpen] = useState(false);
+
+
+  // 탈퇴 처리 함수
   const handleWithdrawal = async () => {
-    const confirmed = confirm(
-      "정말로 탈퇴하시겠습니까?\n\n탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다."
-    );
-
-    if (!confirmed) return;
-
     try {
       const accessToken = tokenManager.getAccessToken();
       
@@ -85,9 +85,20 @@ export default function Footer({ backgroundColor }: FooterProps = { backgroundCo
           </div>
 
           {/* Withdraw link */}
-          <button onClick={handleWithdrawal} className={styles.withdrawLink}>탈퇴하기</button>
+          <button onClick={() => setIsWithDrawalModalOpen(true)} className={styles.withdrawLink}>탈퇴하기</button>
         </div>
       </div>
+
+      <DeleteConfirmModal
+        isOpen={isWithDrawalModalOpen}
+        onClose={() => setIsWithDrawalModalOpen(false)}
+        onConfirm={handleWithdrawal} // 탈퇴 확인 함수
+        title="정말 탈퇴하시겠습니까?"
+        message="저장한 회원 기록이 모두 삭제돼요."
+        cancelText="아니요"
+        confirmText="확인"
+        highlightedText="탈퇴"      
+      />
     </footer>
   );
 }

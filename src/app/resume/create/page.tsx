@@ -22,10 +22,18 @@ function ResumeCreateContent() {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  // 이력서 내용 오류 모달 상태
+  const [isResumeContentErrorModalOpen, setIsResumeContentErrorModalOpen] =
+    useState(false);
+  const [contentErrorMessage, setContentErrorMessage] = useState({
+    modalTitle: '',
+    modalContent: '',
+  });
+
   // 뒤로가기 확인 모달 상태
   const [isBackConfirmModalOpen, setBackConfirmModalOpen] = useState(false);
-  // 기존 이력서 내용 - 변경 여부 확인용
-  const [resumeContents, setResumeContents] = useState({
+  // 기존 이력서 내용 - 제출 전 변경 여부 확인용
+  const [InitialResumeContents, setInitialResumeContents] = useState({
     title: '나의 이력서',
     content: '',
   });
@@ -45,7 +53,7 @@ function ResumeCreateContent() {
         if (data.data) {
           setResumeTitle(data.data.title || '나의 이력서');
           setResumeText(data.data.content || '');
-          setResumeContents({
+          setInitialResumeContents({
             title: data.data.title || '나의 이력서',
             content: data.data.content || '',
           });
@@ -61,10 +69,10 @@ function ResumeCreateContent() {
   // 이력서 내용 변경 여부 확인
   const hasUnsavedChanges = useMemo(() => {
     return (
-      resumeContents.title !== resumeTitle ||
-      resumeContents.content !== resumeText
+      InitialResumeContents.title.trim() !== resumeTitle.trim() ||
+      InitialResumeContents.content.trim() !== resumeText.trim()
     );
-  }, [resumeContents, resumeTitle, resumeText]);
+  }, [InitialResumeContents, resumeTitle, resumeText]);
 
   // resumeId가 있으면 기존 이력서 불러오기
   useEffect(() => {
@@ -109,8 +117,31 @@ function ResumeCreateContent() {
   };
 
   const handleSubmit = async () => {
+    if (!hasUnsavedChanges) {
+      setContentErrorMessage({
+        modalTitle: '변경된 내용이 없어요.',
+        modalContent: '이력서 내용을 수정한 후 제출해주세요.',
+      });
+      setIsResumeContentErrorModalOpen(true);
+      return;
+    }
+
     if (!resumeTitle.trim() || !resumeText.trim()) {
-      alert('제목과 내용을 입력해주세요.');
+      setContentErrorMessage({
+        modalTitle: '이력서 내용이 유효하지 않아요.',
+        modalContent: '제목과 내용을 입력해주세요.',
+      });
+      setIsResumeContentErrorModalOpen(true);
+      return;
+    }
+
+    if (resumeText.trim().length < 300 || resumeText.length > 5000) {
+      setContentErrorMessage({
+        modalTitle: '이력서 내용이 유효하지 않아요.',
+        modalContent:
+          '이력서 내용은 300자 이상,\n5000자 이하로 작성해주세요.\n(앞뒤 공백은 제외됩니다.)',
+      });
+      setIsResumeContentErrorModalOpen(true);
       return;
     }
 
@@ -142,22 +173,34 @@ function ResumeCreateContent() {
         );
         router.push('/dashboard');
       } else if (response.status === 409) {
-        alert('이미 이력서가 등록되어 있습니다.');
+        setContentErrorMessage({
+          modalTitle: '이력서 등록 오류',
+          modalContent: '이미 등록된 이력서가 있습니다.',
+        });
+        setIsResumeContentErrorModalOpen(true);
       } else {
-        alert(
-          data.message ||
+        setContentErrorMessage({
+          modalTitle: data.message
+            ? '이력서 내용이 유효하지 않아요'
+            : '이력서 등록 오류',
+          modalContent:
+            data.message ? '반복된 내용이 있어 올바른 작성이 필요해요.' :
             (resumeId
               ? '이력서 수정에 실패했습니다.'
-              : '이력서 등록에 실패했습니다.')
-        );
+              : '이력서 등록에 실패했습니다.'),
+        });
+        setIsResumeContentErrorModalOpen(true);
       }
     } catch (error) {
       console.error('Resume submission error:', error);
-      alert(
-        resumeId
-          ? '이력서 수정 중 오류가 발생했습니다.'
-          : '이력서 등록 중 오류가 발생했습니다.'
-      );
+      setContentErrorMessage({
+        modalTitle: '이력서 등록 오류',
+        modalContent:
+          resumeId
+            ? '이력서 수정 중 오류가 발생했습니다.'
+            : '이력서 등록 중 오류가 발생했습니다.',
+      });
+      setIsResumeContentErrorModalOpen(true);
     } finally {
       setIsSubmitting(false);
     }
@@ -332,7 +375,17 @@ function ResumeCreateContent() {
           </div>
         </div>
       </main>
+      <Footer />
 
+      <ConfirmModal
+        isOpen={isResumeContentErrorModalOpen}
+        onClose={() => setIsResumeContentErrorModalOpen(false)}
+        onConfirm={() => setIsResumeContentErrorModalOpen(false)}
+        title={contentErrorMessage.modalTitle}
+        message={contentErrorMessage.modalContent}
+        cancelText='확인'
+        confirmText='다시 작성'
+      />
       <ConfirmModal
         isOpen={isBackConfirmModalOpen}
         onClose={() => router.back()}
@@ -342,8 +395,6 @@ function ResumeCreateContent() {
         cancelText='이전 화면'
         confirmText='계속 작성'
       />
-
-      <Footer />
     </>
   );
 }

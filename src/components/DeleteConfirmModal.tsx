@@ -1,49 +1,70 @@
-"use client";
+'use client';
 
-import React from "react";
-import styles from "./DeleteConfirmModal.module.css";
+import { Fragment } from 'react';
+import styles from './DeleteConfirmModal.module.css';
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => void;
-  title?: string;
-  message?: string;
+  onConfirm: () => void | Promise<void>;
+  title: string;
+  message: string;
+  cancelText?: string;
+  confirmText?: string;
+  highlightedText?: string;
 }
 
 export function DeleteConfirmModal({
   isOpen,
   onClose,
   onConfirm,
-  title = "채용공고 삭제",
-  message = "이 채용공고를 삭제하시겠습니까?\n삭제된 채용공고는 복구할 수 없습니다."
+  title,
+  message,
+  cancelText = '취소',
+  confirmText = '확인',
+  highlightedText = '',
 }: Props) {
   if (!isOpen) return null;
+
+  const regex = new RegExp(`(${highlightedText})`, 'g');
+  const titleWords = title.split(regex);
 
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
-        <h3 className={styles.modalTitle}>{title}</h3>
+        <h3 className={styles.modalTitle}>{
+          titleWords.map((word, idx) => {
+            return (
+              word === highlightedText ? (
+                <span key={idx} style={{ color: 'var(--red-2)' }}>
+                  {word}
+                </span>
+              ) : (
+                <Fragment key={idx}>{word}</Fragment>
+              )
+            )
+          })}
+        </h3>
         <p className={styles.modalMessage}>
           {message.split('\n').map((line, index) => (
-            <React.Fragment key={index}>
+            <Fragment key={index}>
               {line}
               {index < message.split('\n').length - 1 && <br />}
-            </React.Fragment>
+            </Fragment>
           ))}
         </p>
         <div className={styles.modalButtons}>
-          <button 
+          <button
             className={styles.modalCancel}
             onClick={onClose}
           >
-            취소
+            {cancelText}
           </button>
-          <button 
+          <button
             className={styles.modalConfirm}
             onClick={onConfirm}
           >
-            삭제
+            {confirmText}
           </button>
         </div>
       </div>
