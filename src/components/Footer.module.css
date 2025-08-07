@@ -1,6 +1,10 @@
 .footer {
   width: 100%;
-  background-color: var(--n-0);
+  background-color: transparent;
+}
+
+.footer.whiteBackground {
+  background-color: #FFFFFF;
 }
 
 .container {

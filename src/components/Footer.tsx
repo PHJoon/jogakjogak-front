@@ -6,7 +6,11 @@ import emailIcon from "@/assets/images/ico_email.svg";
 import styles from "./Footer.module.css";
 import { tokenManager } from "@/utils/auth";
 
-export default function Footer() {
+interface FooterProps {
+  backgroundColor?: 'transparent' | 'white';
+}
+
+export default function Footer({ backgroundColor }: FooterProps = { backgroundColor: 'white' }) {
   const handleWithdrawal = async () => {
     const confirmed = confirm(
       "정말로 탈퇴하시겠습니까?\n\n탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다."
@@ -45,7 +49,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className={styles.footer}>
+    <footer className={`${styles.footer} ${backgroundColor === 'white' ? styles.whiteBackground : ''}`}>
       <div className={styles.container}>
         {/* Logo section */}
         <div className={styles.logoSection}>
