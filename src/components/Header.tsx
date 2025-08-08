@@ -1,21 +1,29 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import styles from "./Header.module.css";
-import logo from "@/assets/images/logo.svg";
-import logoutIcon from "@/assets/images/ic_logout.svg";
-import LoginModal from "./LoginModal";
-import { logout } from "@/utils/auth";
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import styles from './Header.module.css';
+import logo from '@/assets/images/logo.svg';
+import logoutIcon from '@/assets/images/ic_logout.svg';
+import LoginModal from './LoginModal';
+import { logout } from '@/utils/auth';
 
 interface HeaderProps {
-  backgroundColor?: "transparent" | "white";
+  backgroundColor?: 'transparent' | 'white';
   showLogout?: boolean;
+  landingPage?: boolean;
 }
 
-export default function Header({ backgroundColor = "transparent", showLogout = false }: HeaderProps) {
+export default function Header({
+  backgroundColor = 'transparent',
+  showLogout = false,
+  landingPage = false,
+}: HeaderProps) {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [headerBackgroundColor, setHeaderBackgroundColor] = useState<
+    'transparent' | 'white'
+  >(backgroundColor);
 
   const handleLoginClick = () => {
     setIsLoginModalOpen(true);
@@ -28,41 +36,72 @@ export default function Header({ backgroundColor = "transparent", showLogout = f
   const handleLogoutClick = () => {
     // 즉시 UI 업데이트를 위해 홈으로 이동
     window.location.href = '/';
-    
+
     // 백그라운드에서 로그아웃 처리
-    logout().catch(error => {
+    logout().catch((error) => {
       console.error('Logout failed:', error);
     });
   };
 
+  useEffect(() => {
+    if (!landingPage) return;
+
+    const scrollHandler = () => {
+      if (window.scrollY > 64) {
+        setHeaderBackgroundColor('white');
+      } else {
+        setHeaderBackgroundColor('transparent');
+      }
+    };
+
+    window.addEventListener('scroll', scrollHandler);
+    return () => window.removeEventListener('scroll', scrollHandler);
+  }, [landingPage]);
+
   return (
     <>
-      <header className={`${styles.header} ${backgroundColor === "white" ? styles.whiteBackground : ""}`}>
-        <Link href={showLogout ? "/dashboard" : "/"} className={styles.logo}>
-          <Image 
-            src={logo} 
-            alt="조각조각 로고" 
-            width={127.82} 
+      <header
+        className={`${styles.header} ${
+          headerBackgroundColor === 'white' ? styles.whiteBackground : ''
+        } ${landingPage ? styles.landingPage : ''}`}
+      >
+        <Link
+          href={showLogout ? '/dashboard' : '/'}
+          className={styles.logo}
+        >
+          <Image
+            src={logo}
+            alt='조각조각 로고'
+            width={127.82}
             height={25.11}
             priority
           />
         </Link>
         {showLogout ? (
-          <button className={styles.logoutButton} onClick={handleLogoutClick}>
-            <Image 
-              src={logoutIcon} 
-              alt="로그아웃" 
-              width={17.6} 
+          <button
+            className={styles.logoutButton}
+            onClick={handleLogoutClick}
+          >
+            <Image
+              src={logoutIcon}
+              alt='로그아웃'
+              width={17.6}
               height={18}
             />
           </button>
         ) : (
-          <button className={styles.loginButton} onClick={handleLoginClick}>
+          <button
+            className={styles.loginButton}
+            onClick={handleLoginClick}
+          >
             <span>로그인</span>
           </button>
         )}
       </header>
-      <LoginModal isOpen={isLoginModalOpen} onClose={handleCloseModal} />
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={handleCloseModal}
+      />
     </>
   );
 }
