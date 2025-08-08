@@ -220,38 +220,27 @@ export default function DashboardPage() {
   if (isAuthenticated === null || !isDataLoaded) {
     return (
       <>
-        <Header
-          backgroundColor='white'
-          showLogout={true}
-        />
-        <main className={styles.main}>
-          <div className={styles.containerLoading}>
-            <div className={styles.resumeLoading}>
+        <>
+          <Header
+            backgroundColor='white'
+            showLogout={true}
+          />
+          <main className={styles.main}>
+            <div className={styles.containerLoading}>
+              <div className={`${styles.skeleton} ${styles.resumeLoading}`} />
               <div
-                className={styles.skeleton}
-                style={{ height: '93px', borderRadius: '12px' }}
+                className={`${styles.skeleton} ${styles.sortContainerLoading}`}
               />
-            </div>
-
-            <div className={styles.jobSectionLoading}>
-              <JobAdd
-                hasResume={!!resume}
-                onNoResumeClick={handleNoResumeClick}
-              />
-              <div className={styles.jobLoading}>
-                <div
-                  className={styles.skeleton}
-                  style={{ height: '140px', borderRadius: '12px' }}
-                />
-                <div
-                  className={styles.skeleton}
-                  style={{ height: '140px', borderRadius: '12px' }}
-                />
+              <div className={styles.jobSectionLoading}>
+                <JobAdd />
+                <div className={`${styles.skeleton} ${styles.jobLoading}`} />
+                <div className={`${styles.skeleton} ${styles.jobLoading}`} />
+                <div className={`${styles.skeleton} ${styles.jobLoading}`} />
               </div>
             </div>
-          </div>
-        </main>
-        <Footer />
+          </main>
+          <Footer />
+        </>
       </>
     );
   }
