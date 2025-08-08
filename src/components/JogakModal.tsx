@@ -159,7 +159,7 @@ export function JogakModal({
                   onToggleExpand={() => handleItemToggleExpand(item.id)}
                 />
               ))}
-              <JogakDetailModal state="add-custom" onClick={handleAddClick} />
+              {/* <JogakDetailModal state="add-custom" onClick={handleAddClick} /> */}
             </div>
           </div>
         </div>
