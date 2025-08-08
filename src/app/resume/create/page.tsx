@@ -171,7 +171,7 @@ function ResumeCreateContent() {
             ? '이력서가 성공적으로 수정되었습니다.'
             : '이력서가 성공적으로 등록되었습니다.'
         );
-        router.push('/dashboard');
+        router.replace(resumeId ? `/dashboard` : '/job/create');
       } else if (response.status === 409) {
         setContentErrorMessage({
           modalTitle: '이력서 등록 오류',
