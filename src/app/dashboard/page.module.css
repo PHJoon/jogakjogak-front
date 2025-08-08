@@ -1,5 +1,5 @@
 .main {
-  min-height: 100vh;
+  /* min-height: 100vh; */
   padding-top: 64px; /* Header height */
   background-color: var(--n-100);
 }
@@ -10,7 +10,7 @@
   align-items: flex-start;
   max-width: 1600px;
   padding: 24px 0;
-  gap: 16px;
+  /* gap: 16px; */
   margin: 0 auto;
   box-sizing: border-box;
 }
@@ -30,8 +30,9 @@
   display: flex;
   gap: 20px;
   max-width: 1560px;
+  min-height: 694px;
   flex-wrap: wrap;
-  margin: 0 20px;
+  margin: 0 20px 12px 20px;
 }
 
 /* 아이템 한 줄 되는 너비 */
@@ -78,6 +79,7 @@
   flex-direction: column;
   align-items: flex-start;
   max-width: 1600px;
+  height: 100vh;
   padding: 24px 0;
   margin: 0 auto;
   box-sizing: border-box;
@@ -158,9 +160,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  margin-top: 32px;
-  padding: 0 4px;
+  width: calc(100% - 40px);
+  margin: 0 20px 70px 20px;
+  height: 56px;
 }
 
 .paginationButton {

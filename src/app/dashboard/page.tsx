@@ -1,7 +1,7 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 import styles from './page.module.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -36,8 +36,9 @@ interface JobDescription {
   updatedAt: string;
 }
 
-export default function DashboardPage() {
+function DashboardContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [resume, setResume] = useState<Resume | null>(null);
   const [jds, setJds] = useState<JobDescription[]>([]);
@@ -50,9 +51,22 @@ export default function DashboardPage() {
     message: '',
     type: 'success' as 'success' | 'error' | 'info',
   });
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12;
-  const [sortOrder, setSortOrder] = useState<'latest' | 'oldest'>('latest');
+
+  const [sortOrder, setSortOrder] = useState<
+    'createdAt,desc' | 'createdAt,asc'
+  >('createdAt,desc');
+
+  const initialPage = Number(searchParams.get('page')) || 0;
+  const [pageInfo, setPageInfo] = useState({
+    totalPages: 0,
+    totalElements: 0,
+    currentPage: initialPage,
+    pageSize: 0,
+    hasNext: false,
+    hasPrevious: false,
+    isFirst: false,
+    isLast: false,
+  });
 
   useEffect(() => {
     // 로그인 상태 확인
@@ -74,21 +88,30 @@ export default function DashboardPage() {
     }
   }, [isAuthenticated, router]);
 
+  // 페이지 파라미터가 변경될 때마다 현재 페이지 정보 업데이트
+  useEffect(() => {
+    const page = Number(searchParams.get('page')) || 0;
+    setPageInfo((prev) => ({
+      ...prev,
+      currentPage: page,
+    }));
+  }, [searchParams]);
+
   // 로그인 상태일 때 데이터 불러오기
   useEffect(() => {
     if (isAuthenticated) {
-      const sort = sortOrder === 'latest' ? 'createdAt,desc' : 'createdAt,asc';
-      fetchJdsData(sort);
+      fetchJdsData(pageInfo.currentPage, sortOrder);
     }
-  }, [isAuthenticated, sortOrder]);
+  }, [isAuthenticated, sortOrder, pageInfo.currentPage]);
 
-  const fetchJdsData = async (sort?: string) => {
+  const fetchJdsData = async (page: number, sort?: string) => {
     try {
       const accessToken = tokenManager.getAccessToken();
       const queryParams = new URLSearchParams();
 
       if (sort) {
         queryParams.append('sort', sort);
+        queryParams.append('page', page.toString());
       }
 
       const url = `/api/jds${
@@ -104,6 +127,17 @@ export default function DashboardPage() {
       if (data.data) {
         setResume(data.data.resume);
         setJds(data.data.jds || []);
+        setPageInfo({
+          totalElements: data.data.totalElements || 0,
+          totalPages: data.data.totalPages || 0,
+          currentPage: data.data.currentPage || 0,
+          pageSize: data.data.pageSize || 0,
+          hasNext: data.data.hasNext || false,
+          hasPrevious: data.data.hasPrevious || false,
+          isFirst: data.data.isFirst || false,
+          isLast: data.data.isLast || false,
+        });
+
         // 이력서가 없는 경우 모달 표시
         if (!data.data.resume) {
           setShowNoResumeModal(true);
@@ -158,9 +192,7 @@ export default function DashboardPage() {
           type: 'success',
         });
         // 목록 새로고침
-        const sort =
-          sortOrder === 'latest' ? 'createdAt,desc' : 'createdAt,asc';
-        await fetchJdsData(sort);
+        await fetchJdsData(pageInfo.currentPage, sortOrder);
         setDeletingJobId(null);
       } else {
         setSnackbar({
@@ -197,9 +229,7 @@ export default function DashboardPage() {
           type: 'success',
         });
         // 목록 새로고침
-        const sort =
-          sortOrder === 'latest' ? 'createdAt,desc' : 'createdAt,asc';
-        await fetchJdsData(sort);
+        await fetchJdsData(pageInfo.currentPage, sortOrder);
       } else {
         setSnackbar({
           isOpen: true,
@@ -270,86 +300,65 @@ export default function DashboardPage() {
               <select
                 value={sortOrder}
                 onChange={(e) =>
-                  setSortOrder(e.target.value as 'latest' | 'oldest')
+                  setSortOrder(
+                    e.target.value as 'createdAt,desc' | 'createdAt,asc'
+                  )
                 }
                 className={styles.sortSelect}
               >
-                <option value='latest'>최신순</option>
-                <option value='oldest'>오래된 순</option>
+                <option value='createdAt,desc'>최신순</option>
+                <option value='createdAt,asc'>오래된 순</option>
               </select>
             </div>
           </div>
 
           <div className={styles.jobSection}>
-            {currentPage === 1 && (
+            {pageInfo.currentPage === 0 && (
               <JobAdd
                 hasResume={!!resume}
                 onNoResumeClick={handleNoResumeClick}
               />
             )}
+            {jds.length > 0 &&
+              jds.map((jd) => (
+                <JobList
+                  key={jd.jd_id}
+                  title={jd.title}
+                  company={jd.companyName}
+                  registerDate={formatDate(jd.createdAt)}
+                  state='default'
+                  completedCount={String(jd.completed_pieces)}
+                  totalCount={String(jd.total_pieces)}
+                  dDay={calculateDDay(jd.endedAt)}
+                  isApply={!!jd.applyAt}
+                  isAlarmOn={jd.alarmOn}
+                  onClick={() => handleJobClick(jd.jd_id)}
+                  onApplyComplete={() => handleApplyComplete(jd.jd_id)}
+                  onDelete={() => setDeletingJobId(jd.jd_id)}
+                />
+              ))}
+          </div>
 
-            {jds.length > 0 && (
-              <>
-                {(() => {
-                  const startIndex =
-                    currentPage === 1
-                      ? 0
-                      : (currentPage - 1) * itemsPerPage - 1;
-                  const endIndex =
-                    currentPage === 1
-                      ? itemsPerPage - 1
-                      : startIndex + itemsPerPage;
-                  return jds.slice(startIndex, endIndex).map((jd) => (
-                    <JobList
-                      key={jd.jd_id}
-                      title={jd.title}
-                      company={jd.companyName}
-                      registerDate={formatDate(jd.createdAt)}
-                      state='default'
-                      completedCount={String(jd.completed_pieces)}
-                      totalCount={String(jd.total_pieces)}
-                      dDay={calculateDDay(jd.endedAt)}
-                      isApply={!!jd.applyAt}
-                      isAlarmOn={jd.alarmOn}
-                      onClick={() => handleJobClick(jd.jd_id)}
-                      onApplyComplete={() => handleApplyComplete(jd.jd_id)}
-                      onDelete={() => setDeletingJobId(jd.jd_id)}
-                    />
-                  ));
-                })()}
-
-                {/* 페이지네이션 버튼 */}
-                {(() => {
-                  const totalItems = jds.length + 1; // +1 for JobAdd button on first page
-                  const hasNextPage =
-                    currentPage === 1
-                      ? totalItems > itemsPerPage - 1
-                      : jds.length > (currentPage - 1) * itemsPerPage - 1;
-
-                  return (
-                    (totalItems > itemsPerPage || currentPage > 1) && (
-                      <div className={styles.pagination}>
-                        {currentPage > 1 && (
-                          <button
-                            className={styles.paginationButton}
-                            onClick={() => setCurrentPage(currentPage - 1)}
-                          >
-                            이전
-                          </button>
-                        )}
-                        {hasNextPage && (
-                          <button
-                            className={`${styles.paginationButton} ${styles.nextButton}`}
-                            onClick={() => setCurrentPage(currentPage + 1)}
-                          >
-                            다음
-                          </button>
-                        )}
-                      </div>
-                    )
-                  );
-                })()}
-              </>
+          <div className={styles.pagination}>
+            {pageInfo.hasPrevious && (
+              <button
+                className={styles.paginationButton}
+                onClick={() =>
+                  router.replace(`?page=${pageInfo.currentPage - 1}`)
+                }
+              >
+                이전
+              </button>
+            )}
+            {pageInfo.hasNext && (
+              <button
+                className={`${styles.paginationButton} ${styles.nextButton}`}
+                onClick={() =>
+                  router.replace(`?page=${pageInfo.currentPage + 1}`)
+                }
+              >
+                다음
+              </button>
             )}
           </div>
         </div>
@@ -389,5 +398,13 @@ export default function DashboardPage() {
         highlightedText='삭제'
       />
     </>
+  );
+}
+
+export default function DashBoardPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <DashboardContent />
+    </Suspense>
   );
 }
