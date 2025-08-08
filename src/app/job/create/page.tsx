@@ -80,7 +80,7 @@ export default function CreateJobPage() {
 
   const handleCompleteAnimationEnd = () => {
     if (nextJdId) {
-      router.push(`/job/${nextJdId}`);
+      router.replace(`/job/${nextJdId}`);
     }
   };
 
