@@ -71,8 +71,8 @@ function HomeContent() {
     <div className={styles.container}>
       <Background />
       <Header
-        backgroundColor='transparent'
         showLogout={!!isAuthenticated}
+        landingPage={true}
       />
 
       <HeroSection onLoginClick={() => setIsLoginModalOpen(true)} />
