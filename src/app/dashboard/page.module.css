@@ -79,6 +79,7 @@
   flex-direction: column;
   align-items: flex-start;
   max-width: 1600px;
+  height: 100vh;
   padding: 24px 0;
   margin: 0 auto;
   box-sizing: border-box;
