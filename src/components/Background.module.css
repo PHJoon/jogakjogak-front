@@ -19,6 +19,7 @@
   height: 500px;
   display: flex;
   justify-content: space-between;
+  z-index: 1;
 }
 
 .backgroundTopLeft,
@@ -31,12 +32,13 @@
 /* middle background */
 .backgroundMiddle {
   position: fixed;
-  width: 50%;
+  width: 60%;
   height: 60%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
+  mix-blend-mode: multiply;
 }
 
 /* bottom background */
@@ -50,7 +52,46 @@
 }
 
 
-@media screen and (max-width: 1032px) {
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .backgroundTop {
+    height: 400px;
+  }
+
+  .backgroundTopLeft, .backgroundTopRight {
+    width: 35%;
+  }
+
+  .backgroundMiddle {
+    width: 70%;
+    height: 50%;
+  }
+
+  .backgroundBottom {
+    height: 350px;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  .backgroundTop {
+    height: 350px;
+  }
+
+  .backgroundTopLeft, .backgroundTopRight {
+    width: 45%;
+  }
+
+  .backgroundMiddle {
+    width: 70%;
+    height: 50%;
+  }
+  
+  .backgroundBottom {
+    height: 300px;
+  }
+}
+
+
+@media screen and (max-width: 480px) {
   .backgroundTop {
     height: 250px;
   }
@@ -60,11 +101,11 @@
   }
 
   .backgroundMiddle {
-    width: 70%;
+    width: 80%;
     height: 50%;
   }
-
+  
   .backgroundBottom {
-    height: 300px;
+    height: 250px;
   }
 }
