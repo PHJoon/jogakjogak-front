@@ -1,0 +1,39 @@
+name: "📝 General Issue"
+description: "기능, 수정, 질문, 논의 등 모든 범용 이슈에 사용합니다."
+title: "[] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        범용 이슈 템플릿입니다. 질문, 논의, 아이디어 메모 등 자유롭게 작성해주세요.
+  - type: input
+    id: summary
+    attributes:
+      label: 이슈 요약
+      description: 이슈의 주제를 간단하게 적어주세요.
+      placeholder: 예) API 응답 구조 논의
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: 상세 내용
+      description: 이슈와 관련된 상세 내용을 작성해주세요.
+      placeholder: |
+        - 상황 설명
+        - 관련 자료
+        - 고려해야 할 점
+    validations:
+      required: true
+  - type: textarea
+    id: expected_outcome
+    attributes:
+      label: 기대 결과
+      description: 이 이슈가 해결되었을 때의 기대 결과를 작성해주세요.
+      placeholder: 예) API 응답이 일관성 있게 정리됨
+  - type: textarea
+    id: additional
+    attributes:
+      label: 참고 사항
+      description: 링크, 이미지, 문서 등 추가 자료를 첨부해주세요.
