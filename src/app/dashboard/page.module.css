@@ -38,10 +38,11 @@
 /* 아이템 한 줄 되는 너비 */
 @media screen and (max-width: 824px) {
   .jobSection {
-    max-width: 792px;
+    max-width: 784px;
     width: calc(100% - 32px);
     flex-direction: column;
     gap: 10px;
+    margin: 0 16px;
   }
 }
 
@@ -241,6 +242,14 @@
   border-color: var(--primaryjogak-1);
   box-shadow: 0 0 0 3px rgba(52, 131, 250, 0.1);
 }
+
+@media (max-width: 824px) {
+  .sortContainer {
+    width: calc(100% - 32px);
+    margin: 0 16px 16px 16px;
+  }
+}
+
 
 @media (max-width: 768px) {
   .sortContainer {
