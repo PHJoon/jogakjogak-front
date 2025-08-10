@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: center;
   background-color: var(--n-50);
-  box-shadow: inset 0 0 0 1px var(--primarymain-300);
+  filter: drop-shadow(0 2px 8px var(--primarymain-300));
   cursor: pointer;
   transition: background-color 0.2s, box-shadow 0.2s;
 }
@@ -71,12 +71,16 @@
 /* Mobile styles */
 @media (max-width: 824px) {
   .jobAdd {
-    width: 100%;
-    height: auto;
+    position: fixed;
+    bottom: 24px;
+    height: 64px;
+    max-width: 784px;
+    width: calc(100% - 32px);
     border-radius: 12px;
     padding: 16px 0;
     border: 1px solid var(--primarymain-300);
     box-shadow: none;
+    z-index: 100;
   }
 
   .jobAdd.hasResume {
@@ -113,5 +117,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
     width: fit-content;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .jobAdd {
+    bottom: 13px;
   }
 }

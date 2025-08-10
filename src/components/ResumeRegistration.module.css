@@ -75,6 +75,13 @@
   }
 } */
 
+@media screen and (max-width: 824px) {
+  .resumeDesktop {
+    width: calc(100% - 32px);
+    margin: 0 16px 16px 16px;
+  }
+}
+
 /* Mobile styles */
 @media (max-width: 768px) {
   .resumeDesktop {
