@@ -1,0 +1,47 @@
+name: "🛠 Change Request"
+description: "기존 기능이나 코드의 수정·개선 사항을 요청합니다."
+title: "[fix] "
+labels: ["❗️fix"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        수정 요청 감사합니다! 아래 내용을 작성해주세요.
+  - type: input
+    id: summary
+    attributes:
+      label: 수정 요약
+      description: 요청하는 수정 내용을 간단히 적어주세요.
+      placeholder: 예) 로그인 성공 후 리다이렉트 경로 변경
+    validations:
+      required: true
+  - type: textarea
+    id: current_behavior
+    attributes:
+      label: 현재 동작
+      description: 현재 기능/코드가 어떻게 동작하고 있는지 작성해주세요.
+      placeholder: 예) 로그인 성공 시 `/home`으로 이동
+    validations:
+      required: true
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: 변경 후 기대 동작
+      description: 수정 후 기대하는 동작을 작성해주세요.
+      placeholder: 예) 로그인 성공 시 `/dashboard`로 이동
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: 변경 이유
+      description: 이 변경이 필요한 이유를 설명해주세요.
+      placeholder: 예) `/dashboard`가 초기 진입점이 되어야 함
+    validations:
+      required: true
+  - type: textarea
+    id: additional
+    attributes:
+      label: 참고 사항
+      description: 관련 자료, 이미지, 링크 등을 첨부해주세요.
+      placeholder: 예) 디자인 변경안, 레퍼런스 문서 링크
