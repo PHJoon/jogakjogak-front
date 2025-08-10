@@ -171,6 +171,7 @@
 .textWrapper2 {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
+  line-clamp: 1;
   display: -webkit-box;
   flex: 1;
   font-family: var(--headline-1-bold-font-family);
@@ -188,6 +189,7 @@
 .textWrapper3 {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
+  line-clamp: 1;
   align-self: stretch;
   display: -webkit-box;
   font-family: var(--label-1-normal-medium-font-family);
