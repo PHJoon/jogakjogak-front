@@ -1,0 +1,33 @@
+name: "🚀 Feature Request"
+description: "새로운 기능이나 개선 사항을 제안합니다."
+title: "[Feat] "
+labels: ["🚀 feat"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        새로운 기능 제안 감사합니다! 아래 내용을 작성해주세요.
+  - type: input
+    id: summary
+    attributes:
+      label: 기능 요약
+      description: 제안할 기능을 간단하게 설명해주세요.
+      placeholder: 예) 사용자 프로필 페이지에 다크 모드 추가
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: 상세 설명
+      description: 기능의 상세 내용과 필요한 이유를 작성해주세요.
+      placeholder: |
+        - 기능 상세
+        - 필요한 이유
+    validations:
+      required: true
+  - type: textarea
+    id: additional
+    attributes:
+      label: 참고 사항
+      description: 관련 자료, 링크, 이미지 등을 첨부해주세요.
+      placeholder: 예) 디자인 시안 링크, 참고 사이트
