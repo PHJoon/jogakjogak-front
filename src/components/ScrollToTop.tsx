@@ -4,9 +4,12 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import styles from "./ScrollToTop.module.css";
 import scrollToTopIcon from "@/assets/images/ic_scroll_to_top.svg";
+import { usePathname } from 'next/navigation';
 
 export default function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
+  const pathname = usePathname();
+  const isDashboard = pathname === '/dashboard';
 
   useEffect(() => {
     const toggleVisibility = () => {
@@ -31,6 +34,8 @@ export default function ScrollToTop() {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  if (isDashboard) return null;
 
   return (
     <button
