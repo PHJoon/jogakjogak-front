@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
-  
+
   // 루트 경로('/') 에서만 실행
   if (pathname === '/') {
     // intro 파라미터가 있으면 소개 페이지 표시
@@ -16,7 +16,7 @@ export function middleware(request: NextRequest) {
     // 쿠키에서 토큰 확인 (브라우저에서는 보통 쿠키에 저장됨)
     const tokenFromCookie = request.cookies.get('accessToken')?.value;
     const tokenFromAuth = authHeader?.replace('Bearer ', '');
-    
+
     const hasToken = tokenFromCookie || tokenFromAuth;
 
     // 로그인 상태이고 intro 파라미터가 없으면 대시보드로 리다이렉트
@@ -30,7 +30,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };

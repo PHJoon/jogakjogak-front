@@ -148,13 +148,13 @@
 
 .checkbox.checked {
   background-color: white;
-  border-color: #BC59FF;
+  border-color: #bc59ff;
 }
 
 .checkSquare {
   width: 10px;
   height: 10px;
-  background-color: #BC59FF;
+  background-color: #bc59ff;
   border-radius: 2px;
 }
 

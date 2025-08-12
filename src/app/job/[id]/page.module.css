@@ -14,7 +14,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height:60px;
+  height: 60px;
   background-color: #ffffff;
   padding: 0 16px;
 }
@@ -494,7 +494,6 @@
   color: #ffffff;
 }
 
-
 /* Skeleton styles */
 .skeleton {
   background: linear-gradient(
@@ -522,7 +521,7 @@
 
 .skeleton--header {
   .actionButton {
-      background-color: var(--n-300);
+    background-color: var(--n-300);
   }
 
   .actionButtonText {

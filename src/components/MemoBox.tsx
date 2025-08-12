@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import styles from "./MemoBox.module.css";
+import React, { useState } from 'react';
+
+import styles from './MemoBox.module.css';
 
 interface Props {
   maxLength?: number;
@@ -11,15 +12,15 @@ interface Props {
   onChange?: (value: string) => void;
 }
 
-export function MemoBox({ 
-  maxLength = 1000, 
-  placeholder = "해당 조각에 대해 메모해보세요.",
-  className = "",
-  initialValue = "",
-  onChange
+export function MemoBox({
+  maxLength = 1000,
+  placeholder = '해당 조각에 대해 메모해보세요.',
+  className = '',
+  initialValue = '',
+  onChange,
 }: Props) {
   const [text, setText] = useState(initialValue);
-  
+
   React.useEffect(() => {
     setText(initialValue);
   }, [initialValue]);
@@ -42,7 +43,9 @@ export function MemoBox({
         maxLength={maxLength}
       />
       <div className={styles.countWrapper}>
-        <div className={styles.count}>{text.length}/{maxLength}</div>
+        <div className={styles.count}>
+          {text.length}/{maxLength}
+        </div>
       </div>
     </div>
   );

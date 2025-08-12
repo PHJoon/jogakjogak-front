@@ -6,11 +6,11 @@ export async function PATCH(
 ) {
   try {
     const { jdId } = await params;
-    
+
     // Authorization 헤더에서 토큰 추출
     const authHeader = request.headers.get('authorization');
     const accessToken = authHeader?.replace('Bearer ', '');
-    
+
     if (!accessToken) {
       return NextResponse.json(
         { code: 401, message: 'Unauthorized' },
@@ -27,7 +27,7 @@ export async function PATCH(
       {
         method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(requestBody),
@@ -38,7 +38,10 @@ export async function PATCH(
 
     if (!response.ok) {
       return NextResponse.json(
-        { code: response.status, message: data.message || 'Failed to toggle bookmark' },
+        {
+          code: response.status,
+          message: data.message || 'Failed to toggle bookmark',
+        },
         { status: response.status }
       );
     }

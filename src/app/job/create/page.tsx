@@ -1,23 +1,25 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import styles from "./page.module.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import arrowBackIcon from "@/assets/images/ic_arrow_back.svg";
-import { tokenManager } from "@/utils/auth";
-import LoadingModal from "@/components/LoadingModal";
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+
+import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
+import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import LoadingModal from '@/components/LoadingModal';
+import { tokenManager } from '@/utils/auth';
+
+import styles from './page.module.css';
 
 export default function CreateJobPage() {
   const router = useRouter();
-  const [jobTitle, setJobTitle] = useState("");
-  const [companyName, setCompanyName] = useState("");
-  const [jobPosition, setJobPosition] = useState("");
-  const [deadline, setDeadline] = useState("");
-  const [jobDescription, setJobDescription] = useState("");
-  const [jobUrl, setJobUrl] = useState("");
+  const [jobTitle, setJobTitle] = useState('');
+  const [companyName, setCompanyName] = useState('');
+  const [jobPosition, setJobPosition] = useState('');
+  const [deadline, setDeadline] = useState('');
+  const [jobDescription, setJobDescription] = useState('');
+  const [jobUrl, setJobUrl] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [nextJdId, setNextJdId] = useState<number | null>(null);
@@ -29,36 +31,36 @@ export default function CreateJobPage() {
   const handleSubmit = async () => {
     // 필수 필드 검증
     if (!jobTitle.trim()) {
-      alert("채용공고 제목을 입력해주세요.");
+      alert('채용공고 제목을 입력해주세요.');
       return;
     }
     if (!companyName.trim()) {
-      alert("회사 이름을 입력해주세요.");
+      alert('회사 이름을 입력해주세요.');
       return;
     }
     if (!jobDescription.trim()) {
-      alert("채용공고 내용을 입력해주세요.");
+      alert('채용공고 내용을 입력해주세요.');
       return;
     }
 
     setIsSubmitting(true);
     try {
       const accessToken = tokenManager.getAccessToken();
-      
+
       const response = await fetch('/api/jds/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           title: jobTitle,
           companyName: companyName,
-          job: jobPosition || "채용",  // 직무명 필수 - 기본값 제공
+          job: jobPosition || '채용', // 직무명 필수 - 기본값 제공
           content: jobDescription,
-          link: jobUrl,  // jdUrl로 변환은 API route에서 처리
-          endDate: deadline
-        })
+          link: jobUrl, // jdUrl로 변환은 API route에서 처리
+          endDate: deadline,
+        }),
       });
 
       const data = await response.json();
@@ -68,12 +70,12 @@ export default function CreateJobPage() {
         setIsComplete(true);
         // LoadingModal의 onCompleteAnimationEnd에서 페이지 이동 처리
       } else {
-        alert(data.message || "채용공고 등록에 실패했습니다.");
+        alert(data.message || '채용공고 등록에 실패했습니다.');
         setIsSubmitting(false);
       }
     } catch (error) {
       console.error('JD submission error:', error);
-      alert("채용공고 등록 중 오류가 발생했습니다.");
+      alert('채용공고 등록 중 오류가 발생했습니다.');
       setIsSubmitting(false);
     }
   };
@@ -91,7 +93,7 @@ export default function CreateJobPage() {
         <div className={styles.container}>
           <div className={styles.header}>
             <button className={styles.backButton} onClick={handleBack}>
-              <Image 
+              <Image
                 src={arrowBackIcon}
                 alt="뒤로가기"
                 width={15.57}
@@ -140,14 +142,18 @@ export default function CreateJobPage() {
             </div>
 
             {/* 마감일 */}
-            <div className={`${styles.inputWrapper} ${styles.dateWrapper} ${deadline ? styles.hasValue : ''}`}>
+            <div
+              className={`${styles.inputWrapper} ${styles.dateWrapper} ${deadline ? styles.hasValue : ''}`}
+            >
               <input
                 type="date"
                 className={styles.input}
                 value={deadline}
                 onChange={(e) => setDeadline(e.target.value)}
               />
-              <span className={styles.placeholderText}>마감일 설정 (상시채용 시 건너뛰기)</span>
+              <span className={styles.placeholderText}>
+                마감일 설정 (상시채용 시 건너뛰기)
+              </span>
             </div>
 
             {/* 채용공고 내용 */}
@@ -172,8 +178,8 @@ export default function CreateJobPage() {
             </div>
 
             {/* 완료하기 버튼 */}
-            <button 
-              className={styles.completeButton} 
+            <button
+              className={styles.completeButton}
               onClick={handleSubmit}
               disabled={isSubmitting}
             >
@@ -185,8 +191,8 @@ export default function CreateJobPage() {
         </div>
       </main>
       <Footer />
-      <LoadingModal 
-        isOpen={isSubmitting} 
+      <LoadingModal
+        isOpen={isSubmitting}
         isComplete={isComplete}
         onCompleteAnimationEnd={handleCompleteAnimationEnd}
       />

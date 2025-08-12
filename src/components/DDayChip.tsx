@@ -1,7 +1,9 @@
-import React from 'react';
-import styles from './DDayChip.module.css';
 import Image from 'next/image';
+import React from 'react';
+
 import applyIcon from '../assets/images/color_chip/ic_apply.svg';
+
+import styles from './DDayChip.module.css';
 
 interface Props {
   alarm?: 'on' | 'off';
@@ -19,12 +21,7 @@ export function DDayChip({
     case 'dDay-apply':
       return (
         <div className={`${styles.chip} ${styles[state]} ${styles[className]}`}>
-          <Image
-            src={applyIcon}
-            alt='apply'
-            width='12'
-            height='12'
-          />
+          <Image src={applyIcon} alt="apply" width="12" height="12" />
           <span className={styles.text}>지원완료</span>
         </div>
       );

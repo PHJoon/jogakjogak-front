@@ -1,26 +1,28 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
 import Image, { StaticImageData } from 'next/image';
-import styles from './page.module.css';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import { ProgressBar } from '@/components/ProgressBar';
-import { DDayChip } from '@/components/DDayChip';
-import { JogakCategory } from '@/components/JogakCategory';
-import { MemoBox } from '@/components/MemoBox';
-import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
-import alarmIcon from '@/assets/images/ic_alarm.svg';
-import bookmarkIcon from '@/assets/images/ic_add_to_bookmark.svg';
-import moreIcon from '@/assets/images/ic_more.svg';
+import { useParams, useRouter } from 'next/navigation';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
 import contentEmphasisIcon from '@/assets/images/content-emphasis-and-reorganization.svg';
 import scheduleIcon from '@/assets/images/employment-schedule-and-others.svg';
-import { tokenManager } from '@/utils/auth';
-import NotificationModal from '@/components/NotificationModal';
-import Snackbar from '@/components/Snackbar';
+import bookmarkIcon from '@/assets/images/ic_add_to_bookmark.svg';
+import alarmIcon from '@/assets/images/ic_alarm.svg';
+import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
+import moreIcon from '@/assets/images/ic_more.svg';
+import { DDayChip } from '@/components/DDayChip';
 import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
+import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import { JogakCategory } from '@/components/JogakCategory';
+import { MemoBox } from '@/components/MemoBox';
+import NotificationModal from '@/components/NotificationModal';
+import { ProgressBar } from '@/components/ProgressBar';
+import Snackbar from '@/components/Snackbar';
+import { tokenManager } from '@/utils/auth';
 import { calculateDDay } from '@/utils/calculateDDay';
+
+import styles from './page.module.css';
 
 interface TodoItem {
   checklist_id: number;
@@ -53,9 +55,9 @@ interface JDDetail {
 }
 
 const CATEGORY_TITLES: { [key: string]: string } = {
-  'STRUCTURAL_COMPLEMENT_PLAN': '필요한 경험과 역량',
-  'CONTENT_EMPHASIS_REORGANIZATION_PROPOSAL': '내용 강조 및 재구성',
-  'SCHEDULE_MISC_ERROR': '취업 일정 및 기타',
+  STRUCTURAL_COMPLEMENT_PLAN: '필요한 경험과 역량',
+  CONTENT_EMPHASIS_REORGANIZATION_PROPOSAL: '내용 강조 및 재구성',
+  SCHEDULE_MISC_ERROR: '취업 일정 및 기타',
 };
 
 const CATEGORIES = [
@@ -68,14 +70,14 @@ const CATEGORIES = [
 ];
 
 const CATEGORY_COLORS: { [key: string]: string } = {
-  'STRUCTURAL_COMPLEMENT_PLAN': '#D9A9F9',
-  'CONTENT_EMPHASIS_REORGANIZATION_PROPOSAL': '#FFD00E',
-  'SCHEDULE_MISC_ERROR': '#3DC3A9',
+  STRUCTURAL_COMPLEMENT_PLAN: '#D9A9F9',
+  CONTENT_EMPHASIS_REORGANIZATION_PROPOSAL: '#FFD00E',
+  SCHEDULE_MISC_ERROR: '#3DC3A9',
 };
 
 const CATEGORY_ICONS: { [key: string]: StaticImageData } = {
-  'CONTENT_EMPHASIS_REORGANIZATION_PROPOSAL': contentEmphasisIcon,
-  'SCHEDULE_MISC_ERROR': scheduleIcon,
+  CONTENT_EMPHASIS_REORGANIZATION_PROPOSAL: contentEmphasisIcon,
+  SCHEDULE_MISC_ERROR: scheduleIcon,
 };
 
 export default function JobDetailPage() {
@@ -107,7 +109,7 @@ export default function JobDetailPage() {
         const accessToken = tokenManager.getAccessToken();
         const response = await fetch(`/api/jds/${jdId}`, {
           headers: {
-            'Authorization': `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         });
 
@@ -154,7 +156,7 @@ export default function JobDetailPage() {
       const response = await fetch(`/api/jds/${jdId}/bookmark`, {
         method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -213,7 +215,7 @@ export default function JobDetailPage() {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
           body: JSON.stringify({ memo: memoText }),
         });
@@ -272,7 +274,7 @@ export default function JobDetailPage() {
         const response = await fetch(`/api/jds/${jdId}/alarm`, {
           method: 'PATCH',
           headers: {
-            'Authorization': `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
@@ -339,7 +341,7 @@ export default function JobDetailPage() {
         {
           method: 'PATCH',
           headers: {
-            'Authorization': `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
@@ -411,7 +413,7 @@ export default function JobDetailPage() {
       const response = await fetch(`/api/jds/${jdId}/to-do-lists/${todoId}`, {
         method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -424,7 +426,7 @@ export default function JobDetailPage() {
         // 데이터 다시 불러오기
         const detailResponse = await fetch(`/api/jds/${jdId}`, {
           headers: {
-            'Authorization': `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         });
 
@@ -462,7 +464,7 @@ export default function JobDetailPage() {
       const response = await fetch(`/api/jds/${jdId}/to-do-lists/${todoId}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -470,7 +472,7 @@ export default function JobDetailPage() {
         // 데이터 다시 불러오기
         const detailResponse = await fetch(`/api/jds/${jdId}`, {
           headers: {
-            'Authorization': `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         });
 
@@ -512,7 +514,7 @@ export default function JobDetailPage() {
       const response = await fetch(`/api/jds/${jdId}/to-do-lists`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
@@ -522,7 +524,7 @@ export default function JobDetailPage() {
         // 데이터 다시 불러오기
         const detailResponse = await fetch(`/api/jds/${jdId}`, {
           headers: {
-            'Authorization': `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         });
 
@@ -560,7 +562,7 @@ export default function JobDetailPage() {
       const response = await fetch(`/api/jds/${jdId}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -586,7 +588,7 @@ export default function JobDetailPage() {
       const response = await fetch(`/api/jds/${jdId}`, {
         method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -648,17 +650,14 @@ export default function JobDetailPage() {
   if (isLoading) {
     return (
       <>
-        <Header
-          backgroundColor='white'
-          showLogout={true}
-        />
+        <Header backgroundColor="white" showLogout={true} />
         <main className={styles.main}>
           <div className={`${styles.header} ${styles['skeleton--header']}`}>
             <div className={styles.leftSection}>
               <button className={styles.backButton}>
                 <Image
                   src={arrowBackIcon}
-                  alt='뒤로가기'
+                  alt="뒤로가기"
                   width={18.17}
                   height={17.69}
                 />
@@ -673,7 +672,7 @@ export default function JobDetailPage() {
               <button className={`${styles.iconButton} ${styles.bookmarked}`}>
                 <Image
                   src={bookmarkIcon}
-                  alt='북마크'
+                  alt="북마크"
                   width={21.33}
                   height={24}
                   style={{ opacity: 0.7 }}
@@ -684,7 +683,7 @@ export default function JobDetailPage() {
                 <button className={styles.iconButton}>
                   <Image
                     src={moreIcon}
-                    alt='더보기'
+                    alt="더보기"
                     width={21.33}
                     height={5.33}
                   />
@@ -724,10 +723,7 @@ export default function JobDetailPage() {
   if (!jdDetail) {
     return (
       <>
-        <Header
-          backgroundColor='white'
-          showLogout={true}
-        />
+        <Header backgroundColor="white" showLogout={true} />
         <main className={styles.main}>
           <div className={styles.container}>
             <div style={{ textAlign: 'center', padding: '50px' }}>
@@ -744,20 +740,14 @@ export default function JobDetailPage() {
 
   return (
     <>
-      <Header
-        backgroundColor='white'
-        showLogout={true}
-      />
+      <Header backgroundColor="white" showLogout={true} />
       <main className={styles.main}>
         <div className={styles.header}>
           <div className={styles.leftSection}>
-            <button
-              className={styles.backButton}
-              onClick={handleBack}
-            >
+            <button className={styles.backButton} onClick={handleBack}>
               <Image
                 src={arrowBackIcon}
-                alt='뒤로가기'
+                alt="뒤로가기"
                 width={18.17}
                 height={17.69}
               />
@@ -784,24 +774,21 @@ export default function JobDetailPage() {
             >
               <Image
                 src={bookmarkIcon}
-                alt='북마크'
+                alt="북마크"
                 width={21.33}
                 height={24}
                 style={{ opacity: jdDetail.bookmark ? 1 : 0.7 }}
               />
             </button>
 
-            <div
-              ref={moreMenuRef}
-              style={{ position: 'relative' }}
-            >
+            <div ref={moreMenuRef} style={{ position: 'relative' }}>
               <button
                 className={styles.iconButton}
                 onClick={() => setShowMoreMenu(!showMoreMenu)}
               >
                 <Image
                   src={moreIcon}
-                  alt='더보기'
+                  alt="더보기"
                   width={21.33}
                   height={5.33}
                 />
@@ -842,7 +829,7 @@ export default function JobDetailPage() {
               <div className={styles.jobDetailsLeft}>
                 <DDayChip
                   alarm={jdDetail.alarmOn ? 'on' : 'off'}
-                  state='default'
+                  state="default"
                   className={dDayChipColor(calculateDDay(jdDetail.endedAt))}
                   dDay={calculateDDay(jdDetail.endedAt)}
                 />
@@ -891,12 +878,7 @@ export default function JobDetailPage() {
               onClick={handleAlarmButtonClick}
               disabled={isTogglingAlarm}
             >
-              <Image
-                src={alarmIcon}
-                alt='알림'
-                width={14.2}
-                height={13.1}
-              />
+              <Image src={alarmIcon} alt="알림" width={14.2} height={13.1} />
               <div className={styles.notificationBtnText}>
                 {jdDetail.alarmOn ? '알림 중' : '알림 신청'}
               </div>
@@ -910,7 +892,7 @@ export default function JobDetailPage() {
               return (
                 <JogakCategory
                   key={category}
-                  state='active'
+                  state="active"
                   title={CATEGORY_TITLES[category] || category}
                   initialItems={todos.map((todo) => ({
                     id: todo.checklist_id.toString(),
@@ -948,7 +930,7 @@ export default function JobDetailPage() {
 
           {/* Memo Box */}
           <MemoBox
-            placeholder='해당 조각에 대해 메모해보세요.'
+            placeholder="해당 조각에 대해 메모해보세요."
             maxLength={1000}
             className={styles.memoBoxInstance}
             initialValue={jdDetail.memo || ''}
@@ -975,11 +957,11 @@ export default function JobDetailPage() {
         isOpen={isDeleting}
         onClose={() => setIsDeleting(false)}
         onConfirm={handleDelete}
-        title='정말 삭제하시겠습니까?'
-        message='저장한 내용이 모두 없어져요.'
-        cancelText='취소'
-        confirmText='삭제'
-        highlightedText='삭제'
+        title="정말 삭제하시겠습니까?"
+        message="저장한 내용이 모두 없어져요."
+        cancelText="취소"
+        confirmText="삭제"
+        highlightedText="삭제"
       />
 
       {/* Notification Modal */}

@@ -41,7 +41,7 @@
   width: 105px;
   height: 48px;
   padding: 12px 30px;
-  background: #3483FA;
+  background: #3483fa;
   border: none;
   border-radius: 10px;
   display: flex;
@@ -54,7 +54,7 @@
 
 .loginButton span {
   text-align: center;
-  color: #F5F8FC;
+  color: #f5f8fc;
   font-size: 17px;
   font-family: Pretendard;
   font-weight: 700;
@@ -63,7 +63,7 @@
 }
 
 .loginButton:hover {
-  background: #2A73EA;
+  background: #2a73ea;
 }
 
 .logoutButton {
@@ -84,18 +84,18 @@
   .header {
     padding: 0 19.4px 0 13.09px;
   }
-  
+
   .logo img {
     width: 81.81px;
     height: 16.07px;
   }
-  
+
   .loginButton {
     width: 88px;
     height: 36px;
     padding: 6px 16px;
   }
-  
+
   .loginButton span {
     font-size: 15px;
     line-height: 20px;

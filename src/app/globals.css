@@ -1,78 +1,78 @@
 :root {
   /* Typography - Body */
-  --body-1-normal-bold-font-family: "Pretendard", Helvetica;
+  --body-1-normal-bold-font-family: 'Pretendard', Helvetica;
   --body-1-normal-bold-font-size: 16px;
   --body-1-normal-bold-font-style: normal;
   --body-1-normal-bold-font-weight: 700;
   --body-1-normal-bold-letter-spacing: 0.09119999885559082px;
   --body-1-normal-bold-line-height: 150%;
-  --body-1-normal-medium-font-family: "Pretendard", Helvetica;
+  --body-1-normal-medium-font-family: 'Pretendard', Helvetica;
   --body-1-normal-medium-font-size: 16px;
   --body-1-normal-medium-font-style: normal;
   --body-1-normal-medium-font-weight: 500;
   --body-1-normal-medium-letter-spacing: 0.09119999885559082px;
   --body-1-normal-medium-line-height: 150%;
-  --body-1-normal-regular-font-family: "Pretendard", Helvetica;
+  --body-1-normal-regular-font-family: 'Pretendard', Helvetica;
   --body-1-normal-regular-font-size: 16px;
   --body-1-normal-regular-font-style: normal;
   --body-1-normal-regular-font-weight: 400;
   --body-1-normal-regular-letter-spacing: 0.09119999885559082px;
   --body-1-normal-regular-line-height: 150%;
-  --body-1-reading-bold-font-family: "Pretendard", Helvetica;
+  --body-1-reading-bold-font-family: 'Pretendard', Helvetica;
   --body-1-reading-bold-font-size: 16px;
   --body-1-reading-bold-font-style: normal;
   --body-1-reading-bold-font-weight: 700;
   --body-1-reading-bold-letter-spacing: 0.09119999885559082px;
   --body-1-reading-bold-line-height: 162.5%;
-  --body-1-reading-medium-font-family: "Pretendard Variable", Helvetica;
+  --body-1-reading-medium-font-family: 'Pretendard Variable', Helvetica;
   --body-1-reading-medium-font-size: 16px;
   --body-1-reading-medium-font-style: normal;
   --body-1-reading-medium-font-weight: 500;
   --body-1-reading-medium-letter-spacing: 0.09119999885559082px;
   --body-1-reading-medium-line-height: 162.5%;
-  --body-1-reading-regular-font-family: "Pretendard", Helvetica;
+  --body-1-reading-regular-font-family: 'Pretendard', Helvetica;
   --body-1-reading-regular-font-size: 16px;
   --body-1-reading-regular-font-style: normal;
   --body-1-reading-regular-font-weight: 400;
   --body-1-reading-regular-letter-spacing: 0.09119999885559082px;
   --body-1-reading-regular-line-height: 162.5%;
-  --body-2-normal-bold-font-family: "Pretendard", Helvetica;
+  --body-2-normal-bold-font-family: 'Pretendard', Helvetica;
   --body-2-normal-bold-font-size: 15px;
   --body-2-normal-bold-font-style: normal;
   --body-2-normal-bold-font-weight: 700;
   --body-2-normal-bold-letter-spacing: 0.14399999678134917px;
   --body-2-normal-bold-line-height: 146.70000076293945%;
-  --body-2-normal-medium-font-family: "Pretendard", Helvetica;
+  --body-2-normal-medium-font-family: 'Pretendard', Helvetica;
   --body-2-normal-medium-font-size: 15px;
   --body-2-normal-medium-font-style: normal;
   --body-2-normal-medium-font-weight: 500;
   --body-2-normal-medium-letter-spacing: 0.14399999678134917px;
   --body-2-normal-medium-line-height: 146.70000076293945%;
-  --body-2-normal-regular-font-family: "Pretendard", Helvetica;
+  --body-2-normal-regular-font-family: 'Pretendard', Helvetica;
   --body-2-normal-regular-font-size: 15px;
   --body-2-normal-regular-font-style: normal;
   --body-2-normal-regular-font-weight: 400;
   --body-2-normal-regular-letter-spacing: 0.14399999678134917px;
   --body-2-normal-regular-line-height: 146.70000076293945%;
-  --body-2-reading-bold-font-family: "Pretendard", Helvetica;
+  --body-2-reading-bold-font-family: 'Pretendard', Helvetica;
   --body-2-reading-bold-font-size: 15px;
   --body-2-reading-bold-font-style: normal;
   --body-2-reading-bold-font-weight: 700;
   --body-2-reading-bold-letter-spacing: 0.14399999678134917px;
   --body-2-reading-bold-line-height: 160.0000023841858%;
-  --body-2-reading-medium-font-family: "Pretendard", Helvetica;
+  --body-2-reading-medium-font-family: 'Pretendard', Helvetica;
   --body-2-reading-medium-font-size: 15px;
   --body-2-reading-medium-font-style: normal;
   --body-2-reading-medium-font-weight: 500;
   --body-2-reading-medium-letter-spacing: 0.14399999678134917px;
   --body-2-reading-medium-line-height: 160.0000023841858%;
-  --body-2-reading-regular-font-family: "Pretendard", Helvetica;
+  --body-2-reading-regular-font-family: 'Pretendard', Helvetica;
   --body-2-reading-regular-font-size: 15px;
   --body-2-reading-regular-font-style: normal;
   --body-2-reading-regular-font-weight: 400;
   --body-2-reading-regular-letter-spacing: 0.14399999678134917px;
   --body-2-reading-regular-line-height: 160.0000023841858%;
-  
+
   /* Brand Colors */
   --brandcontent-ye100: rgba(255, 246, 207, 1);
   --brandcontent-ye200: rgba(255, 229, 126, 1);
@@ -86,221 +86,221 @@
   --brandspec-pu200: rgba(217, 169, 249, 1);
   --brandspec-pu300: rgba(203, 126, 255, 1);
   --brandspec-pu400: rgba(189, 104, 247, 1);
-  
+
   /* Typography - Caption */
-  --caption-1-bold-font-family: "Pretendard", Helvetica;
+  --caption-1-bold-font-family: 'Pretendard', Helvetica;
   --caption-1-bold-font-size: 12px;
   --caption-1-bold-font-style: normal;
   --caption-1-bold-font-weight: 700;
   --caption-1-bold-letter-spacing: 0.30239999771118165px;
   --caption-1-bold-line-height: 133.39999914169312%;
-  --caption-1-medium-font-family: "Pretendard", Helvetica;
+  --caption-1-medium-font-family: 'Pretendard', Helvetica;
   --caption-1-medium-font-size: 12px;
   --caption-1-medium-font-style: normal;
   --caption-1-medium-font-weight: 500;
   --caption-1-medium-letter-spacing: 0.30239999771118165px;
   --caption-1-medium-line-height: 133.39999914169312%;
-  --caption-1-regular-font-family: "Pretendard", Helvetica;
+  --caption-1-regular-font-family: 'Pretendard', Helvetica;
   --caption-1-regular-font-size: 12px;
   --caption-1-regular-font-style: normal;
   --caption-1-regular-font-weight: 400;
   --caption-1-regular-letter-spacing: 0.30239999771118165px;
   --caption-1-regular-line-height: 133.39999914169312%;
-  --caption-2-bold-font-family: "Pretendard", Helvetica;
+  --caption-2-bold-font-family: 'Pretendard', Helvetica;
   --caption-2-bold-font-size: 11px;
   --caption-2-bold-font-style: normal;
   --caption-2-bold-font-weight: 700;
   --caption-2-bold-letter-spacing: 0.3420999884605408px;
   --caption-2-bold-line-height: 127.30000019073486%;
-  --caption-2-medium-font-family: "Pretendard", Helvetica;
+  --caption-2-medium-font-family: 'Pretendard', Helvetica;
   --caption-2-medium-font-size: 11px;
   --caption-2-medium-font-style: normal;
   --caption-2-medium-font-weight: 500;
   --caption-2-medium-letter-spacing: 0.3420999884605408px;
   --caption-2-medium-line-height: 127.30000019073486%;
-  --caption-2-regular-font-family: "Pretendard", Helvetica;
+  --caption-2-regular-font-family: 'Pretendard', Helvetica;
   --caption-2-regular-font-size: 11px;
   --caption-2-regular-font-style: normal;
   --caption-2-regular-font-weight: 400;
   --caption-2-regular-letter-spacing: 0.3420999884605408px;
   --caption-2-regular-line-height: 127.30000019073486%;
-  
+
   /* Typography - Display */
-  --display-1-bold-font-family: "Pretendard", Helvetica;
+  --display-1-bold-font-family: 'Pretendard', Helvetica;
   --display-1-bold-font-size: 56px;
   --display-1-bold-font-style: normal;
   --display-1-bold-font-weight: 700;
   --display-1-bold-letter-spacing: -1.786400032043457px;
   --display-1-bold-line-height: 128.60000133514404%;
-  --display-1-medium-font-family: "Pretendard", Helvetica;
+  --display-1-medium-font-family: 'Pretendard', Helvetica;
   --display-1-medium-font-size: 56px;
   --display-1-medium-font-style: normal;
   --display-1-medium-font-weight: 500;
   --display-1-medium-letter-spacing: -1.786400032043457px;
   --display-1-medium-line-height: 128.60000133514404%;
-  --display-1-regular-font-family: "Pretendard", Helvetica;
+  --display-1-regular-font-family: 'Pretendard', Helvetica;
   --display-1-regular-font-size: 56px;
   --display-1-regular-font-style: normal;
   --display-1-regular-font-weight: 400;
   --display-1-regular-letter-spacing: -1.786400032043457px;
   --display-1-regular-line-height: 128.60000133514404%;
-  --display-2-bold-font-family: "Pretendard", Helvetica;
+  --display-2-bold-font-family: 'Pretendard', Helvetica;
   --display-2-bold-font-size: 40px;
   --display-2-bold-font-style: normal;
   --display-2-bold-font-weight: 700;
   --display-2-bold-letter-spacing: -1.127999973297119px;
   --display-2-bold-line-height: 129.99999523162842%;
-  --display-2-medium-font-family: "Pretendard", Helvetica;
+  --display-2-medium-font-family: 'Pretendard', Helvetica;
   --display-2-medium-font-size: 40px;
   --display-2-medium-font-style: normal;
   --display-2-medium-font-weight: 500;
   --display-2-medium-letter-spacing: -1.127999973297119px;
   --display-2-medium-line-height: 129.99999523162842%;
-  --display-2-regular-font-family: "Pretendard", Helvetica;
+  --display-2-regular-font-family: 'Pretendard', Helvetica;
   --display-2-regular-font-size: 40px;
   --display-2-regular-font-style: normal;
   --display-2-regular-font-weight: 400;
   --display-2-regular-letter-spacing: -1.127999973297119px;
   --display-2-regular-line-height: 129.99999523162842%;
-  
+
   /* Green Colors */
   --gr-1: rgba(113, 224, 121, 1);
   --gr-2: rgba(78, 204, 94, 1);
   --gr-3: rgba(96, 194, 85, 1);
   --gr-4: rgba(98, 172, 85, 1);
-  
+
   /* Typography - Heading */
-  --heading-1-bold-font-family: "Pretendard", Helvetica;
+  --heading-1-bold-font-family: 'Pretendard', Helvetica;
   --heading-1-bold-font-size: 22px;
   --heading-1-bold-font-style: normal;
   --heading-1-bold-font-weight: 700;
   --heading-1-bold-letter-spacing: -0.426800012588501px;
   --heading-1-bold-line-height: 136.39999628067017%;
-  --heading-1-medium-font-family: "Pretendard", Helvetica;
+  --heading-1-medium-font-family: 'Pretendard', Helvetica;
   --heading-1-medium-font-size: 22px;
   --heading-1-medium-font-style: normal;
   --heading-1-medium-font-weight: 500;
   --heading-1-medium-letter-spacing: -0.426800012588501px;
   --heading-1-medium-line-height: 136.39999628067017%;
-  --heading-1-regular-font-family: "Pretendard", Helvetica;
+  --heading-1-regular-font-family: 'Pretendard', Helvetica;
   --heading-1-regular-font-size: 22px;
   --heading-1-regular-font-style: normal;
   --heading-1-regular-font-weight: 400;
   --heading-1-regular-letter-spacing: -0.426800012588501px;
   --heading-1-regular-line-height: 136.39999628067017%;
-  --heading-2-bold-font-family: "Pretendard", Helvetica;
+  --heading-2-bold-font-family: 'Pretendard', Helvetica;
   --heading-2-bold-font-size: 20px;
   --heading-2-bold-font-style: normal;
   --heading-2-bold-font-weight: 700;
   --heading-2-bold-letter-spacing: -0.24000000953674316px;
   --heading-2-bold-line-height: 139.9999976158142%;
-  --heading-2-medium-font-family: "Pretendard", Helvetica;
+  --heading-2-medium-font-family: 'Pretendard', Helvetica;
   --heading-2-medium-font-size: 20px;
   --heading-2-medium-font-style: normal;
   --heading-2-medium-font-weight: 500;
   --heading-2-medium-letter-spacing: -0.24000000953674316px;
   --heading-2-medium-line-height: 139.9999976158142%;
-  --heading-2-regular-font-family: "Pretendard", Helvetica;
+  --heading-2-regular-font-family: 'Pretendard', Helvetica;
   --heading-2-regular-font-size: 20px;
   --heading-2-regular-font-style: normal;
   --heading-2-regular-font-weight: 400;
   --heading-2-regular-letter-spacing: -0.24000000953674316px;
   --heading-2-regular-line-height: 139.9999976158142%;
-  
+
   /* Typography - Headline */
-  --headline-1-bold-font-family: "Pretendard", Helvetica;
+  --headline-1-bold-font-family: 'Pretendard', Helvetica;
   --headline-1-bold-font-size: 18px;
   --headline-1-bold-font-style: normal;
   --headline-1-bold-font-weight: 700;
   --headline-1-bold-letter-spacing: -0.0035999999195337295px;
   --headline-1-bold-line-height: 144.50000524520874%;
-  --headline-1-medium-font-family: "Pretendard", Helvetica;
+  --headline-1-medium-font-family: 'Pretendard', Helvetica;
   --headline-1-medium-font-size: 18px;
   --headline-1-medium-font-style: normal;
   --headline-1-medium-font-weight: 500;
   --headline-1-medium-letter-spacing: -0.0035999999195337295px;
   --headline-1-medium-line-height: 144.50000524520874%;
-  --headline-1-regular-font-family: "Pretendard", Helvetica;
+  --headline-1-regular-font-family: 'Pretendard', Helvetica;
   --headline-1-regular-font-size: 18px;
   --headline-1-regular-font-style: normal;
   --headline-1-regular-font-weight: 400;
   --headline-1-regular-letter-spacing: -0.0035999999195337295px;
   --headline-1-regular-line-height: 144.50000524520874%;
-  --headline-2-bold-font-family: "Pretendard", Helvetica;
+  --headline-2-bold-font-family: 'Pretendard', Helvetica;
   --headline-2-bold-font-size: 17px;
   --headline-2-bold-font-style: normal;
   --headline-2-bold-font-weight: 700;
   --headline-2-bold-letter-spacing: 0px;
   --headline-2-bold-line-height: 141.19999408721924%;
-  --headline-2-medium-font-family: "Pretendard", Helvetica;
+  --headline-2-medium-font-family: 'Pretendard', Helvetica;
   --headline-2-medium-font-size: 17px;
   --headline-2-medium-font-style: normal;
   --headline-2-medium-font-weight: 500;
   --headline-2-medium-letter-spacing: 0px;
   --headline-2-medium-line-height: 141.19999408721924%;
-  --headline-2-regular-font-family: "Pretendard", Helvetica;
+  --headline-2-regular-font-family: 'Pretendard', Helvetica;
   --headline-2-regular-font-size: 17px;
   --headline-2-regular-font-style: normal;
   --headline-2-regular-font-weight: 400;
   --headline-2-regular-letter-spacing: 0px;
   --headline-2-regular-line-height: 141.19999408721924%;
-  
+
   /* Typography - Label */
-  --label-1-normal-bold-font-family: "Pretendard", Helvetica;
+  --label-1-normal-bold-font-family: 'Pretendard', Helvetica;
   --label-1-normal-bold-font-size: 14px;
   --label-1-normal-bold-font-style: normal;
   --label-1-normal-bold-font-weight: 700;
   --label-1-normal-bold-letter-spacing: 0.2030000066757202px;
   --label-1-normal-bold-line-height: 142.90000200271606%;
-  --label-1-normal-medium-font-family: "Pretendard", Helvetica;
+  --label-1-normal-medium-font-family: 'Pretendard', Helvetica;
   --label-1-normal-medium-font-size: 14px;
   --label-1-normal-medium-font-style: normal;
   --label-1-normal-medium-font-weight: 500;
   --label-1-normal-medium-letter-spacing: 0.2030000066757202px;
   --label-1-normal-medium-line-height: 142.90000200271606%;
-  --label-1-normal-regular-font-family: "Pretendard", Helvetica;
+  --label-1-normal-regular-font-family: 'Pretendard', Helvetica;
   --label-1-normal-regular-font-size: 14px;
   --label-1-normal-regular-font-style: normal;
   --label-1-normal-regular-font-weight: 400;
   --label-1-normal-regular-letter-spacing: 0.2030000066757202px;
   --label-1-normal-regular-line-height: 142.90000200271606%;
-  --label-1-reading-bold-font-family: "Pretendard", Helvetica;
+  --label-1-reading-bold-font-family: 'Pretendard', Helvetica;
   --label-1-reading-bold-font-size: 14px;
   --label-1-reading-bold-font-style: normal;
   --label-1-reading-bold-font-weight: 700;
   --label-1-reading-bold-letter-spacing: 0.2030000066757202px;
   --label-1-reading-bold-line-height: 157.14000463485718%;
-  --label-1-reading-medium-font-family: "Pretendard", Helvetica;
+  --label-1-reading-medium-font-family: 'Pretendard', Helvetica;
   --label-1-reading-medium-font-size: 14px;
   --label-1-reading-medium-font-style: normal;
   --label-1-reading-medium-font-weight: 500;
   --label-1-reading-medium-letter-spacing: 0.2030000066757202px;
   --label-1-reading-medium-line-height: 157.09999799728394%;
-  --label-1-reading-regular-font-family: "Pretendard", Helvetica;
+  --label-1-reading-regular-font-family: 'Pretendard', Helvetica;
   --label-1-reading-regular-font-size: 14px;
   --label-1-reading-regular-font-style: normal;
   --label-1-reading-regular-font-weight: 400;
   --label-1-reading-regular-letter-spacing: 0.2030000066757202px;
   --label-1-reading-regular-line-height: 157.09999799728394%;
-  --label-2-bold-font-family: "Pretendard", Helvetica;
+  --label-2-bold-font-family: 'Pretendard', Helvetica;
   --label-2-bold-font-size: 13px;
   --label-2-bold-font-style: normal;
   --label-2-bold-font-weight: 700;
   --label-2-bold-letter-spacing: 0.25220000743865967px;
   --label-2-bold-line-height: 138.49999904632568%;
-  --label-2-medium-font-family: "Pretendard", Helvetica;
+  --label-2-medium-font-family: 'Pretendard', Helvetica;
   --label-2-medium-font-size: 13px;
   --label-2-medium-font-style: normal;
   --label-2-medium-font-weight: 500;
   --label-2-medium-letter-spacing: 0.25220000743865967px;
   --label-2-medium-line-height: 138.49999904632568%;
-  --label-2-regular-font-family: "Pretendard", Helvetica;
+  --label-2-regular-font-family: 'Pretendard', Helvetica;
   --label-2-regular-font-size: 13px;
   --label-2-regular-font-style: normal;
   --label-2-regular-font-weight: 400;
   --label-2-regular-letter-spacing: 0.25220000743865967px;
   --label-2-regular-line-height: 138.49999904632568%;
-  
+
   /* Neutral Colors */
   --n-0: rgba(255, 255, 255, 1);
   --n-100: rgba(245, 248, 252, 1);
@@ -317,7 +317,7 @@
   --n-950: rgba(38, 49, 62, 1);
   --n-990: rgba(25, 32, 40, 1);
   --n-995: rgba(18, 23, 29, 1);
-  
+
   /* Primary Colors */
   --primaryjogak-1: rgba(52, 131, 250, 1);
   --primaryjogak-2: rgba(174, 201, 255, 1);
@@ -332,64 +332,64 @@
   --primarymain-900: rgba(31, 79, 150, 1);
   --primarymain-950: rgba(21, 52, 100, 1);
   --primarymain-970: rgba(10, 26, 50, 1);
-  
+
   /* Red Colors */
   --red-1: rgba(245, 127, 127, 1);
   --red-2: rgba(225, 77, 77, 1);
   --red-3: rgba(222, 58, 58, 1);
   --red-4: rgba(206, 73, 74, 1);
   --red-5: rgba(133, 61, 64, 1);
-  
+
   /* Typography - Title */
-  --title-1-bold-font-family: "Pretendard", Helvetica;
+  --title-1-bold-font-family: 'Pretendard', Helvetica;
   --title-1-bold-font-size: 36px;
   --title-1-bold-font-style: normal;
   --title-1-bold-font-weight: 700;
   --title-1-bold-letter-spacing: -0.9720000171661377px;
   --title-1-bold-line-height: 133.39999914169312%;
-  --title-1-medium-font-family: "Pretendard", Helvetica;
+  --title-1-medium-font-family: 'Pretendard', Helvetica;
   --title-1-medium-font-size: 36px;
   --title-1-medium-font-style: normal;
   --title-1-medium-font-weight: 500;
   --title-1-medium-letter-spacing: -0.9720000171661377px;
   --title-1-medium-line-height: 133.39999914169312%;
-  --title-1-regular-font-family: "Pretendard", Helvetica;
+  --title-1-regular-font-family: 'Pretendard', Helvetica;
   --title-1-regular-font-size: 36px;
   --title-1-regular-font-style: normal;
   --title-1-regular-font-weight: 400;
   --title-1-regular-letter-spacing: -0.9720000171661377px;
   --title-1-regular-line-height: 133.39999914169312%;
-  --title-2-bold-font-family: "Pretendard", Helvetica;
+  --title-2-bold-font-family: 'Pretendard', Helvetica;
   --title-2-bold-font-size: 28px;
   --title-2-bold-font-style: normal;
   --title-2-bold-font-weight: 700;
   --title-2-bold-letter-spacing: -0.660799970626831px;
   --title-2-bold-line-height: 135.80000400543213%;
-  --title-2-medium-font-family: "Pretendard", Helvetica;
+  --title-2-medium-font-family: 'Pretendard', Helvetica;
   --title-2-medium-font-size: 28px;
   --title-2-medium-font-style: normal;
   --title-2-medium-font-weight: 500;
   --title-2-medium-letter-spacing: -0.660799970626831px;
   --title-2-medium-line-height: 135.80000400543213%;
-  --title-2-regular-font-family: "Pretendard", Helvetica;
+  --title-2-regular-font-family: 'Pretendard', Helvetica;
   --title-2-regular-font-size: 28px;
   --title-2-regular-font-style: normal;
   --title-2-regular-font-weight: 400;
   --title-2-regular-letter-spacing: -0.660799970626831px;
   --title-2-regular-line-height: 135.80000400543213%;
-  --title-3-bold-font-family: "Pretendard", Helvetica;
+  --title-3-bold-font-family: 'Pretendard', Helvetica;
   --title-3-bold-font-size: 24px;
   --title-3-bold-font-style: normal;
   --title-3-bold-font-weight: 700;
   --title-3-bold-letter-spacing: -0.5519999885559081px;
   --title-3-bold-line-height: 133.39999914169312%;
-  --title-3-medium-font-family: "Pretendard", Helvetica;
+  --title-3-medium-font-family: 'Pretendard', Helvetica;
   --title-3-medium-font-size: 24px;
   --title-3-medium-font-style: normal;
   --title-3-medium-font-weight: 500;
   --title-3-medium-letter-spacing: -0.5519999885559081px;
   --title-3-medium-line-height: 133.39999914169312%;
-  --title-3-regular-font-family: "Pretendard", Helvetica;
+  --title-3-regular-font-family: 'Pretendard', Helvetica;
   --title-3-regular-font-size: 24px;
   --title-3-regular-font-style: normal;
   --title-3-regular-font-weight: 400;
@@ -410,7 +410,21 @@ body {
 }
 
 body {
-  font-family: var(--font-pretendard), -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  font-family:
+    var(--font-pretendard),
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    Roboto,
+    'Helvetica Neue',
+    'Segoe UI',
+    'Apple SD Gothic Neo',
+    'Noto Sans KR',
+    'Malgun Gothic',
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

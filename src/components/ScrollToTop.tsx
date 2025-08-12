@@ -1,10 +1,12 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import styles from "./ScrollToTop.module.css";
-import scrollToTopIcon from "@/assets/images/ic_scroll_to_top.svg";
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
+
+import scrollToTopIcon from '@/assets/images/ic_scroll_to_top.svg';
+
+import styles from './ScrollToTop.module.css';
 
 export default function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
@@ -20,19 +22,19 @@ export default function ScrollToTop() {
         setIsVisible(false);
       }
     };
-    
+
     // 초기 확인
     toggleVisibility();
 
-    window.addEventListener("scroll", toggleVisibility);
+    window.addEventListener('scroll', toggleVisibility);
 
     return () => {
-      window.removeEventListener("scroll", toggleVisibility);
+      window.removeEventListener('scroll', toggleVisibility);
     };
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   if (isDashboard) return null;

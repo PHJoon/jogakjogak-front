@@ -1,4 +1,5 @@
-import Image, { StaticImageData } from "next/image";
+import Image, { StaticImageData } from 'next/image';
+
 import styles from './FeatureSection.module.css';
 
 interface FeatureSectionProps {
@@ -14,26 +15,24 @@ export default function FeatureSection({
   imageAlt,
   title,
   description,
-  reversed = false
+  reversed = false,
 }: FeatureSectionProps) {
   return (
     <section className={styles.featureSection}>
-      <div className={`${styles.featureContent} ${reversed ? styles.reversed : ''}`}>
+      <div
+        className={`${styles.featureContent} ${reversed ? styles.reversed : ''}`}
+      >
         <div className={styles.imagePlaceholder}>
-          <Image 
-            src={image} 
-            alt={imageAlt} 
+          <Image
+            src={image}
+            alt={imageAlt}
             fill
-            style={{ objectFit: "contain" }}
+            style={{ objectFit: 'contain' }}
           />
         </div>
         <div className={styles.featureText}>
-          <h2 className={styles.featureTitle}>
-            {title}
-          </h2>
-          <p className={styles.featureDescription}>
-            {description}
-          </p>
+          <h2 className={styles.featureTitle}>{title}</h2>
+          <p className={styles.featureDescription}>{description}</p>
         </div>
       </div>
     </section>

@@ -14,7 +14,7 @@
 }
 
 .dayover {
-  background-color: #C8D3DF;
+  background-color: #c8d3df;
 }
 
 .alarm {
@@ -33,25 +33,25 @@
 }
 
 .dDay-anytime {
-  background-color: #60C255;
+  background-color: #60c255;
 }
 
 .dDay-day0 {
-  background-color: #CE494A;
+  background-color: #ce494a;
 }
 
 .dDay-dayover {
-  background-color: #C8D3DF;
+  background-color: #c8d3df;
 }
 
 .dDay-over1 {
-  background-color: #F57F7F;
+  background-color: #f57f7f;
 }
 
 .dDay-apply {
-  background-color: #3483FA;
+  background-color: #3483fa;
 }
 
-.dDay-default .text{
+.dDay-default .text {
   color: var(--primaryjogak-1);
 }
