@@ -17,14 +17,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.jogakjogak.com';
+    const backendUrl =
+      process.env.NEXT_PUBLIC_API_URL || 'https://api.jogakjogak.com';
 
     // 백엔드 서버로 토큰 재발급 요청 - 쿠키로 전송
     const response = await fetch(`${backendUrl}/member/reissue`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `refresh=${refresh_token}`,
+        Cookie: `refresh=${refresh_token}`,
       },
     });
 
@@ -36,12 +37,14 @@ export async function POST(request: NextRequest) {
     if (response.status === 200 && data.status === 'OK') {
       // 백엔드가 data 필드에 직접 access token을 문자열로 보냄
       const accessToken = data.data;
-      
+
       // Set-Cookie에서 새로운 refresh token 찾기
       let newRefreshToken = null;
       if (setCookieHeader) {
         // Set-Cookie 헤더 파싱
-        const cookies = setCookieHeader.split(/,(?=\s*\w+=)/).map(c => c.trim());
+        const cookies = setCookieHeader
+          .split(/,(?=\s*\w+=)/)
+          .map((c) => c.trim());
         for (const cookie of cookies) {
           if (cookie.startsWith('refresh=')) {
             newRefreshToken = cookie.split('=')[1].split(';')[0];
@@ -49,19 +52,19 @@ export async function POST(request: NextRequest) {
           }
         }
       }
-      
+
       // 프론트엔드가 기대하는 형식으로 응답 생성
       const responseData = {
         code: 200,
         data: {
           access_token: accessToken,
-          refresh_token: newRefreshToken || refresh_token
+          refresh_token: newRefreshToken || refresh_token,
         },
-        message: 'Token reissued successfully'
+        message: 'Token reissued successfully',
       };
-      
+
       const res = NextResponse.json(responseData);
-      
+
       // 새로운 refresh token을 프론트엔드 쿠키에도 저장
       if (newRefreshToken) {
         res.cookies.set('refresh', newRefreshToken, {
@@ -71,10 +74,12 @@ export async function POST(request: NextRequest) {
           maxAge: 60 * 60 * 24 * 30, // 30일
         });
       }
-      
+
       return res;
     } else {
-      return NextResponse.json(data || { code: response.status }, { status: response.status });
+      return NextResponse.json(data || { code: response.status }, {
+        status: response.status,
+      });
     }
   } catch (error) {
     console.error('Token reissue error:', error);

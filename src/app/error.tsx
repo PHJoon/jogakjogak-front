@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
 import styles from './page.module.css';
 
 export default function Error({
@@ -18,28 +19,35 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className={styles.container} style={{
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: '2rem',
-      textAlign: 'center'
-    }}>
-      <h1 style={{ 
-        fontSize: '2rem', 
-        marginBottom: '1rem',
-        color: '#333'
-      }}>
+    <div
+      className={styles.container}
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '2rem',
+        textAlign: 'center',
+      }}
+    >
+      <h1
+        style={{
+          fontSize: '2rem',
+          marginBottom: '1rem',
+          color: '#333',
+        }}
+      >
         오류가 발생했습니다
       </h1>
-      
-      <p style={{ 
-        fontSize: '1.1rem', 
-        marginBottom: '2rem',
-        color: '#666'
-      }}>
+
+      <p
+        style={{
+          fontSize: '1.1rem',
+          marginBottom: '2rem',
+          color: '#666',
+        }}
+      >
         일시적인 오류가 발생했습니다. 다시 시도해 주세요.
       </p>
 
@@ -54,14 +62,18 @@ export default function Error({
             border: 'none',
             borderRadius: '8px',
             cursor: 'pointer',
-            fontFamily: 'Pretendard'
+            fontFamily: 'Pretendard',
           }}
-          onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#6D28D9'}
-          onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#7C3AED'}
+          onMouseOver={(e) =>
+            (e.currentTarget.style.backgroundColor = '#6D28D9')
+          }
+          onMouseOut={(e) =>
+            (e.currentTarget.style.backgroundColor = '#7C3AED')
+          }
         >
           다시 시도
         </button>
-        
+
         <button
           onClick={() => router.push('/')}
           style={{
@@ -72,10 +84,12 @@ export default function Error({
             border: '2px solid #7C3AED',
             borderRadius: '8px',
             cursor: 'pointer',
-            fontFamily: 'Pretendard'
+            fontFamily: 'Pretendard',
           }}
-          onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#F3F4F6'}
-          onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'}
+          onMouseOver={(e) =>
+            (e.currentTarget.style.backgroundColor = '#F3F4F6')
+          }
+          onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'white')}
         >
           홈으로 돌아가기
         </button>

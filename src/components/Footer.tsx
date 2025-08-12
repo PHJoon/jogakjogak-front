@@ -1,13 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-import logo from '@/assets/images/logo.svg';
-import emailIcon from '@/assets/images/ico_email.svg';
-import styles from './Footer.module.css';
-import { tokenManager } from '@/utils/auth';
-import { DeleteConfirmModal } from './DeleteConfirmModal';
-import { useState } from 'react';
 import Link from 'next/link';
+import { useState } from 'react';
+
+import emailIcon from '@/assets/images/ico_email.svg';
+import logo from '@/assets/images/logo.svg';
+import { tokenManager } from '@/utils/auth';
+
+import { DeleteConfirmModal } from './DeleteConfirmModal';
+import styles from './Footer.module.css';
 
 interface FooterProps {
   backgroundColor?: 'transparent' | 'white';
@@ -31,7 +33,7 @@ export default function Footer(
       const response = await fetch('/api/member/withdrawal', {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -61,7 +63,7 @@ export default function Footer(
         <div className={styles.logoSection}>
           <Image
             src={logo}
-            alt='조각조각'
+            alt="조각조각"
             width={148.27}
             height={29.13}
             className={styles.logo}
@@ -72,35 +74,32 @@ export default function Footer(
         <div className={styles.mainContent}>
           {/* Links */}
           <nav className={styles.linkContainer}>
-            <Link
-              href='/?intro=true'
-              className={styles.link}
-            >
+            <Link href="/?intro=true" className={styles.link}>
               서비스 소개
             </Link>
             <span className={styles.separator}>|</span>
             <a
-              href='https://zircon-eagle-db5.notion.site/FAQ-23e02f1ef63480679aebe4b2172852f1?source=copy_link'
-              target='_blank'
-              rel='noopener noreferrer'
+              href="https://zircon-eagle-db5.notion.site/FAQ-23e02f1ef63480679aebe4b2172852f1?source=copy_link"
+              target="_blank"
+              rel="noopener noreferrer"
               className={styles.link}
             >
               문의하기
             </a>
             <span className={styles.separator}>|</span>
             <a
-              href='https://zircon-eagle-db5.notion.site/23e02f1ef634800cb29ddda947b3ae52?source=copy_link'
-              target='_blank'
-              rel='noopener noreferrer'
+              href="https://zircon-eagle-db5.notion.site/23e02f1ef634800cb29ddda947b3ae52?source=copy_link"
+              target="_blank"
+              rel="noopener noreferrer"
               className={styles.link}
             >
               이용약관
             </a>
             <span className={styles.separator}>|</span>
             <a
-              href='https://zircon-eagle-db5.notion.site/22d02f1ef634808aa79ad41a0f2c3655'
-              target='_blank'
-              rel='noopener noreferrer'
+              href="https://zircon-eagle-db5.notion.site/22d02f1ef634808aa79ad41a0f2c3655"
+              target="_blank"
+              rel="noopener noreferrer"
               className={styles.link}
             >
               개인정보 처리방침
@@ -112,7 +111,7 @@ export default function Footer(
             <div className={styles.emailContainer}>
               <Image
                 src={emailIcon}
-                alt='이메일'
+                alt="이메일"
                 width={13.33}
                 height={10.67}
                 className={styles.emailIcon}
@@ -138,11 +137,11 @@ export default function Footer(
         isOpen={isWithDrawalModalOpen}
         onClose={() => setIsWithDrawalModalOpen(false)}
         onConfirm={handleWithdrawal} // 탈퇴 확인 함수
-        title='정말 탈퇴하시겠습니까?'
-        message='저장한 회원 기록이 모두 삭제돼요.'
-        cancelText='아니요'
-        confirmText='확인'
-        highlightedText='탈퇴'
+        title="정말 탈퇴하시겠습니까?"
+        message="저장한 회원 기록이 모두 삭제돼요."
+        cancelText="아니요"
+        confirmText="확인"
+        highlightedText="탈퇴"
       />
     </footer>
   );

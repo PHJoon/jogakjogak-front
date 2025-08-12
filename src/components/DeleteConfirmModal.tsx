@@ -1,6 +1,7 @@
 'use client';
 
 import { Fragment } from 'react';
+
 import styles from './DeleteConfirmModal.module.css';
 
 interface Props {
@@ -32,17 +33,15 @@ export function DeleteConfirmModal({
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
-        <h3 className={styles.modalTitle}>{
-          titleWords.map((word, idx) => {
-            return (
-              word === highlightedText ? (
-                <span key={idx} style={{ color: 'var(--red-2)' }}>
-                  {word}
-                </span>
-              ) : (
-                <Fragment key={idx}>{word}</Fragment>
-              )
-            )
+        <h3 className={styles.modalTitle}>
+          {titleWords.map((word, idx) => {
+            return word === highlightedText ? (
+              <span key={idx} style={{ color: 'var(--red-2)' }}>
+                {word}
+              </span>
+            ) : (
+              <Fragment key={idx}>{word}</Fragment>
+            );
           })}
         </h3>
         <p className={styles.modalMessage}>
@@ -54,16 +53,10 @@ export function DeleteConfirmModal({
           ))}
         </p>
         <div className={styles.modalButtons}>
-          <button
-            className={styles.modalCancel}
-            onClick={onClose}
-          >
+          <button className={styles.modalCancel} onClick={onClose}>
             {cancelText}
           </button>
-          <button
-            className={styles.modalConfirm}
-            onClick={onConfirm}
-          >
+          <button className={styles.modalConfirm} onClick={onConfirm}>
             {confirmText}
           </button>
         </div>

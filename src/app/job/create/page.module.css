@@ -155,13 +155,13 @@
   position: relative;
 }
 
-.dateWrapper .input[type="date"] {
+.dateWrapper .input[type='date'] {
   position: relative;
   z-index: 2;
   color: transparent;
 }
 
-.dateWrapper .input[type="date"]::-webkit-calendar-picker-indicator {
+.dateWrapper .input[type='date']::-webkit-calendar-picker-indicator {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -170,13 +170,13 @@
   z-index: 3;
 }
 
-.dateWrapper.hasValue .input[type="date"],
-.dateWrapper .input[type="date"]:focus {
+.dateWrapper.hasValue .input[type='date'],
+.dateWrapper .input[type='date']:focus {
   color: var(--n-800);
 }
 
 .dateWrapper.hasValue .placeholderText,
-.dateWrapper .input[type="date"]:focus ~ .placeholderText {
+.dateWrapper .input[type='date']:focus ~ .placeholderText {
   display: none;
 }
 
@@ -252,7 +252,7 @@
   .container {
     padding: 16px;
   }
-  
+
   .title {
     font-size: 16px;
   }

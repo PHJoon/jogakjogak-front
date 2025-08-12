@@ -11,7 +11,9 @@
   background-color: var(--n-50);
   filter: drop-shadow(0 2px 8px var(--primarymain-300));
   cursor: pointer;
-  transition: background-color 0.2s, box-shadow 0.2s;
+  transition:
+    background-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .jobAdd:hover {

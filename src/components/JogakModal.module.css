@@ -207,11 +207,11 @@
     width: 90vw;
     padding: 20px;
   }
-  
+
   .modalFooter {
     flex-direction: column;
   }
-  
+
   .editButton,
   .mainButton,
   .closeButtonAlt {

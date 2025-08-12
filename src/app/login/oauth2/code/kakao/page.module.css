@@ -31,7 +31,9 @@
 }
 
 @keyframes dotJump {
-  0%, 80%, 100% {
+  0%,
+  80%,
+  100% {
     transform: translateY(0);
   }
   40% {
@@ -39,7 +41,7 @@
   }
 }
 
-.loadingText{
+.loadingText {
   font-size: 20px;
   color: var(--primaryjogak-1);
   font-weight: 500;

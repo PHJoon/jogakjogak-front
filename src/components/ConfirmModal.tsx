@@ -1,6 +1,7 @@
 'use client';
 
 import { Fragment } from 'react';
+
 import styles from './ConfirmModal.module.css';
 
 interface Props {
@@ -24,7 +25,6 @@ export function ConfirmModal({
 }: Props) {
   if (!isOpen) return null;
 
-
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
@@ -38,16 +38,10 @@ export function ConfirmModal({
           ))}
         </p>
         <div className={styles.modalButtons}>
-          <button
-            className={styles.modalCancel}
-            onClick={onClose}
-          >
+          <button className={styles.modalCancel} onClick={onClose}>
             {cancelText}
           </button>
-          <button
-            className={styles.modalConfirm}
-            onClick={onConfirm}
-          >
+          <button className={styles.modalConfirm} onClick={onConfirm}>
             {confirmText}
           </button>
         </div>

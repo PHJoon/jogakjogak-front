@@ -2,7 +2,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 import { FlatCompat } from '@eslint/eslintrc';
-import { globalIgnores } from 'eslint/config'
+import { globalIgnores } from 'eslint/config';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -12,7 +12,14 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  globalIgnores(['node_modules/**', 'dist/**', 'build/**', '.next/**', 'out/**', 'coverage/**']),
+  globalIgnores([
+    'node_modules/**',
+    'dist/**',
+    'build/**',
+    '.next/**',
+    'out/**',
+    'coverage/**',
+  ]),
   ...compat.extends(
     'next/core-web-vitals',
     'next/typescript',
@@ -38,9 +45,10 @@ const eslintConfig = [
             // Then sibling and parent imports. They can be mingled together
             'external',
             'internal',
-            ['parent', 'sibling', 'index'],
+            'parent',
+            'sibling',
+            'index',
             'object',
-            'unknown'
           ],
           pathGroups: [
             {

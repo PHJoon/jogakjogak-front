@@ -250,7 +250,6 @@
   }
 }
 
-
 @media (max-width: 768px) {
   .sortContainer {
     width: calc(100% - 32px);

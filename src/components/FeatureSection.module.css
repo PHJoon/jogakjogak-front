@@ -57,42 +57,42 @@
   .featureSection {
     padding: 0 16px 32px 16px;
   }
-  
+
   .featureSection + .featureSection {
     margin-top: 48px;
   }
-  
+
   .featureContent {
     flex-direction: column;
     gap: 40px;
     align-items: flex-start;
   }
-  
+
   .featureContent.reversed {
     flex-direction: column;
   }
-  
+
   .imagePlaceholder {
     width: calc(100vw - 32px);
     max-width: 507px;
     height: calc((100vw - 32px) * 471 / 507);
     max-height: 471px;
   }
-  
+
   .featureText {
     width: calc(100vw - 32px);
     max-width: 507px;
     padding-left: 24px;
     padding-right: 24px;
   }
-  
+
   .featureTitle {
     font-size: var(--title-3-bold-font-size);
     line-height: var(--title-3-bold-line-height);
     text-align: left;
     margin-bottom: 16px;
   }
-  
+
   .featureDescription {
     font-family: var(--body-2-reading-regular-font-family);
     font-size: var(--body-2-reading-regular-font-size);

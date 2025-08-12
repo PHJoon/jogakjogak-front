@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
-import styles from "./NotificationCancelModal.module.css";
+import React from 'react';
+
+import styles from './NotificationCancelModal.module.css';
 
 interface Props {
   isOpen: boolean;
@@ -9,11 +10,7 @@ interface Props {
   onConfirm: () => void;
 }
 
-export function NotificationCancelModal({
-  isOpen,
-  onClose,
-  onConfirm
-}: Props) {
+export function NotificationCancelModal({ isOpen, onClose, onConfirm }: Props) {
   if (!isOpen) return null;
 
   return (

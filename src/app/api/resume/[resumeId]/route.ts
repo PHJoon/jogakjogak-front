@@ -6,11 +6,11 @@ export async function GET(
 ) {
   try {
     const { resumeId } = await params;
-    
+
     // Authorization 헤더에서 토큰 추출
     const authHeader = request.headers.get('authorization');
     const accessToken = authHeader?.replace('Bearer ', '');
-    
+
     if (!accessToken) {
       return NextResponse.json(
         { code: 401, message: 'Unauthorized' },
@@ -24,7 +24,7 @@ export async function GET(
       {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
       }
@@ -34,7 +34,10 @@ export async function GET(
 
     if (!response.ok) {
       return NextResponse.json(
-        { code: response.status, message: data.message || 'Failed to fetch resume' },
+        {
+          code: response.status,
+          message: data.message || 'Failed to fetch resume',
+        },
         { status: response.status }
       );
     }
@@ -55,11 +58,11 @@ export async function PATCH(
 ) {
   try {
     const { resumeId } = await params;
-    
+
     // Authorization 헤더에서 토큰 추출
     const authHeader = request.headers.get('authorization');
     const accessToken = authHeader?.replace('Bearer ', '');
-    
+
     if (!accessToken) {
       return NextResponse.json(
         { code: 401, message: 'Unauthorized' },
@@ -98,7 +101,7 @@ export async function PATCH(
       {
         method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ title, content }),
@@ -109,7 +112,10 @@ export async function PATCH(
 
     if (!response.ok) {
       return NextResponse.json(
-        { code: response.status, message: data.message || 'Failed to update resume' },
+        {
+          code: response.status,
+          message: data.message || 'Failed to update resume',
+        },
         { status: response.status }
       );
     }
