@@ -1,7 +1,7 @@
-name: "🛠 Change Request"
-description: "기존 기능이나 코드의 수정·개선 사항을 요청합니다."
-title: "[fix] "
-labels: ["❗️fix"]
+name: '🛠 Change Request'
+description: '기존 기능이나 코드의 수정·개선 사항을 요청합니다.'
+title: '[fix] '
+labels: ['🛠️ fix']
 body:
   - type: markdown
     attributes:
@@ -37,8 +37,6 @@ body:
       label: 변경 이유
       description: 이 변경이 필요한 이유를 설명해주세요.
       placeholder: 예) `/dashboard`가 초기 진입점이 되어야 함
-    validations:
-      required: true
   - type: textarea
     id: additional
     attributes:

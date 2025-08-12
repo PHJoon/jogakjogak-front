@@ -6,11 +6,11 @@ export async function PATCH(
 ) {
   try {
     const { jdId, todoId } = await params;
-    
+
     // Authorization 헤더에서 토큰 추출
     const authHeader = request.headers.get('authorization');
     const accessToken = authHeader?.replace('Bearer ', '');
-    
+
     if (!accessToken) {
       return NextResponse.json(
         { code: 401, message: 'Unauthorized' },
@@ -27,7 +27,7 @@ export async function PATCH(
       {
         method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(requestBody),
@@ -38,7 +38,10 @@ export async function PATCH(
 
     if (!response.ok) {
       return NextResponse.json(
-        { code: response.status, message: data.message || 'Failed to update todo' },
+        {
+          code: response.status,
+          message: data.message || 'Failed to update todo',
+        },
         { status: response.status }
       );
     }
@@ -59,11 +62,11 @@ export async function DELETE(
 ) {
   try {
     const { jdId, todoId } = await params;
-    
+
     // Authorization 헤더에서 토큰 추출
     const authHeader = request.headers.get('authorization');
     const accessToken = authHeader?.replace('Bearer ', '');
-    
+
     if (!accessToken) {
       return NextResponse.json(
         { code: 401, message: 'Unauthorized' },
@@ -77,7 +80,7 @@ export async function DELETE(
       {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -85,7 +88,10 @@ export async function DELETE(
     if (!response.ok) {
       const data = await response.json();
       return NextResponse.json(
-        { code: response.status, message: data.message || 'Failed to delete todo' },
+        {
+          code: response.status,
+          message: data.message || 'Failed to delete todo',
+        },
         { status: response.status }
       );
     }

@@ -2,17 +2,19 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
-import styles from './page.module.css';
-import Header from '@/components/Header';
+
+import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
 import Footer from '@/components/Footer';
-import { ResumeRegistration } from '@/components/ResumeRegistration';
+import Header from '@/components/Header';
 import { JobAdd } from '@/components/JobAdd';
 import { JobList } from '@/components/JobList';
-import { tokenManager } from '@/utils/auth';
 import NoResumeModal from '@/components/NoResumeModal';
+import { ResumeRegistration } from '@/components/ResumeRegistration';
 import Snackbar from '@/components/Snackbar';
-import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
+import { tokenManager } from '@/utils/auth';
 import { calculateDDay } from '@/utils/calculateDDay';
+
+import styles from './page.module.css';
 
 interface Resume {
   resumeId: number;
@@ -119,7 +121,7 @@ function DashboardContent() {
       }`;
       const response = await fetch(url, {
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
       const data = await response.json();
@@ -181,7 +183,7 @@ function DashboardContent() {
       const response = await fetch(`/api/jds/${jobId}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -218,7 +220,7 @@ function DashboardContent() {
       const response = await fetch(`/api/jds/${jobId}`, {
         method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -251,10 +253,7 @@ function DashboardContent() {
     return (
       <>
         <>
-          <Header
-            backgroundColor='white'
-            showLogout={true}
-          />
+          <Header backgroundColor="white" showLogout={true} />
           <main className={styles.main}>
             <div className={styles.containerLoading}>
               <div className={`${styles.skeleton} ${styles.resumeLoading}`} />
@@ -281,10 +280,7 @@ function DashboardContent() {
 
   return (
     <>
-      <Header
-        backgroundColor='white'
-        showLogout={true}
-      />
+      <Header backgroundColor="white" showLogout={true} />
       <main className={styles.main}>
         <div className={styles.container}>
           <ResumeRegistration
@@ -306,8 +302,8 @@ function DashboardContent() {
                 }
                 className={styles.sortSelect}
               >
-                <option value='createdAt,desc'>최신순</option>
-                <option value='createdAt,asc'>오래된 순</option>
+                <option value="createdAt,desc">최신순</option>
+                <option value="createdAt,asc">오래된 순</option>
               </select>
             </div>
           </div>
@@ -326,7 +322,7 @@ function DashboardContent() {
                   title={jd.title}
                   company={jd.companyName}
                   registerDate={formatDate(jd.createdAt)}
-                  state='default'
+                  state="default"
                   completedCount={String(jd.completed_pieces)}
                   totalCount={String(jd.total_pieces)}
                   dDay={calculateDDay(jd.endedAt)}
@@ -372,10 +368,10 @@ function DashboardContent() {
       />
 
       <Snackbar
-        message='채용공고를 추가하기 전에 먼저 이력서를 등록해주세요.'
+        message="채용공고를 추가하기 전에 먼저 이력서를 등록해주세요."
         isOpen={showNoResumeSnackbar}
         onClose={() => setShowNoResumeSnackbar(false)}
-        type='info'
+        type="info"
         duration={3000}
       />
 
@@ -391,11 +387,11 @@ function DashboardContent() {
         isOpen={!!deletingJobId}
         onClose={() => setDeletingJobId(null)}
         onConfirm={() => handleJobDelete(deletingJobId)}
-        title='정말 삭제하시겠습니까?'
-        message='저장한 내용이 모두 없어져요.'
-        cancelText='취소'
-        confirmText='삭제'
-        highlightedText='삭제'
+        title="정말 삭제하시겠습니까?"
+        message="저장한 내용이 모두 없어져요."
+        cancelText="취소"
+        confirmText="삭제"
+        highlightedText="삭제"
       />
     </>
   );

@@ -1,8 +1,10 @@
 'use client';
 
-import { useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
+import { useEffect, Suspense } from 'react';
+
 import { tokenManager } from '@/utils/auth';
+
 import styles from './page.module.css';
 
 function KakaoCallbackContent() {
@@ -12,17 +14,20 @@ function KakaoCallbackContent() {
     const handleCallback = async () => {
       try {
         // API를 통해 쿠키에서 refresh token 확인
-        const getRefreshTokenResponse = await fetch('/api/auth/get-refresh-token', {
-          credentials: 'include',
-        });
-        
+        const getRefreshTokenResponse = await fetch(
+          '/api/auth/get-refresh-token',
+          {
+            credentials: 'include',
+          }
+        );
+
         const refreshTokenData = await getRefreshTokenResponse.json();
-        
+
         if (!refreshTokenData.refresh_token) {
           router.push('/?error=login_failed');
           return;
         }
-        
+
         const refreshToken = refreshTokenData.refresh_token;
 
         // refresh_token으로 access_token 받기
@@ -33,7 +38,7 @@ function KakaoCallbackContent() {
           },
           credentials: 'include',
           body: JSON.stringify({
-            refresh_token: refreshToken
+            refresh_token: refreshToken,
           }),
         });
 

@@ -1,18 +1,20 @@
 'use client';
 
-import { useEffect, Suspense, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { tokenManager } from '@/utils/auth';
-import styles from './page.module.css';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import HeroSection from '@/components/HeroSection';
-import FeatureSection from '@/components/FeatureSection';
-import LoginModal from '@/components/LoginModal';
+import { useEffect, Suspense, useState } from 'react';
+
 import section1 from '@/assets/images/section1.png';
 import section2 from '@/assets/images/section2.png';
 import section3 from '@/assets/images/section3.png';
 import Background from '@/components/Background';
+import FeatureSection from '@/components/FeatureSection';
+import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import HeroSection from '@/components/HeroSection';
+import LoginModal from '@/components/LoginModal';
+import { tokenManager } from '@/utils/auth';
+
+import styles from './page.module.css';
 
 function HomeContent() {
   const searchParams = useSearchParams();
@@ -70,16 +72,13 @@ function HomeContent() {
   return (
     <div className={styles.container}>
       <Background />
-      <Header
-        showLogout={!!isAuthenticated}
-        landingPage={true}
-      />
+      <Header showLogout={!!isAuthenticated} landingPage={true} />
 
       <HeroSection onLoginClick={() => setIsLoginModalOpen(true)} />
 
       <FeatureSection
         image={section1}
-        imageAlt='조각조각 서비스 화면'
+        imageAlt="조각조각 서비스 화면"
         title={
           <>
             이력서와 채용 공고로
@@ -98,7 +97,7 @@ function HomeContent() {
 
       <FeatureSection
         image={section2}
-        imageAlt='진척도 확인 화면'
+        imageAlt="진척도 확인 화면"
         title={
           <>
             조각을 채워가며
@@ -118,7 +117,7 @@ function HomeContent() {
 
       <FeatureSection
         image={section3}
-        imageAlt='알림 기능 화면'
+        imageAlt="알림 기능 화면"
         title={
           <>
             멈춘 날도 괜찮아요.
@@ -135,7 +134,7 @@ function HomeContent() {
         }
       />
 
-      <Footer backgroundColor='transparent' />
+      <Footer backgroundColor="transparent" />
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}

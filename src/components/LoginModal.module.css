@@ -38,7 +38,6 @@
   justify-content: center;
 }
 
-
 .logoSection {
   display: flex;
   flex-direction: column;
@@ -96,7 +95,7 @@
 }
 
 .kakaoButton {
-  background-color: #FEE500;
+  background-color: #fee500;
   color: var(--n-995);
 }
 
@@ -104,7 +103,6 @@
 .kakaoButton:hover {
   opacity: 0.9;
 }
-
 
 .rightSection {
   width: 384px;
@@ -137,7 +135,7 @@
   .desktopLayout {
     display: none;
   }
-  
+
   .mobileLayout {
     display: block;
     width: 343px;
@@ -147,7 +145,7 @@
     position: relative;
     padding: 24px;
   }
-  
+
   .mobileCloseButton {
     position: absolute;
     top: 24px;
@@ -162,7 +160,7 @@
     width: 40px;
     height: 40px;
   }
-  
+
   .mobileContent {
     display: flex;
     flex-direction: column;
@@ -170,7 +168,7 @@
     justify-content: center;
     height: 100%;
   }
-  
+
   .mobileLogo {
     display: flex;
     flex-direction: column;
@@ -178,7 +176,7 @@
     gap: 8px;
     margin-bottom: 32px;
   }
-  
+
   .mobileButtons {
     display: flex;
     flex-direction: column;

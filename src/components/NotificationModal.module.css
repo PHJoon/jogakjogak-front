@@ -89,7 +89,11 @@
 .previewHeader {
   width: 100%;
   height: 56px;
-  background: linear-gradient(90deg, rgba(52, 131, 250, 1) 0%, rgba(24, 160, 251, 1) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(52, 131, 250, 1) 0%,
+    rgba(24, 160, 251, 1) 100%
+  );
   padding: 16px 23px;
 }
 

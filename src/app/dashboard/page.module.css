@@ -32,6 +32,7 @@
   max-width: 1560px;
   min-height: 694px;
   flex-wrap: wrap;
+  align-content: flex-start;
   margin: 0 20px 12px 20px;
 }
 
@@ -249,7 +250,6 @@
     margin: 0 16px 16px 16px;
   }
 }
-
 
 @media (max-width: 768px) {
   .sortContainer {

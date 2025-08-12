@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import styles from './Header.module.css';
-import logo from '@/assets/images/logo.svg';
+import React, { useEffect, useState } from 'react';
+
 import logoutIcon from '@/assets/images/ic_logout.svg';
-import LoginModal from './LoginModal';
+import logo from '@/assets/images/logo.svg';
 import { logout } from '@/utils/auth';
+
+import styles from './Header.module.css';
+import LoginModal from './LoginModal';
 
 interface HeaderProps {
   backgroundColor?: 'transparent' | 'white';
@@ -65,43 +67,26 @@ export default function Header({
           headerBackgroundColor === 'white' ? styles.whiteBackground : ''
         } ${landingPage ? styles.landingPage : ''}`}
       >
-        <Link
-          href={showLogout ? '/dashboard' : '/'}
-          className={styles.logo}
-        >
+        <Link href={showLogout ? '/dashboard' : '/'} className={styles.logo}>
           <Image
             src={logo}
-            alt='조각조각 로고'
+            alt="조각조각 로고"
             width={127.82}
             height={25.11}
             priority
           />
         </Link>
         {showLogout ? (
-          <button
-            className={styles.logoutButton}
-            onClick={handleLogoutClick}
-          >
-            <Image
-              src={logoutIcon}
-              alt='로그아웃'
-              width={17.6}
-              height={18}
-            />
+          <button className={styles.logoutButton} onClick={handleLogoutClick}>
+            <Image src={logoutIcon} alt="로그아웃" width={17.6} height={18} />
           </button>
         ) : (
-          <button
-            className={styles.loginButton}
-            onClick={handleLoginClick}
-          >
+          <button className={styles.loginButton} onClick={handleLoginClick}>
             <span>로그인</span>
           </button>
         )}
       </header>
-      <LoginModal
-        isOpen={isLoginModalOpen}
-        onClose={handleCloseModal}
-      />
+      <LoginModal isOpen={isLoginModalOpen} onClose={handleCloseModal} />
     </>
   );
 }

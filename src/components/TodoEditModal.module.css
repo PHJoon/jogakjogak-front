@@ -15,7 +15,9 @@
   transform: translate(-50%, -50%);
   background: white;
   border-radius: 12px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
   z-index: 1001;
   width: 90%;
   max-width: 500px;
@@ -32,7 +34,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 24px 24px 0 24px;
-  border-bottom: 1px solid #E5E7EB;
+  border-bottom: 1px solid #e5e7eb;
   margin-bottom: 24px;
 }
 
@@ -53,7 +55,7 @@
 }
 
 .closeButton:hover {
-  background-color: #F3F4F6;
+  background-color: #f3f4f6;
 }
 
 .form {
@@ -77,10 +79,12 @@
 .textarea {
   width: 100%;
   padding: 12px;
-  border: 1px solid #D1D5DB;
+  border: 1px solid #d1d5db;
   border-radius: 8px;
   font-size: 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
   box-sizing: border-box;
 }
 
@@ -88,7 +92,7 @@
 .input:focus,
 .textarea:focus {
   outline: none;
-  border-color: #8B5CF6;
+  border-color: #8b5cf6;
   box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
@@ -100,7 +104,7 @@
 
 .charCount {
   font-size: 12px;
-  color: #6B7280;
+  color: #6b7280;
   text-align: right;
   margin-top: 4px;
 }
@@ -111,5 +115,5 @@
   justify-content: flex-end;
   margin-top: 32px;
   padding-top: 20px;
-  border-top: 1px solid #E5E7EB;
+  border-top: 1px solid #e5e7eb;
 }

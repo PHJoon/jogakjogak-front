@@ -83,12 +83,12 @@
   .hero {
     margin-bottom: 64px;
   }
-  
+
   .badge {
     margin-bottom: 16px;
     padding: 8px 12px;
   }
-  
+
   .badge span {
     font-family: var(--label-2-bold-font-family);
     font-size: var(--label-2-bold-font-size);
@@ -96,7 +96,7 @@
     letter-spacing: var(--label-2-bold-letter-spacing);
     line-height: var(--label-2-bold-line-height);
   }
-  
+
   .title {
     font-size: var(--title-2-bold-font-size);
     line-height: var(--title-2-bold-line-height);
@@ -104,7 +104,7 @@
     margin-bottom: 16px;
     flex-direction: column;
   }
-  
+
   .description {
     font-family: var(--body-1-reading-medium-font-family);
     font-size: var(--body-1-reading-medium-font-size);
@@ -113,7 +113,7 @@
     letter-spacing: var(--body-1-reading-medium-letter-spacing);
     margin-bottom: 16px;
   }
-  
+
   .ctaButton {
     width: 167px;
     height: 48px;

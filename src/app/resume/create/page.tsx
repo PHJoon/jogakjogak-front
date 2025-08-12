@@ -1,17 +1,19 @@
 'use client';
 
-import { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
-import styles from './page.module.css';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import { Button } from '@/components/Button';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
+
 import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
-import arrowDropDownIcon from '@/assets/images/ic_drop_down.svg';
 import chatInfoIcon from '@/assets/images/ic_chat_info.svg';
-import { tokenManager } from '@/utils/auth';
+import arrowDropDownIcon from '@/assets/images/ic_drop_down.svg';
+import { Button } from '@/components/Button';
 import { ConfirmModal } from '@/components/ConfirmModal';
+import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import { tokenManager } from '@/utils/auth';
+
+import styles from './page.module.css';
 
 function ResumeCreateContent() {
   const router = useRouter();
@@ -44,7 +46,7 @@ function ResumeCreateContent() {
       const accessToken = tokenManager.getAccessToken();
       const response = await fetch(`/api/resume/${resumeId}`, {
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -155,7 +157,7 @@ function ResumeCreateContent() {
         method,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           title: resumeTitle,
@@ -183,11 +185,11 @@ function ResumeCreateContent() {
           modalTitle: data.message
             ? '이력서 내용이 유효하지 않아요'
             : '이력서 등록 오류',
-          modalContent:
-            data.message ? '반복된 내용이 있어 올바른 작성이 필요해요.' :
-            (resumeId
+          modalContent: data.message
+            ? '반복된 내용이 있어 올바른 작성이 필요해요.'
+            : resumeId
               ? '이력서 수정에 실패했습니다.'
-              : '이력서 등록에 실패했습니다.'),
+              : '이력서 등록에 실패했습니다.',
         });
         setIsResumeContentErrorModalOpen(true);
       }
@@ -195,10 +197,9 @@ function ResumeCreateContent() {
       console.error('Resume submission error:', error);
       setContentErrorMessage({
         modalTitle: '이력서 등록 오류',
-        modalContent:
-          resumeId
-            ? '이력서 수정 중 오류가 발생했습니다.'
-            : '이력서 등록 중 오류가 발생했습니다.',
+        modalContent: resumeId
+          ? '이력서 수정 중 오류가 발생했습니다.'
+          : '이력서 등록 중 오류가 발생했습니다.',
       });
       setIsResumeContentErrorModalOpen(true);
     } finally {
@@ -208,20 +209,14 @@ function ResumeCreateContent() {
 
   return (
     <>
-      <Header
-        backgroundColor='white'
-        showLogout={true}
-      />
+      <Header backgroundColor="white" showLogout={true} />
       <main className={styles.main}>
         <div className={styles.container}>
           <div className={styles.header}>
-            <button
-              className={styles.backButton}
-              onClick={handleBack}
-            >
+            <button className={styles.backButton} onClick={handleBack}>
               <Image
                 src={arrowBackIcon}
-                alt='뒤로가기'
+                alt="뒤로가기"
                 width={15.57}
                 height={15.16}
               />
@@ -229,10 +224,7 @@ function ResumeCreateContent() {
             <h1 className={styles.title}>
               {resumeId ? '나의 이력서 수정하기' : '나의 이력서 만들기'}
             </h1>
-            <Button
-              variant='disabled'
-              className={styles.pdfButton}
-            >
+            <Button variant="disabled" className={styles.pdfButton}>
               PDF로 불러오기
             </Button>
           </div>
@@ -248,7 +240,7 @@ function ResumeCreateContent() {
                 <div className={styles.resumeSection}>
                   <div className={styles.resumeHeader}>
                     <input
-                      type='text'
+                      type="text"
                       className={styles.resumeTitleInput}
                       value={resumeTitle}
                       onChange={handleTitleChange}
@@ -263,7 +255,7 @@ function ResumeCreateContent() {
                 <div className={styles.inputSection}>
                   <textarea
                     className={styles.textarea}
-                    placeholder='갖고 있는 이력서 내용을 복사/붙여넣기 하면 한번에 정리해드릴게요.'
+                    placeholder="갖고 있는 이력서 내용을 복사/붙여넣기 하면 한번에 정리해드릴게요."
                     maxLength={5000}
                     value={resumeText}
                     onChange={handleTextChange}
@@ -276,14 +268,11 @@ function ResumeCreateContent() {
             )}
 
             <div className={styles.helpSection}>
-              <div
-                className={styles.helpHeader}
-                onClick={toggleHelp}
-              >
+              <div className={styles.helpHeader} onClick={toggleHelp}>
                 <div className={styles.helpContent}>
                   <Image
                     src={chatInfoIcon}
-                    alt='도움말'
+                    alt="도움말"
                     width={16.67}
                     height={15.51}
                     className={styles.helpIcon}
@@ -296,7 +285,7 @@ function ResumeCreateContent() {
                 </div>
                 <Image
                   src={arrowDropDownIcon}
-                  alt='펼치기'
+                  alt="펼치기"
                   width={8.6}
                   height={4.7}
                   className={`${styles.dropdownIcon} ${
@@ -366,10 +355,10 @@ function ResumeCreateContent() {
                 {isLoading
                   ? '불러오는 중...'
                   : isSubmitting
-                  ? resumeId
-                    ? '수정 중...'
-                    : '등록 중...'
-                  : '완료하기'}
+                    ? resumeId
+                      ? '수정 중...'
+                      : '등록 중...'
+                    : '완료하기'}
               </span>
             </button>
           </div>
@@ -383,17 +372,17 @@ function ResumeCreateContent() {
         onConfirm={() => setIsResumeContentErrorModalOpen(false)}
         title={contentErrorMessage.modalTitle}
         message={contentErrorMessage.modalContent}
-        cancelText='확인'
-        confirmText='다시 작성'
+        cancelText="확인"
+        confirmText="다시 작성"
       />
       <ConfirmModal
         isOpen={isBackConfirmModalOpen}
         onClose={() => router.back()}
         onConfirm={() => setBackConfirmModalOpen(false)}
-        title='이전 화면으로 가시겠어요?'
-        message='작성 중인 내용이 모두 지워져요.'
-        cancelText='이전 화면'
-        confirmText='계속 작성'
+        title="이전 화면으로 가시겠어요?"
+        message="작성 중인 내용이 모두 지워져요."
+        cancelText="이전 화면"
+        confirmText="계속 작성"
       />
     </>
   );

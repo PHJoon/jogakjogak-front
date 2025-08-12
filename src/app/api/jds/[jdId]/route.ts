@@ -6,11 +6,11 @@ export async function GET(
 ) {
   try {
     const { jdId } = await params;
-    
+
     // Authorization 헤더에서 토큰 추출
     const authHeader = request.headers.get('authorization');
     const accessToken = authHeader?.replace('Bearer ', '');
-    
+
     if (!accessToken) {
       return NextResponse.json(
         { code: 401, message: 'Unauthorized' },
@@ -24,7 +24,7 @@ export async function GET(
       {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
       }
@@ -34,7 +34,10 @@ export async function GET(
 
     if (!response.ok) {
       return NextResponse.json(
-        { code: response.status, message: data.message || 'Failed to fetch JD' },
+        {
+          code: response.status,
+          message: data.message || 'Failed to fetch JD',
+        },
         { status: response.status }
       );
     }
@@ -50,8 +53,8 @@ export async function GET(
 }
 
 export async function PATCH(
-    request: NextRequest,
-    { params }: { params: Promise<{ jdId: string }> }
+  request: NextRequest,
+  { params }: { params: Promise<{ jdId: string }> }
 ) {
   try {
     const { jdId } = await params;
@@ -60,28 +63,30 @@ export async function PATCH(
 
     if (!accessToken) {
       return NextResponse.json(
-          { code: 401, message: 'Unauthorized' },
-          { status: 401 }
+        { code: 401, message: 'Unauthorized' },
+        { status: 401 }
       );
     }
 
     const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'https://api.jogakjogak.com'}/jds/${jdId}/apply`,
-        {
-          method: 'PATCH',
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-          }
-
-        }
+      `${process.env.NEXT_PUBLIC_API_URL || 'https://api.jogakjogak.com'}/jds/${jdId}/apply`,
+      {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
     );
 
     const data = await response.json();
 
     if (!response.ok) {
       return NextResponse.json(
-          { code: response.status, message: data.message || 'Failed to patch JD' },
-          { status: response.status }
+        {
+          code: response.status,
+          message: data.message || 'Failed to patch JD',
+        },
+        { status: response.status }
       );
     }
 
@@ -89,8 +94,8 @@ export async function PATCH(
   } catch (error) {
     console.error('JD patch error:', error);
     return NextResponse.json(
-        { code: 500, message: 'Internal server error' },
-        { status: 500 }
+      { code: 500, message: 'Internal server error' },
+      { status: 500 }
     );
   }
 }
@@ -101,11 +106,11 @@ export async function DELETE(
 ) {
   try {
     const { jdId } = await params;
-    
+
     // Authorization 헤더에서 토큰 추출
     const authHeader = request.headers.get('authorization');
     const accessToken = authHeader?.replace('Bearer ', '');
-    
+
     if (!accessToken) {
       return NextResponse.json(
         { code: 401, message: 'Unauthorized' },
@@ -119,7 +124,7 @@ export async function DELETE(
       {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -128,7 +133,10 @@ export async function DELETE(
 
     if (!response.ok) {
       return NextResponse.json(
-        { code: response.status, message: data.message || 'Failed to delete JD' },
+        {
+          code: response.status,
+          message: data.message || 'Failed to delete JD',
+        },
         { status: response.status }
       );
     }

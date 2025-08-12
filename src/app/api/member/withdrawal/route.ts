@@ -5,7 +5,7 @@ export async function DELETE(request: NextRequest) {
     // Authorization 헤더에서 토큰 추출
     const authHeader = request.headers.get('authorization');
     const accessToken = authHeader?.replace('Bearer ', '');
-    
+
     if (!accessToken) {
       return NextResponse.json(
         { code: 401, message: 'Unauthorized' },
@@ -19,7 +19,7 @@ export async function DELETE(request: NextRequest) {
       {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -27,7 +27,10 @@ export async function DELETE(request: NextRequest) {
     if (!response.ok) {
       const data = await response.json();
       return NextResponse.json(
-        { code: response.status, message: data.message || 'Failed to withdraw member' },
+        {
+          code: response.status,
+          message: data.message || 'Failed to withdraw member',
+        },
         { status: response.status }
       );
     }

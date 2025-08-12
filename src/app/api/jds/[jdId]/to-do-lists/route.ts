@@ -6,11 +6,11 @@ export async function POST(
 ) {
   try {
     const { jdId } = await params;
-    
+
     // Authorization 헤더에서 토큰 추출
     const authHeader = request.headers.get('authorization');
     const accessToken = authHeader?.replace('Bearer ', '');
-    
+
     if (!accessToken) {
       return NextResponse.json(
         { code: 401, message: 'Unauthorized' },
@@ -27,7 +27,7 @@ export async function POST(
       {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(requestBody),
@@ -38,7 +38,10 @@ export async function POST(
 
     if (!response.ok) {
       return NextResponse.json(
-        { code: response.status, message: data.message || 'Failed to create todo' },
+        {
+          code: response.status,
+          message: data.message || 'Failed to create todo',
+        },
         { status: response.status }
       );
     }

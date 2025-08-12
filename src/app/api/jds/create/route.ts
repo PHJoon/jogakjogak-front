@@ -5,7 +5,7 @@ export async function POST(request: NextRequest) {
     // Authorization 헤더에서 토큰 추출
     const authHeader = request.headers.get('authorization');
     const accessToken = authHeader?.replace('Bearer ', '');
-    
+
     if (!accessToken) {
       return NextResponse.json(
         { code: 401, message: 'Unauthorized' },
@@ -19,9 +19,10 @@ export async function POST(request: NextRequest) {
     // 필수 필드 검증
     if (!title || !companyName || !job || !content) {
       return NextResponse.json(
-        { 
-          code: 400, 
-          message: 'Missing required fields: title, companyName, job, content are required' 
+        {
+          code: 400,
+          message:
+            'Missing required fields: title, companyName, job, content are required',
         },
         { status: 400 }
       );
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
       {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -41,8 +42,8 @@ export async function POST(request: NextRequest) {
           companyName,
           job,
           content,
-          jdUrl: link || "",  // link → jdUrl, 빈 문자열 기본값
-          ...(endDate && { endedAt: `${endDate}T23:59:59` })  // endDate가 있을 때만 추가
+          jdUrl: link || '', // link → jdUrl, 빈 문자열 기본값
+          ...(endDate && { endedAt: `${endDate}T23:59:59` }), // endDate가 있을 때만 추가
         }),
       }
     );
@@ -51,13 +52,14 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       // 백엔드 에러 형식에 맞춰 처리
-      const errorMessage = data.message || data.errorMessage || 'Failed to create JD';
-      
+      const errorMessage =
+        data.message || data.errorMessage || 'Failed to create JD';
+
       return NextResponse.json(
-        { 
-          code: response.status, 
+        {
+          code: response.status,
           message: errorMessage,
-          errorCode: data.errorCode
+          errorCode: data.errorCode,
         },
         { status: response.status }
       );
@@ -66,12 +68,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
     console.error('JD creation error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { 
-        code: 500, 
+      {
+        code: 500,
         message: `Internal server error: ${errorMessage}`,
-        details: error instanceof Error ? error.stack : undefined
+        details: error instanceof Error ? error.stack : undefined,
       },
       { status: 500 }
     );

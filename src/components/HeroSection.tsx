@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from './HeroSection.module.css';
+import { useState, useEffect } from 'react';
+
 import { tokenManager } from '@/utils/auth';
+
+import styles from './HeroSection.module.css';
 
 interface HeroSectionProps {
   onLoginClick?: () => void;
@@ -37,8 +39,8 @@ export default function HeroSection({ onLoginClick }: HeroSectionProps) {
         <span>막막한 취업 준비, 조각조각이 함께</span>
       </div>
       <h1 className={styles.title}>
-          <p>나의 커리어 조각,</p>
-          <p>하나씩 완성해요</p>
+        <p>나의 커리어 조각,</p>
+        <p>하나씩 완성해요</p>
       </h1>
       <p className={styles.description}>
         AI가 함께하는 나의 취업 성공 투두 리스트

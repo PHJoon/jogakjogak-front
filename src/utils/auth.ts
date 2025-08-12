@@ -19,7 +19,8 @@ export const tokenManager = {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('access_token');
       // 쿠키도 제거
-      document.cookie = 'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+      document.cookie =
+        'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
     }
   },
 
@@ -37,7 +38,7 @@ export const tokenManager = {
 export async function reissueToken(): Promise<boolean> {
   try {
     const refreshToken = await tokenManager.getRefreshToken();
-    
+
     const response = await fetch('/api/member/reissue', {
       method: 'POST',
       headers: {
@@ -64,16 +65,19 @@ export async function reissueToken(): Promise<boolean> {
 }
 
 // API 요청 래퍼 함수
-export async function fetchWithAuth(url: string, options: RequestInit = {}): Promise<Response> {
+export async function fetchWithAuth(
+  url: string,
+  options: RequestInit = {}
+): Promise<Response> {
   const accessToken = tokenManager.getAccessToken();
-  
+
   const headers = {
     ...options.headers,
     ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
   };
 
-  let response = await fetch(url, { 
-    ...options, 
+  let response = await fetch(url, {
+    ...options,
     headers,
     credentials: 'include', // 쿠키 포함
   });
@@ -81,13 +85,13 @@ export async function fetchWithAuth(url: string, options: RequestInit = {}): Pro
   // 토큰 만료 시 재발급 시도
   if (response.status === 401) {
     const reissued = await reissueToken();
-    
+
     if (reissued) {
       // 새 토큰으로 재시도
       const newAccessToken = tokenManager.getAccessToken();
       headers.Authorization = `Bearer ${newAccessToken}`;
-      response = await fetch(url, { 
-        ...options, 
+      response = await fetch(url, {
+        ...options,
         headers,
         credentials: 'include',
       });
@@ -105,10 +109,10 @@ export async function fetchWithAuth(url: string, options: RequestInit = {}): Pro
 export async function logout() {
   // 즉시 토큰 제거
   tokenManager.removeAccessToken();
-  
+
   try {
     const refreshToken = await tokenManager.getRefreshToken();
-    
+
     if (refreshToken) {
       await fetch('/api/member/logout', {
         method: 'POST',

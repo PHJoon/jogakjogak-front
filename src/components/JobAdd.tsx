@@ -1,10 +1,12 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import styles from "./JobAdd.module.css";
-import addJobIcon from "@/assets/images/add_job.svg";
-import addJobActiveIcon from "@/assets/images/add_job_active.svg";
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
+import addJobIcon from '@/assets/images/add_job.svg';
+import addJobActiveIcon from '@/assets/images/add_job_active.svg';
+
+import styles from './JobAdd.module.css';
 
 interface JobAddProps {
   className?: string;
@@ -12,10 +14,10 @@ interface JobAddProps {
   onNoResumeClick?: () => void;
 }
 
-export function JobAdd({ 
-  className = "",
+export function JobAdd({
+  className = '',
   hasResume = false,
-  onNoResumeClick
+  onNoResumeClick,
 }: JobAddProps) {
   const router = useRouter();
 
@@ -23,15 +25,18 @@ export function JobAdd({
     if (!hasResume && onNoResumeClick) {
       onNoResumeClick();
     } else {
-      router.push("/job/create");
+      router.push('/job/create');
     }
   };
 
   return (
-    <div className={`${styles.jobAdd} ${hasResume ? styles.hasResume : ''} ${className}`} onClick={handleClick}>
+    <div
+      className={`${styles.jobAdd} ${hasResume ? styles.hasResume : ''} ${className}`}
+      onClick={handleClick}
+    >
       {/* Desktop version */}
       <div className={styles.desktopContent}>
-        <Image 
+        <Image
           src={hasResume ? addJobActiveIcon : addJobIcon}
           alt="Add Job"
           width={33.33}
@@ -40,10 +45,10 @@ export function JobAdd({
         />
         <div className={styles.textWrapper}>채용공고 추가하기</div>
       </div>
-      
+
       {/* Mobile version */}
       <div className={styles.mobileContent}>
-        <Image 
+        <Image
           src={hasResume ? addJobActiveIcon : addJobIcon}
           alt="Add Job"
           width={26.67}

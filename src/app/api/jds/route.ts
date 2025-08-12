@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
     // Authorization 헤더에서 토큰 추출
     const authHeader = request.headers.get('authorization');
     const accessToken = authHeader?.replace('Bearer ', '');
-    
+
     if (!accessToken) {
       return NextResponse.json(
         { code: 401, message: 'Unauthorized' },
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     const queryParams = new URLSearchParams({
       page,
       size,
-      sort
+      sort,
     });
 
     const queryString = queryParams.toString();
@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
       {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
       }
@@ -43,7 +43,10 @@ export async function GET(request: NextRequest) {
 
     if (!response.ok) {
       return NextResponse.json(
-        { code: response.status, message: data.message || 'Failed to fetch jds' },
+        {
+          code: response.status,
+          message: data.message || 'Failed to fetch jds',
+        },
         { status: response.status }
       );
     }
