@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 
 import logoutIcon from '@/assets/images/ic_logout.svg';
 import logo from '@/assets/images/logo.svg';
-import { logout } from '@/utils/auth';
+import { logout } from '@/lib/auth/authApi';
 
 import styles from './Header.module.css';
 import LoginModal from './LoginModal';

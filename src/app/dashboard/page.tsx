@@ -11,32 +11,13 @@ import { JobList } from '@/components/JobList';
 import NoResumeModal from '@/components/NoResumeModal';
 import { ResumeRegistration } from '@/components/ResumeRegistration';
 import Snackbar from '@/components/Snackbar';
-import { tokenManager } from '@/utils/auth';
+import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
+import { tokenManager } from '@/lib/auth/tokenManager';
+import { getJdsData } from '@/lib/jds/jdsApi';
+import { JobDescription, Resume } from '@/types/jds';
 import { calculateDDay } from '@/utils/calculateDDay';
 
 import styles from './page.module.css';
-
-interface Resume {
-  resumeId: number;
-  title: string;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface JobDescription {
-  jd_id: number;
-  title: string;
-  bookmark: boolean;
-  alarmOn: boolean;
-  companyName: string;
-  total_pieces: number;
-  completed_pieces: number;
-  applyAt: string | null;
-  endedAt: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
 function DashboardContent() {
   const router = useRouter();
@@ -75,6 +56,7 @@ function DashboardContent() {
     const checkAuth = () => {
       const token = tokenManager.getAccessToken();
       setIsAuthenticated(!!token);
+      console.log('isAuthenticated:', !!token);
     };
 
     checkAuth();
@@ -86,6 +68,7 @@ function DashboardContent() {
 
   useEffect(() => {
     if (isAuthenticated === false) {
+      tokenManager.removeAccessToken();
       router.push('/');
     }
   }, [isAuthenticated, router]);
@@ -108,42 +91,16 @@ function DashboardContent() {
 
   const fetchJdsData = async (page: number, sort?: string) => {
     try {
-      const accessToken = tokenManager.getAccessToken();
-      const queryParams = new URLSearchParams();
+      const res = await getJdsData(page, sort);
 
-      if (sort) {
-        queryParams.append('sort', sort);
-        queryParams.append('page', page.toString());
-      }
-
-      const url = `/api/jds${
-        queryParams.toString() ? `?${queryParams.toString()}` : ''
-      }`;
-      const response = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      const data = await response.json();
-
-      if (data.data) {
-        setResume(data.data.resume);
-        setJds(data.data.jds || []);
-        setPageInfo({
-          totalElements: data.data.totalElements || 0,
-          totalPages: data.data.totalPages || 0,
-          currentPage: data.data.currentPage || 0,
-          pageSize: data.data.pageSize || 0,
-          hasNext: data.data.hasNext || false,
-          hasPrevious: data.data.hasPrevious || false,
-          isFirst: data.data.isFirst || false,
-          isLast: data.data.isLast || false,
-        });
-
-        // 이력서가 없는 경우 모달 표시
-        if (!data.data.resume) {
+      if (res) {
+        if (!res.resume) {
           setShowNoResumeModal(true);
+          return;
         }
+        setResume(res.resume);
+        setJds(res.jds);
+        setPageInfo(res.pageInfo);
       }
     } catch (error) {
       console.error('Failed to fetch jds data:', error);
@@ -158,10 +115,7 @@ function DashboardContent() {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return `${date.getFullYear()}년 ${String(date.getMonth() + 1).padStart(
-      2,
-      '0'
-    )}월 ${String(date.getDate()).padStart(2, '0')}일`;
+    return `${date.getFullYear()}년 ${String(date.getMonth() + 1).padStart(2, '0')}월 ${String(date.getDate()).padStart(2, '0')}일`;
   };
 
   const handleResumeRegisterClick = () => {
@@ -179,12 +133,8 @@ function DashboardContent() {
     if (!jobId) return;
 
     try {
-      const accessToken = tokenManager.getAccessToken();
-      const response = await fetch(`/api/jds/${jobId}`, {
+      const response = await fetchWithAuth(`/api/jds/${jobId}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
       });
 
       if (response.ok) {
@@ -216,12 +166,8 @@ function DashboardContent() {
   // 지원 완료 핸들러
   const handleApplyComplete = async (jobId: number) => {
     try {
-      const accessToken = tokenManager.getAccessToken();
-      const response = await fetch(`/api/jds/${jobId}`, {
+      const response = await fetchWithAuth(`/api/jds/${jobId}`, {
         method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
       });
 
       if (response.ok) {

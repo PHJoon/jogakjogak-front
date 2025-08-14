@@ -8,7 +8,7 @@ import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import LoadingModal from '@/components/LoadingModal';
-import { tokenManager } from '@/utils/auth';
+import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
 
 import styles from './page.module.css';
 
@@ -45,13 +45,10 @@ export default function CreateJobPage() {
 
     setIsSubmitting(true);
     try {
-      const accessToken = tokenManager.getAccessToken();
-
-      const response = await fetch('/api/jds/create', {
+      const response = await fetchWithAuth('/api/jds/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           title: jobTitle,

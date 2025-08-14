@@ -19,40 +19,11 @@ import { MemoBox } from '@/components/MemoBox';
 import NotificationModal from '@/components/NotificationModal';
 import { ProgressBar } from '@/components/ProgressBar';
 import Snackbar from '@/components/Snackbar';
-import { tokenManager } from '@/utils/auth';
+import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
+import { JDDetail, TodoItem } from '@/types/jds';
 import { calculateDDay } from '@/utils/calculateDDay';
 
 import styles from './page.module.css';
-
-interface TodoItem {
-  checklist_id: number;
-  category: string;
-  title: string;
-  content: string;
-  memo: string;
-  jdId: number;
-  createdAt: string;
-  updatedAt: string;
-  done: boolean;
-}
-
-interface JDDetail {
-  jd_id: number;
-  title: string;
-  bookmark: boolean;
-  companyName: string;
-  job: string;
-  content: string;
-  jdUrl: string;
-  memo: string;
-  memberId: number;
-  alarmOn: boolean;
-  applyAt: string | null;
-  endedAt: string;
-  createdAt: string;
-  updatedAt: string;
-  toDoLists: TodoItem[];
-}
 
 const CATEGORY_TITLES: { [key: string]: string } = {
   STRUCTURAL_COMPLEMENT_PLAN: '필요한 경험과 역량',
@@ -106,12 +77,7 @@ export default function JobDetailPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const accessToken = tokenManager.getAccessToken();
-        const response = await fetch(`/api/jds/${jdId}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const response = await fetchWithAuth(`/api/jds/${jdId}`);
 
         if (response.ok) {
           const data = await response.json();
@@ -152,11 +118,9 @@ export default function JobDetailPage() {
     setJdDetail({ ...jdDetail, bookmark: newBookmarkState });
 
     try {
-      const accessToken = tokenManager.getAccessToken();
-      const response = await fetch(`/api/jds/${jdId}/bookmark`, {
+      const response = await fetchWithAuth(`/api/jds/${jdId}/bookmark`, {
         method: 'PATCH',
         headers: {
-          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -210,12 +174,10 @@ export default function JobDetailPage() {
     async (memoText: string) => {
       try {
         setIsSavingMemo(true);
-        const accessToken = tokenManager.getAccessToken();
-        const response = await fetch(`/api/jds/${jdId}/memo`, {
+        const response = await fetchWithAuth(`/api/jds/${jdId}/memo`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
           },
           body: JSON.stringify({ memo: memoText }),
         });
@@ -270,11 +232,9 @@ export default function JobDetailPage() {
       setJdDetail({ ...jdDetail, alarmOn: isEnabled });
 
       try {
-        const accessToken = tokenManager.getAccessToken();
-        const response = await fetch(`/api/jds/${jdId}/alarm`, {
+        const response = await fetchWithAuth(`/api/jds/${jdId}/alarm`, {
           method: 'PATCH',
           headers: {
-            Authorization: `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
@@ -335,13 +295,11 @@ export default function JobDetailPage() {
   // Todo 완료 상태 토글
   const toggleTodoComplete = async (todo: TodoItem, newStatus: boolean) => {
     try {
-      const accessToken = tokenManager.getAccessToken();
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `/api/jds/${jdId}/to-do-lists/${todo.checklist_id}`,
         {
           method: 'PATCH',
           headers: {
-            Authorization: `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
@@ -409,26 +367,23 @@ export default function JobDetailPage() {
       );
       const isDone = currentTodo?.done || false;
 
-      const accessToken = tokenManager.getAccessToken();
-      const response = await fetch(`/api/jds/${jdId}/to-do-lists/${todoId}`, {
-        method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...data,
-          is_done: isDone,
-        }),
-      });
+      const response = await fetchWithAuth(
+        `/api/jds/${jdId}/to-do-lists/${todoId}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...data,
+            is_done: isDone,
+          }),
+        }
+      );
 
       if (response.ok) {
         // 데이터 다시 불러오기
-        const detailResponse = await fetch(`/api/jds/${jdId}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const detailResponse = await fetchWithAuth(`/api/jds/${jdId}`);
 
         if (detailResponse.ok) {
           const detailData = await detailResponse.json();
@@ -460,21 +415,13 @@ export default function JobDetailPage() {
   // Todo 삭제 함수
   const deleteTodo = async (todoId: string) => {
     try {
-      const accessToken = tokenManager.getAccessToken();
-      const response = await fetch(`/api/jds/${jdId}/to-do-lists/${todoId}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await fetchWithAuth(
+        `/api/jds/${jdId}/to-do-lists/${todoId}`
+      );
 
       if (response.ok) {
         // 데이터 다시 불러오기
-        const detailResponse = await fetch(`/api/jds/${jdId}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const detailResponse = await fetchWithAuth(`/api/jds/${jdId}`);
 
         if (detailResponse.ok) {
           const detailData = await detailResponse.json();
@@ -510,11 +457,9 @@ export default function JobDetailPage() {
     content: string;
   }) => {
     try {
-      const accessToken = tokenManager.getAccessToken();
-      const response = await fetch(`/api/jds/${jdId}/to-do-lists`, {
+      const response = await fetchWithAuth(`/api/jds/${jdId}/to-do-lists`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
@@ -522,11 +467,7 @@ export default function JobDetailPage() {
 
       if (response.ok) {
         // 데이터 다시 불러오기
-        const detailResponse = await fetch(`/api/jds/${jdId}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const detailResponse = await fetchWithAuth(`/api/jds/${jdId}`);
 
         if (detailResponse.ok) {
           const detailData = await detailResponse.json();
@@ -558,12 +499,8 @@ export default function JobDetailPage() {
   // 삭제 핸들러
   const handleDelete = async () => {
     try {
-      const accessToken = tokenManager.getAccessToken();
-      const response = await fetch(`/api/jds/${jdId}`, {
+      const response = await fetchWithAuth(`/api/jds/${jdId}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
       });
 
       if (response.ok) {
@@ -584,12 +521,8 @@ export default function JobDetailPage() {
   // 지원 완료 핸들러
   const handleApplyComplete = async () => {
     try {
-      const accessToken = tokenManager.getAccessToken();
-      const response = await fetch(`/api/jds/${jdId}`, {
+      const response = await fetchWithAuth(`/api/jds/${jdId}`, {
         method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
       });
 
       if (response.ok) {
