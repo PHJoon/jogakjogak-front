@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
-import { tokenManager } from '@/utils/auth';
+import { tokenManager } from '@/lib/auth/tokenManager';
 
 import styles from './HeroSection.module.css';
 

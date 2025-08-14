@@ -6,7 +6,8 @@ import { useState } from 'react';
 
 import emailIcon from '@/assets/images/ico_email.svg';
 import logo from '@/assets/images/logo.svg';
-import { tokenManager } from '@/utils/auth';
+import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
+import { tokenManager } from '@/lib/auth/tokenManager';
 
 import { DeleteConfirmModal } from './DeleteConfirmModal';
 import styles from './Footer.module.css';
@@ -30,11 +31,8 @@ export default function Footer(
         return;
       }
 
-      const response = await fetch('/api/member/withdrawal', {
+      const response = await fetchWithAuth('/api/member/withdrawal', {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
       });
 
       if (response.ok) {

@@ -11,7 +11,7 @@ import { Button } from '@/components/Button';
 import { ConfirmModal } from '@/components/ConfirmModal';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import { tokenManager } from '@/utils/auth';
+import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
 
 import styles from './page.module.css';
 
@@ -43,12 +43,7 @@ function ResumeCreateContent() {
   const fetchResume = useCallback(async () => {
     setIsLoading(true);
     try {
-      const accessToken = tokenManager.getAccessToken();
-      const response = await fetch(`/api/resume/${resumeId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await fetchWithAuth(`/api/resume/${resumeId}`);
 
       if (response.ok) {
         const data = await response.json();
@@ -149,15 +144,13 @@ function ResumeCreateContent() {
 
     setIsSubmitting(true);
     try {
-      const accessToken = tokenManager.getAccessToken();
       const url = resumeId ? `/api/resume/${resumeId}` : '/api/resume';
       const method = resumeId ? 'PATCH' : 'POST';
 
-      const response = await fetch(url, {
+      const response = await fetchWithAuth(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           title: resumeTitle,

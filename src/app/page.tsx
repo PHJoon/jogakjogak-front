@@ -12,7 +12,7 @@ import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import LoginModal from '@/components/LoginModal';
-import { tokenManager } from '@/utils/auth';
+import { tokenManager } from '@/lib/auth/tokenManager';
 
 import styles from './page.module.css';
 
