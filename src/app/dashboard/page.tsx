@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
 import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
+import { FeedbackSurveyModal } from '@/components/FeedbackSurveyModal';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import { JobAdd } from '@/components/JobAdd';
@@ -14,6 +15,7 @@ import Snackbar from '@/components/Snackbar';
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
 import { tokenManager } from '@/lib/auth/tokenManager';
 import { getJdsData } from '@/lib/jds/jdsApi';
+import { useBoundStore } from '@/stores/useBoundStore';
 import { JobDescription, Resume } from '@/types/jds';
 import { calculateDDay } from '@/utils/calculateDDay';
 
@@ -51,12 +53,19 @@ function DashboardContent() {
     isLast: false,
   });
 
+  const showFeedbackSurveyModal = useBoundStore(
+    (state) => state.showFeedbackSurveyModal
+  );
+  const setShowFeedbackSurveyModal = useBoundStore(
+    (state) => state.setShowFeedbackSurveyModal
+  );
+  const setJdCount = useBoundStore((state) => state.setJdCount);
+
   useEffect(() => {
     // 로그인 상태 확인
     const checkAuth = () => {
       const token = tokenManager.getAccessToken();
       setIsAuthenticated(!!token);
-      console.log('isAuthenticated:', !!token);
     };
 
     checkAuth();
@@ -81,6 +90,10 @@ function DashboardContent() {
       currentPage: page,
     }));
   }, [searchParams]);
+
+  useEffect(() => {
+    setJdCount(jds.length);
+  }, [jds, setJdCount]);
 
   // 로그인 상태일 때 데이터 불러오기
   useEffect(() => {
@@ -312,6 +325,14 @@ function DashboardContent() {
         onClose={() => setShowNoResumeModal(false)}
         onRegisterClick={handleResumeRegisterClick}
       />
+
+      <FeedbackSurveyModal
+        isOpen={showFeedbackSurveyModal}
+        onClose={() => setShowFeedbackSurveyModal(false)}
+      />
+      <button onClick={() => setShowFeedbackSurveyModal(true)}>
+        피드백 남기기
+      </button>
 
       <Snackbar
         message="채용공고를 추가하기 전에 먼저 이력서를 등록해주세요."

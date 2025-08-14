@@ -9,6 +9,7 @@ import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import LoadingModal from '@/components/LoadingModal';
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
+import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './page.module.css';
 
@@ -23,6 +24,10 @@ export default function CreateJobPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [nextJdId, setNextJdId] = useState<number | null>(null);
+  const jdCount = useBoundStore((state) => state.jdCount);
+  const openFeedbackSurveyModal = useBoundStore(
+    (state) => state.openFeedbackSurveyModal
+  );
 
   const handleBack = () => {
     router.back();
@@ -66,6 +71,7 @@ export default function CreateJobPage() {
         setNextJdId(data.data.jd_id);
         setIsComplete(true);
         // LoadingModal의 onCompleteAnimationEnd에서 페이지 이동 처리
+        openFeedbackSurveyModal();
       } else {
         alert(data.message || '채용공고 등록에 실패했습니다.');
         setIsSubmitting(false);
