@@ -19,6 +19,7 @@ import { MemoBox } from '@/components/MemoBox';
 import NotificationModal from '@/components/NotificationModal';
 import { ProgressBar } from '@/components/ProgressBar';
 import Snackbar from '@/components/Snackbar';
+import useClientMeta from '@/hooks/useClientMeta';
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
 import { JDDetail, TodoItem } from '@/types/jds';
 import { calculateDDay } from '@/utils/calculateDDay';
@@ -73,6 +74,12 @@ export default function JobDetailPage() {
     message: '',
     type: 'success' as 'success' | 'error' | 'info',
   });
+
+  // 클라이언트 메타 설정
+  useClientMeta(
+    '채용공고 분석 | 조각조각',
+    'AI가 분석한 채용공고의 투두리스트를 확인하고 관리합니다.'
+  );
 
   useEffect(() => {
     const fetchData = async () => {
