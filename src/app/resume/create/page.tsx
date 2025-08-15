@@ -11,6 +11,7 @@ import { Button } from '@/components/Button';
 import { ConfirmModal } from '@/components/ConfirmModal';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
+import useClientMeta from '@/hooks/useClientMeta';
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
 
 import styles from './page.module.css';
@@ -70,6 +71,12 @@ function ResumeCreateContent() {
       InitialResumeContents.content.trim() !== resumeText.trim()
     );
   }, [InitialResumeContents, resumeTitle, resumeText]);
+
+  // 클라이언트 메타 설정
+  useClientMeta(
+    `이력서 ${resumeId ? '수정' : '등록'} | 조각조각`,
+    `이력서를 ${resumeId ? '수정' : '등록'}합니다.`
+  );
 
   // resumeId가 있으면 기존 이력서 불러오기
   useEffect(() => {

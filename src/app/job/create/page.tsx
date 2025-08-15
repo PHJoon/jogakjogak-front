@@ -8,6 +8,7 @@ import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import LoadingModal from '@/components/LoadingModal';
+import useClientMeta from '@/hooks/useClientMeta';
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
 import { useBoundStore } from '@/stores/useBoundStore';
 
@@ -88,6 +89,12 @@ export default function CreateJobPage() {
       router.replace(`/job/${nextJdId}`);
     }
   };
+
+  // 클라이언트 메타 설정
+  useClientMeta(
+    `채용공고 등록 | 조각조각`,
+    'AI가 분석할 채용공고를 등록합니다.'
+  );
 
   return (
     <>

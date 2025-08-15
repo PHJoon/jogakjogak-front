@@ -12,6 +12,7 @@ import { JobList } from '@/components/JobList';
 import NoResumeModal from '@/components/NoResumeModal';
 import { ResumeRegistration } from '@/components/ResumeRegistration';
 import Snackbar from '@/components/Snackbar';
+import useClientMeta from '@/hooks/useClientMeta';
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
 import { tokenManager } from '@/lib/auth/tokenManager';
 import { getJdsData } from '@/lib/jds/jdsApi';
@@ -60,6 +61,12 @@ function DashboardContent() {
     (state) => state.setShowFeedbackSurveyModal
   );
   const setJdCount = useBoundStore((state) => state.setJdCount);
+
+  // 클라이언트 메타 설정
+  useClientMeta(
+    '채용공고 대시보드 | 조각조각',
+    'AI가 분석할 채용공고를 추가하고 관리합니다.'
+  );
 
   useEffect(() => {
     // 로그인 상태 확인
