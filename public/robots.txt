@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /
+Allow: /$
+
+Sitemap: https://jogakjogak.com/sitemap.xml
+Sitemap: https://www.jogakjogak.com/sitemap.xml
