@@ -568,25 +568,6 @@ export default function JobDetailPage() {
     return { completed, total };
   };
 
-  const dDayChipColor = (num: number | undefined) => {
-    if (jdDetail?.applyAt) {
-      return 'dDay-apply';
-    }
-
-    if (num === undefined) {
-      return 'dDay-anytime';
-    }
-    if (num < 0) {
-      return 'dDay-dayover';
-    } else if (num === 0) {
-      return 'dDay-day0';
-    } else if (num > 0 && num <= 7) {
-      return 'dDay-over1';
-    } else {
-      return 'dDay-default';
-    }
-  };
-
   if (isLoading) {
     return (
       <>
@@ -768,9 +749,8 @@ export default function JobDetailPage() {
             <div className={styles.jobDetailsTop}>
               <div className={styles.jobDetailsLeft}>
                 <DDayChip
-                  alarm={jdDetail.alarmOn ? 'on' : 'off'}
-                  state="default"
-                  className={dDayChipColor(calculateDDay(jdDetail.endedAt))}
+                  alarmOn={jdDetail.alarmOn}
+                  isApplied={!!jdDetail.applyAt}
                   dDay={calculateDDay(jdDetail.endedAt)}
                 />
                 <div className={styles.modifiedInfo}>
