@@ -49,3 +49,5 @@ export interface JDDetail {
   updatedAt: string;
   toDoLists: TodoItem[];
 }
+
+export type Sort = 'createdAt.desc' | 'createdAt.asc';
