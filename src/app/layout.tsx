@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 
+import { QueryClientProvider } from '@tanstack/react-query';
 import localFont from 'next/font/local';
 
-import ScrollToTop from '@/components/ScrollToTop';
-
 import './globals.css';
+
+import ScrollToTop from '@/components/ScrollToTop';
+import { queryClient, ReactQueryProvider } from '@/lib/queryClient';
 
 const pretendard = localFont({
   src: [
@@ -71,8 +73,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={pretendard.variable}>
-        {children}
-        <ScrollToTop />
+        <ReactQueryProvider>
+          {children}
+          <ScrollToTop />
+        </ReactQueryProvider>
       </body>
     </html>
   );

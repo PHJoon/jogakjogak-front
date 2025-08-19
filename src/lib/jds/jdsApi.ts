@@ -1,9 +1,10 @@
 import { ApiResponse, PaginatedData } from '@/types';
 import { JobDescription, Resume } from '@/types/jds';
+import throwIfNotOk from '@/utils/throwIfNotOk';
 
 import { fetchWithAuth } from '../api/fetchWithAuth';
 
-type JobAnalysisData = ApiResponse<
+type JdsResponse = ApiResponse<
   PaginatedData<'jds', JobDescription, { resume: Resume | null }>
 >;
 
@@ -20,7 +21,7 @@ export async function getJdsData(page: number, sort?: string) {
     }`;
 
     const response = await fetchWithAuth(url);
-    const data: JobAnalysisData = await response.json();
+    const data: JdsResponse = await response.json();
 
     return {
       resume: data.data?.resume || null,
@@ -39,4 +40,24 @@ export async function getJdsData(page: number, sort?: string) {
   } catch (error) {
     console.error('Failed to fetch JDs data:', error);
   }
+}
+
+// 채용공고 삭제
+export async function deleteJd(jobId: number) {
+  const response = await fetchWithAuth(`/api/jds/${jobId}`, {
+    method: 'DELETE',
+  });
+
+  throwIfNotOk(response, '채용공고 삭제 중 오류가 발생했습니다.');
+  return { success: true };
+}
+
+// 채용공고 지원 완료
+export async function markJobAsApplied(jobId: number) {
+  const response = await fetchWithAuth(`/api/jds/${jobId}`, {
+    method: 'PATCH',
+  });
+
+  throwIfNotOk(response, '채용공고 지원 완료 처리 중 오류가 발생했습니다.');
+  return response.json();
 }
