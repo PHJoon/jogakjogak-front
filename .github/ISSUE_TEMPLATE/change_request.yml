@@ -1,6 +1,6 @@
 name: '🛠 Change Request'
 description: '기존 기능이나 코드의 수정·개선 사항을 요청합니다.'
-title: '[fix] '
+title: '[Fix] '
 labels: ['🛠️ fix']
 body:
   - type: markdown
@@ -13,14 +13,6 @@ body:
       label: 수정 요약
       description: 요청하는 수정 내용을 간단히 적어주세요.
       placeholder: 예) 로그인 성공 후 리다이렉트 경로 변경
-    validations:
-      required: true
-  - type: textarea
-    id: current_behavior
-    attributes:
-      label: 현재 동작
-      description: 현재 기능/코드가 어떻게 동작하고 있는지 작성해주세요.
-      placeholder: 예) 로그인 성공 시 `/home`으로 이동
     validations:
       required: true
   - type: textarea

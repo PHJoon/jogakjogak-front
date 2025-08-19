@@ -21,6 +21,7 @@ import { ProgressBar } from '@/components/ProgressBar';
 import Snackbar from '@/components/Snackbar';
 import useClientMeta from '@/hooks/useClientMeta';
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
+import { queryClient } from '@/lib/queryClient';
 import { JDDetail, TodoItem } from '@/types/jds';
 import { calculateDDay } from '@/utils/calculateDDay';
 
@@ -258,6 +259,9 @@ export default function JobDetailPage() {
           // 백엔드 응답에서 실제 상태로 업데이트
           if (responseData.data) {
             setJdDetail({ ...jdDetail, alarmOn: responseData.data.alarmOn });
+            queryClient.invalidateQueries({
+              queryKey: ['jds-list'],
+            });
           }
         }
       } catch (error) {
@@ -348,6 +352,7 @@ export default function JobDetailPage() {
             {}
           );
           setTodosByCategory(grouped);
+          queryClient.invalidateQueries({ queryKey: ['jds-list'] });
         }
       } else {
         const errorData = await response.text();
@@ -423,7 +428,10 @@ export default function JobDetailPage() {
   const deleteTodo = async (todoId: string) => {
     try {
       const response = await fetchWithAuth(
-        `/api/jds/${jdId}/to-do-lists/${todoId}`
+        `/api/jds/${jdId}/to-do-lists/${todoId}`,
+        {
+          method: 'DELETE',
+        }
       );
 
       if (response.ok) {
@@ -445,6 +453,9 @@ export default function JobDetailPage() {
               {}
             );
             setTodosByCategory(grouped);
+            queryClient.invalidateQueries({
+              queryKey: ['jds-list'],
+            });
           }
         }
       } else {
@@ -491,6 +502,7 @@ export default function JobDetailPage() {
               {}
             );
             setTodosByCategory(grouped);
+            queryClient.invalidateQueries({ queryKey: ['jds-list'] });
           }
         }
       } else {
@@ -557,6 +569,21 @@ export default function JobDetailPage() {
         message: '지원 완료 처리 중 오류가 발생했습니다.',
         type: 'error',
       });
+    }
+  };
+
+  // 채용공고 보기 클릭 핸들러
+  const handleClickJobUrl = () => {
+    if (jdDetail) {
+      if (jdDetail.jdUrl === '') {
+        setSnackbar({
+          isOpen: true,
+          message: '저장된 채용공고 링크가 없습니다.',
+          type: 'error',
+        });
+        return;
+      }
+      window.open(jdDetail.jdUrl, '_blank');
     }
   };
 
@@ -676,14 +703,7 @@ export default function JobDetailPage() {
           </div>
 
           <div className={styles.rightSection}>
-            <button
-              className={styles.actionButton}
-              onClick={() => {
-                if (jdDetail.jdUrl) {
-                  window.open(jdDetail.jdUrl, '_blank');
-                }
-              }}
-            >
+            <button className={styles.actionButton} onClick={handleClickJobUrl}>
               <span className={styles.actionButtonText}>채용공고 보기</span>
             </button>
 

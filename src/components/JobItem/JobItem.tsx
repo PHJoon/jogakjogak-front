@@ -65,13 +65,6 @@ export default function JobItem({
 
   const { deleteMutation, patchMutation } = useJdsMutation();
 
-  const totalCount = String(jd.total_pieces);
-  const completedCount = String(jd.completed_pieces);
-
-  const totalCountNum =
-    typeof totalCount === 'string' ? parseInt(totalCount) : totalCount;
-  const completedCountNum = parseInt(completedCount);
-
   const dDay = calculateDDay(jd.endedAt);
 
   // 외부 클릭 시 메뉴 닫기
@@ -216,15 +209,20 @@ export default function JobItem({
               <div className={styles.progressLabel}>완료한 조각</div>
               <div className={styles.progressCount}>
                 <span className={styles.count}>
-                  <span className={styles.countDone}>{completedCount}</span>
-                  <span className={styles.countTotal}> / {totalCount}</span>
+                  <span className={styles.countDone}>
+                    {jd.completed_pieces}
+                  </span>
+                  <span className={styles.countTotal}>
+                    {' '}
+                    / {jd.total_pieces}
+                  </span>
                 </span>
               </div>
             </div>
 
             <ProgressBar
-              total={totalCountNum}
-              completed={completedCountNum}
+              total={jd.total_pieces}
+              completed={jd.completed_pieces}
               className={styles.progressBar}
             />
           </div>
