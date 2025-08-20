@@ -11,7 +11,7 @@ import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './JobItemAdd.module.css';
 
-export function JobItemAdd() {
+export default function JobItemAdd() {
   const router = useRouter();
   const [showNoResumeSnackbar, setShowNoResumeSnackbar] = useState(false);
   const resume = useBoundStore((state) => state.resume);

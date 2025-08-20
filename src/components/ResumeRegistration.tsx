@@ -9,7 +9,7 @@ import { useBoundStore } from '@/stores/useBoundStore';
 import { Button } from './Button';
 import styles from './ResumeRegistration.module.css';
 
-export function ResumeRegistration() {
+export default function ResumeRegistration() {
   const router = useRouter();
   const resume = useBoundStore((state) => state.resume);
   const hasResume = !!resume;
