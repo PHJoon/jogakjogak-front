@@ -211,13 +211,6 @@
   transform: rotate(180deg);
 }
 
-.helpExpanded {
-  padding: 0 24px 24px 24px;
-  background-color: var(--n-0);
-  animation: slideDown 0.3s ease-out;
-  overflow: hidden;
-}
-
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -229,26 +222,6 @@
     max-height: 1000px;
     padding-bottom: 24px;
   }
-}
-
-.helpGuide {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.helpGuide p {
-  font-family: var(--body-2-normal-regular-font-family);
-  font-size: var(--body-2-normal-regular-font-size);
-  font-weight: var(--body-2-normal-regular-font-weight);
-  color: var(--n-900);
-  margin: 0;
-  line-height: 1.5;
-}
-
-.helpSubtext {
-  color: var(--n-700) !important;
-  margin-left: 16px !important;
 }
 
 /* Mobile responsive */
