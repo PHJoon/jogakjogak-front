@@ -5,13 +5,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
 
 import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
-import chatInfoIcon from '@/assets/images/ic_chat_info.svg';
-import arrowDropDownIcon from '@/assets/images/ic_drop_down.svg';
 import { Button } from '@/components/Button';
 import { ConfirmModal } from '@/components/ConfirmModal';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import ResumeGuide from '@/components/ResumeGuide';
+import ResumeHelper from '@/components/ResumeHelper';
 import useClientMeta from '@/hooks/useClientMeta';
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
 
@@ -23,7 +21,6 @@ function ResumeCreateContent() {
   const resumeId = searchParams.get('id');
   const [resumeTitle, setResumeTitle] = useState('나의 이력서');
   const [resumeText, setResumeText] = useState('');
-  const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   // 이력서 내용 오류 모달 상태
@@ -115,10 +112,6 @@ function ResumeCreateContent() {
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setResumeText(e.target.value);
-  };
-
-  const toggleHelp = () => {
-    setIsHelpOpen(!isHelpOpen);
   };
 
   const handleSubmit = async () => {
@@ -269,33 +262,7 @@ function ResumeCreateContent() {
             )}
 
             <div className={styles.helpSection}>
-              <div className={styles.helpHeader} onClick={toggleHelp}>
-                <div className={styles.helpContent}>
-                  <Image
-                    src={chatInfoIcon}
-                    alt="도움말"
-                    width={16.67}
-                    height={15.51}
-                    className={styles.helpIcon}
-                  />
-                  <span className={styles.helpText}>
-                    {isHelpOpen
-                      ? '이력서에 이런 내용을 포함하면 좋아요.'
-                      : '이력서에 어떤걸 넣을지 모르겠나요?'}
-                  </span>
-                </div>
-                <Image
-                  src={arrowDropDownIcon}
-                  alt="펼치기"
-                  width={8.6}
-                  height={4.7}
-                  className={`${styles.dropdownIcon} ${
-                    isHelpOpen ? styles.rotated : ''
-                  }`}
-                />
-              </div>
-
-              {isHelpOpen && <ResumeGuide />}
+              <ResumeHelper />
             </div>
 
             <button

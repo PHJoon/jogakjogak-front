@@ -165,65 +165,6 @@
   transition: all 0.3s ease;
 }
 
-.helpHeader {
-  padding: 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.helpHeader:hover {
-  background-color: var(--n-50);
-}
-
-.helpContent {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.helpIcon {
-  width: 16.67px !important;
-  height: 15.51px !important;
-}
-
-.helpText {
-  color: var(--n-800);
-  font-family: var(--body-2-normal-regular-font-family);
-  font-size: var(--body-2-normal-regular-font-size);
-  font-style: var(--body-2-normal-regular-font-style);
-  font-weight: var(--body-2-normal-regular-font-weight);
-  letter-spacing: var(--body-2-normal-regular-letter-spacing);
-  line-height: var(--body-2-normal-regular-line-height);
-  white-space: nowrap;
-}
-
-.dropdownIcon {
-  width: 8.6px !important;
-  height: 4.7px !important;
-  cursor: pointer;
-  transition: transform 0.3s;
-}
-
-.dropdownIcon.rotated {
-  transform: rotate(180deg);
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    max-height: 0;
-    padding-bottom: 0;
-  }
-  to {
-    opacity: 1;
-    max-height: 1000px;
-    padding-bottom: 24px;
-  }
-}
-
 /* Mobile responsive */
 @media (max-width: 768px) {
   .container {
