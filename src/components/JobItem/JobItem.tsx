@@ -63,7 +63,7 @@ export default function JobItem({
     type: 'success' as 'success' | 'error' | 'info',
   });
 
-  const { deleteMutation, patchMutation } = useJdsMutation();
+  const { deleteMutate, patchMutate } = useJdsMutation();
 
   const dDay = calculateDDay(jd.endedAt);
 
@@ -93,7 +93,7 @@ export default function JobItem({
   const handleJobDelete = async (jobId: number | null) => {
     if (!jobId) return;
 
-    deleteMutation(jobId, {
+    deleteMutate(jobId, {
       onSuccess: () => {
         setSnackbar({
           isOpen: true,
@@ -115,7 +115,7 @@ export default function JobItem({
   const handleMarkAsApplied = async (jobId: number | null) => {
     if (!jobId) return;
 
-    patchMutation(jobId, {
+    patchMutate(jobId, {
       onSuccess: () => {
         setSnackbar({
           isOpen: true,
