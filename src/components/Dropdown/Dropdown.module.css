@@ -1,0 +1,50 @@
+.dropdownContainer {
+  position: relative;
+}
+
+.dropdownButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+}
+
+.dropdownItem {
+  cursor: pointer;
+}
+
+@keyframes dropdownOpen {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dropdownClose {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.dropdownOpen {
+  animation: dropdownOpen 0.2s ease-out forwards;
+}
+
+.dropdownClose {
+  animation: dropdownClose 0.2s ease-out forwards;
+}
