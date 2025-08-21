@@ -35,7 +35,8 @@ export default function SortDropdown({ setSort, setShowOnly }: Props) {
   const toggle = () => setIsOpen((prev) => !prev);
 
   const params = useSearchParams();
-  const paramsOption = params.get('sort') || params.get('showOnly') || '최신순';
+  const paramsOption =
+    params.get('sort') || params.get('showOnly') || 'createdAt,desc';
   const [optionLabel, setOptionLabel] = useState(paramsOption);
 
   const handleClick = (option: Option) => {
