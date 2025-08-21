@@ -4,16 +4,15 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useReducer, useState, useRef, useEffect } from 'react';
 
+import kebabIcon from '@/assets/images/ic_kebab.svg';
+import { DDayChip } from '@/components/DDayChip';
 import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
+import { ProgressBar } from '@/components/ProgressBar';
 import Snackbar from '@/components/Snackbar';
 import useJdsMutation from '@/hooks/mutations/useJdsMutation';
 import { JobDescription } from '@/types/jds';
 import { calculateDDay } from '@/utils/calculateDDay';
 import { formatDate } from '@/utils/formatDate';
-
-import kebabIcon from '../../assets/images/ic_kebab.svg';
-import { DDayChip } from '../DDayChip';
-import { ProgressBar } from '../ProgressBar';
 
 import styles from './JobItem.module.css';
 

@@ -6,10 +6,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { FeedbackSurveyModal } from '@/components/FeedbackSurveyModal';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import JobItem from '@/components/JobItem/JobItem';
-import JobItemAdd from '@/components/JobItemAdd';
 import NoResumeModal from '@/components/NoResumeModal';
-import ResumeRegistration from '@/components/ResumeRegistration';
 import useJdsQuery from '@/hooks/queries/useJdsQuery';
 import useClientMeta from '@/hooks/useClientMeta';
 import { useQueryParams } from '@/hooks/useQueryParams';
@@ -17,6 +14,9 @@ import { tokenManager } from '@/lib/auth/tokenManager';
 import { useBoundStore } from '@/stores/useBoundStore';
 import { JobDescription, Sort } from '@/types/jds';
 
+import JobItem from './components/JobItem';
+import JobItemAdd from './components/JobItemAdd';
+import ResumeRegistration from './components/ResumeRegistration';
 import styles from './page.module.css';
 
 function LoadingSkeleton() {

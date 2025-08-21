@@ -4,9 +4,9 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import cautionIcon from '@/assets/images/ic_caution.svg';
+import { Button } from '@/components/Button';
 import { useBoundStore } from '@/stores/useBoundStore';
 
-import { Button } from './Button';
 import styles from './ResumeRegistration.module.css';
 
 export default function ResumeRegistration() {
