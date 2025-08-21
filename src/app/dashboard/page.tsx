@@ -161,9 +161,7 @@ function DashboardContent() {
           <div className={styles.jobSection}>
             {pageInfo.currentPage === 0 && <JobItemAdd />}
             {jds.length > 0 &&
-              jds.map((jd) => (
-                <JobItem key={jd.jd_id} jd={jd} state="default" />
-              ))}
+              jds.map((jd) => <JobItem key={jd.jd_id} jd={jd} />)}
           </div>
 
           {/* pagination */}
