@@ -15,7 +15,12 @@ export default function useJdsQuery() {
 
   const { data, isLoading, isError, error } = useQuery({
     queryFn: () => getJdsData(page, sort, showOnly),
-    queryKey: ['jds-list', page, sort, showOnly],
+    queryKey: [
+      'jds-list',
+      `page=${page}`,
+      `sort=${sort}`,
+      `showOnly=${showOnly}`,
+    ],
   });
 
   useEffect(() => {
