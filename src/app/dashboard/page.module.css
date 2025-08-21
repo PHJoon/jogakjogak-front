@@ -210,6 +210,53 @@
   margin: 0 20px 16px 20px;
 }
 
+.dropdownContainer {
+  position: relative;
+  padding: 4px 0px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  /* background-color: #2e7ae6; */
+  border: 1px solid var(--n-300);
+}
+
+.sortButton {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #ffffff;
+  padding: 8px 6px;
+  /* font-size: 14px; */
+  /* font-weight: 500; */
+  cursor: pointer;
+  min-width: 104px;
+  min-height: 34px;
+  /* background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center; */
+  /* background-size: 16px; */
+
+  /* background-color: black; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sortButtonText {
+  display: inline-flex;
+  width: 40px;
+  height: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-primary);
+  font-family: var(--body-2-noraml-medium-font-family);
+  font-size: var(--body-2-noraml-medium-font-size);
+  font-style: var(--body-2-noraml-medium-font-style);
+  font-weight: var(--body-2-noraml-medium-font-weight);
+  letter-spacing: var(--body-2-noraml-medium-letter-spacing);
+  line-height: var(--body-2-noraml-medium-font-line-height);
+}
+
 .sortDropdown {
   position: relative;
 }

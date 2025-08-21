@@ -1,8 +1,15 @@
 'use client';
 
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
+import {
+  Dropdown,
+  DropdownButton,
+  DropdownItem,
+  DropdownMenu,
+} from '@/components/Dropdown/Dropdown';
 import { FeedbackSurveyModal } from '@/components/FeedbackSurveyModal';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
@@ -17,6 +24,7 @@ import { JobDescription, Sort } from '@/types/jds';
 import JobItem from './components/JobItem';
 import JobItemAdd from './components/JobItemAdd';
 import ResumeRegistration from './components/ResumeRegistration';
+import SortDropdown from './components/SortDropdown';
 import styles from './page.module.css';
 
 function LoadingSkeleton() {
@@ -51,7 +59,9 @@ function DashboardContent() {
   const {
     page,
     sort,
+    showOnly,
     setSort,
+    setShowOnly,
     nextPage,
     prevPage,
     isPending: paginationPending,
@@ -119,7 +129,7 @@ function DashboardContent() {
         setPageInfo(data.pageInfo);
       }
     }
-  }, [isAuthenticated, page, sort, data, setResume]);
+  }, [isAuthenticated, data, setResume]);
 
   const handleResumeRegisterClick = () => {
     setShowNoResumeModal(false);
@@ -144,16 +154,7 @@ function DashboardContent() {
 
           {/* 정렬 드롭다운 */}
           <div className={styles.sortContainer}>
-            <div className={styles.sortDropdown}>
-              <select
-                value={sort}
-                onChange={(e) => setSort(e.target.value as Sort)}
-                className={styles.sortSelect}
-              >
-                <option value="createdAt,desc">최신순</option>
-                <option value="createdAt,asc">오래된 순</option>
-              </select>
-            </div>
+            <SortDropdown setSort={setSort} setShowOnly={setShowOnly} />
           </div>
 
           {/* job list */}

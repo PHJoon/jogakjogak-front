@@ -50,4 +50,6 @@ export interface JDDetail {
   toDoLists: TodoItem[];
 }
 
-export type Sort = 'createdAt.desc' | 'createdAt.asc';
+export type Sort = 'createdAt,desc' | 'createdAt,asc' | 'endedAt,asc';
+
+export type ShowOnly = 'bookmark' | 'completed' | 'alarm';
