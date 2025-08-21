@@ -7,9 +7,15 @@ interface Props {
   total: number;
   completed: number;
   className?: string;
+  isDayover?: boolean;
 }
 
-export function ProgressBar({ total, completed, className = '' }: Props) {
+export function ProgressBar({
+  total,
+  completed,
+  className = '',
+  isDayover = false,
+}: Props) {
   return (
     <div className={`${styles.progressBar} ${className}`}>
       {Array.from({ length: total }, (_, index) => (
@@ -17,6 +23,7 @@ export function ProgressBar({ total, completed, className = '' }: Props) {
           key={index}
           isActive={index < completed}
           className={styles.segmentInstance}
+          isDayover={isDayover}
         />
       ))}
     </div>

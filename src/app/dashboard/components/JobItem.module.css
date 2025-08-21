@@ -319,6 +319,10 @@
   color: var(--n-500);
 }
 
+.countDone.dayover {
+  color: var(--n-700);
+}
+
 /* More menu styles */
 .menuTrigger {
   background: none;

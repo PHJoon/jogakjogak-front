@@ -12,3 +12,7 @@
 .default {
   background-color: var(--n-300);
 }
+
+.active.dayover {
+  background-color: var(--n-500);
+}

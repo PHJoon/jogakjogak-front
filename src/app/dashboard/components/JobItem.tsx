@@ -49,9 +49,17 @@ export default function JobItem({
   state: stateProp = 'default',
   className = '',
 }: Props) {
+  const dDay = calculateDDay(jd.endedAt);
+
+  const jdState = jd.applyAt
+    ? 'done'
+    : dDay && dDay < 0
+      ? 'dayover'
+      : 'default';
+
   const [state, dispatch] = useReducer(reducer, {
-    state: stateProp,
-    originalState: stateProp,
+    state: jdState,
+    originalState: jdState,
   });
   const router = useRouter();
   const moreMenuRef = useRef<HTMLDivElement>(null);
@@ -64,8 +72,6 @@ export default function JobItem({
   });
 
   const { deleteMutate, applyMutate, bookmarkMutate } = useJdsMutation();
-
-  const dDay = calculateDDay(jd.endedAt);
 
   // 외부 클릭 시 메뉴 닫기
   useEffect(() => {
@@ -254,7 +260,9 @@ export default function JobItem({
               <div className={styles.progressLabel}>완료한 조각</div>
               <div className={styles.progressCount}>
                 <span className={styles.count}>
-                  <span className={styles.countDone}>
+                  <span
+                    className={`${styles.countDone} ${jdState === 'dayover' ? styles.dayover : ''}`}
+                  >
                     {jd.completed_pieces}
                   </span>
                   <span className={styles.countTotal}>
@@ -269,6 +277,7 @@ export default function JobItem({
               total={jd.total_pieces}
               completed={jd.completed_pieces}
               className={styles.progressBar}
+              isDayover={jdState === 'dayover'}
             />
           </div>
         </div>
