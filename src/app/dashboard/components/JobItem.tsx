@@ -4,16 +4,16 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useReducer, useState, useRef, useEffect } from 'react';
 
+import bookmarkIcon from '@/assets/images/ic_add_to_bookmark.svg';
+import kebabIcon from '@/assets/images/ic_kebab.svg';
+import { DDayChip } from '@/components/DDayChip';
 import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
+import { ProgressBar } from '@/components/ProgressBar';
 import Snackbar from '@/components/Snackbar';
 import useJdsMutation from '@/hooks/mutations/useJdsMutation';
 import { JobDescription } from '@/types/jds';
 import { calculateDDay } from '@/utils/calculateDDay';
 import { formatDate } from '@/utils/formatDate';
-
-import kebabIcon from '../../assets/images/ic_kebab.svg';
-import { DDayChip } from '../DDayChip';
-import { ProgressBar } from '../ProgressBar';
 
 import styles from './JobItem.module.css';
 
@@ -63,7 +63,7 @@ export default function JobItem({
     type: 'success' as 'success' | 'error' | 'info',
   });
 
-  const { deleteMutate, patchMutate } = useJdsMutation();
+  const { deleteMutate, applyMutate, bookmarkMutate } = useJdsMutation();
 
   const dDay = calculateDDay(jd.endedAt);
 
@@ -115,7 +115,7 @@ export default function JobItem({
   const handleMarkAsApplied = async (jobId: number | null) => {
     if (!jobId) return;
 
-    patchMutate(jobId, {
+    applyMutate(jobId, {
       onSuccess: () => {
         setSnackbar({
           isOpen: true,
@@ -131,6 +131,36 @@ export default function JobItem({
         });
       },
     });
+  };
+
+  // 즐겨찾기 핸들러
+  const handleBookmarkToggle = async (
+    jobId: number | null,
+    newBookmarkState: boolean
+  ) => {
+    if (!jobId) return;
+
+    bookmarkMutate(
+      { jobId, newBookmarkState },
+      {
+        onSuccess: () => {
+          setSnackbar({
+            isOpen: true,
+            message: newBookmarkState
+              ? '즐겨찾기에 추가되었습니다.'
+              : '즐겨찾기에서 제거되었습니다.',
+            type: 'success',
+          });
+        },
+        onError: (error) => {
+          setSnackbar({
+            isOpen: true,
+            message: error.message,
+            type: 'error',
+          });
+        },
+      }
+    );
   };
 
   return (
@@ -154,6 +184,21 @@ export default function JobItem({
 
               <div className={styles.menuWrapper} ref={moreMenuRef}>
                 <button
+                  className={`${styles.menuTrigger} ${jd.bookmark ? styles.bookmarked : ''}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleBookmarkToggle(jd.jd_id, !jd.bookmark);
+                  }}
+                >
+                  <Image
+                    src={bookmarkIcon}
+                    alt="add-bookmark"
+                    width={20}
+                    height={20}
+                    // style={{ opacity: jd.bookmark ? 1 : 0.7 }}
+                  />
+                </button>
+                <button
                   className={styles.menuTrigger}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -163,8 +208,8 @@ export default function JobItem({
                   <Image
                     src={kebabIcon}
                     alt="more-options"
-                    width="24"
-                    height="24"
+                    width={24}
+                    height={24}
                   />
                 </button>
 
@@ -251,6 +296,7 @@ export default function JobItem({
         isOpen={snackbar.isOpen}
         onClose={() => setSnackbar({ ...snackbar, isOpen: false })}
         type={snackbar.type}
+        duration={1000}
       />
     </>
   );

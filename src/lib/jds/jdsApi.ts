@@ -1,5 +1,5 @@
 import { ApiResponse, PaginatedData } from '@/types';
-import { JobDescription, Resume } from '@/types/jds';
+import { JobDescription, Resume, ShowOnly, Sort } from '@/types/jds';
 import throwIfNotOk from '@/utils/throwIfNotOk';
 
 import { fetchWithAuth } from '../api/fetchWithAuth';
@@ -9,12 +9,19 @@ type JdsResponse = ApiResponse<
 >;
 
 // 채용공고 전체 데이터 가져오기
-export async function getJdsData(page: number, sort?: string) {
+export async function getJdsData(
+  page: number,
+  sort: Sort | '',
+  showOnly: ShowOnly | ''
+) {
   try {
     const queryParams = new URLSearchParams();
+    queryParams.append('page', page.toString());
     if (sort) {
       queryParams.append('sort', sort);
-      queryParams.append('page', page.toString());
+    }
+    if (showOnly) {
+      queryParams.append('showOnly', showOnly);
     }
     const url = `/api/jds${
       queryParams.toString() ? `?${queryParams.toString()}` : ''
@@ -59,5 +66,20 @@ export async function markJobAsApplied(jobId: number) {
   });
 
   throwIfNotOk(response, '채용공고 지원 완료 처리 중 오류가 발생했습니다.');
+  return { success: true };
+}
+
+// 채용공고 즐겨찾기 등록
+export async function addBookmark(jobId: number, newBookmarkState: boolean) {
+  const response = await fetchWithAuth(`/api/jds/${jobId}/bookmark`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      isBookmark: newBookmarkState,
+    }),
+  });
+  throwIfNotOk(response, '채용공고 즐겨찾기 등록 중 오류가 발생했습니다.');
   return { success: true };
 }

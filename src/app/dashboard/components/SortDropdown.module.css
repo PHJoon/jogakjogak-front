@@ -1,0 +1,89 @@
+.sortButton {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #ffffff;
+  padding: 10px 6px;
+  cursor: pointer;
+  min-width: 104px;
+  height: 42px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--n-300);
+}
+
+.sortButton.open {
+  border-radius: 8px 8px 0 0;
+}
+
+.sortButtonText {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--n-800);
+  font-family: var(--body-2-normal-medium-font-family);
+  font-size: var(--body-2-normal-medium-font-size);
+  font-style: var(--body-2-normal-medium-font-style);
+  font-weight: var(--body-2-normal-medium-font-weight);
+  letter-spacing: var(--body-2-normal-medium-letter-spacing);
+  line-height: var(--body-2-normal-medium-font-line-height);
+}
+
+.sortDropdown {
+  position: relative;
+}
+
+.dropdownMenu {
+  transform: translateY(-4px);
+  background-color: #ffffff;
+  padding-bottom: 3px;
+  border-radius: 0 0 8px 8px;
+  border: 1px solid var(--n-300);
+  border-top: none;
+  width: 104px;
+}
+
+.dropdownMenu:hover {
+  background-color: var(--n-50);
+}
+
+.sortSelect {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #ffffff;
+  border-style: none;
+  border-top: 1px solid var(--n-300);
+  padding: 6px 8px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  color: var(--n-700);
+  font-family: var(--body-2-normal-medium-font-family);
+  font-size: var(--body-2-normal-medium-font-size);
+  font-style: var(--body-2-normal-medium-font-style);
+  font-weight: var(--body-2-normal-medium-font-weight);
+  letter-spacing: var(--body-2-normal-medium-letter-spacing);
+  line-height: var(--body-2-normal-medium-font-line-height);
+
+  width: 102px;
+}
+
+.sortSelect:hover {
+  border-color: var(--n-400);
+  background-color: var(--n-50);
+}
+
+.sortSelect:focus {
+  outline: none;
+}
+
+@media (max-width: 768px) {
+  .sortSelect {
+    padding: 10px 32px 10px 12px;
+    font-size: 13px;
+    min-width: 100px;
+  }
+}
