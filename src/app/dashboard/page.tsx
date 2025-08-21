@@ -6,17 +6,16 @@ import { Suspense, useEffect, useState } from 'react';
 import { FeedbackSurveyModal } from '@/components/FeedbackSurveyModal';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import { JobAdd } from '@/components/JobAdd';
 import JobItem from '@/components/JobItem/JobItem';
+import JobItemAdd from '@/components/JobItemAdd';
 import NoResumeModal from '@/components/NoResumeModal';
-import { ResumeRegistration } from '@/components/ResumeRegistration';
-import Snackbar from '@/components/Snackbar';
+import ResumeRegistration from '@/components/ResumeRegistration';
 import useJdsQuery from '@/hooks/queries/useJdsQuery';
 import useClientMeta from '@/hooks/useClientMeta';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { tokenManager } from '@/lib/auth/tokenManager';
 import { useBoundStore } from '@/stores/useBoundStore';
-import { JobDescription, Resume, Sort } from '@/types/jds';
+import { JobDescription, Sort } from '@/types/jds';
 
 import styles from './page.module.css';
 
@@ -31,7 +30,7 @@ function LoadingSkeleton() {
             className={`${styles.skeleton} ${styles.sortContainerLoading}`}
           />
           <div className={styles.jobSectionLoading}>
-            <JobAdd />
+            <JobItemAdd />
             <div className={`${styles.skeleton} ${styles.jobLoading}`} />
             <div className={`${styles.skeleton} ${styles.jobLoading}`} />
             <div className={`${styles.skeleton} ${styles.jobLoading}`} />
@@ -46,10 +45,8 @@ function LoadingSkeleton() {
 function DashboardContent() {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const [resume, setResume] = useState<Resume | null>(null);
   const [jds, setJds] = useState<JobDescription[]>([]);
   const [showNoResumeModal, setShowNoResumeModal] = useState(false);
-  const [showNoResumeSnackbar, setShowNoResumeSnackbar] = useState(false);
 
   const {
     page,
@@ -72,6 +69,9 @@ function DashboardContent() {
     isFirst: false,
     isLast: false,
   });
+
+  const resume = useBoundStore((state) => state.resume);
+  const setResume = useBoundStore((state) => state.setResume);
 
   const showFeedbackSurveyModal = useBoundStore(
     (state) => state.showFeedbackSurveyModal
@@ -119,16 +119,12 @@ function DashboardContent() {
         setPageInfo(data.pageInfo);
       }
     }
-  }, [isAuthenticated, page, sort, data]);
+  }, [isAuthenticated, page, sort, data, setResume]);
 
   const handleResumeRegisterClick = () => {
     setShowNoResumeModal(false);
     // 이력서 등록 페이지로 이동
     router.push('/resume/create');
-  };
-
-  const handleNoResumeClick = () => {
-    setShowNoResumeSnackbar(true);
   };
 
   if (!isAuthenticated) {
@@ -144,12 +140,7 @@ function DashboardContent() {
       <Header backgroundColor="white" showLogout={true} />
       <main className={styles.main}>
         <div className={styles.container}>
-          <ResumeRegistration
-            hasResume={!!resume}
-            resumeId={resume?.resumeId}
-            resumeTitle={resume?.title}
-            resumeUpdatedAt={resume?.updatedAt}
-          />
+          <ResumeRegistration />
 
           {/* 정렬 드롭다운 */}
           <div className={styles.sortContainer}>
@@ -167,12 +158,7 @@ function DashboardContent() {
 
           {/* job list */}
           <div className={styles.jobSection}>
-            {pageInfo.currentPage === 0 && (
-              <JobAdd
-                hasResume={!!resume}
-                onNoResumeClick={handleNoResumeClick}
-              />
-            )}
+            {pageInfo.currentPage === 0 && <JobItemAdd />}
             {jds.length > 0 &&
               jds.map((jd) => (
                 <JobItem key={jd.jd_id} jd={jd} state="default" />
@@ -208,14 +194,6 @@ function DashboardContent() {
       <FeedbackSurveyModal
         isOpen={showFeedbackSurveyModal}
         onClose={() => setShowFeedbackSurveyModal(false)}
-      />
-
-      <Snackbar
-        message="채용공고를 추가하기 전에 먼저 이력서를 등록해주세요."
-        isOpen={showNoResumeSnackbar}
-        onClose={() => setShowNoResumeSnackbar(false)}
-        type="info"
-        duration={3000}
       />
     </>
   );

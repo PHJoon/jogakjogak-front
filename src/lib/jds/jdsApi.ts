@@ -59,5 +59,5 @@ export async function markJobAsApplied(jobId: number) {
   });
 
   throwIfNotOk(response, '채용공고 지원 완료 처리 중 오류가 발생했습니다.');
-  return response.json();
+  return { success: true };
 }

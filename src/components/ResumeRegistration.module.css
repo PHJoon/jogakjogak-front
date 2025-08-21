@@ -13,7 +13,7 @@
   background-color: var(--n-0);
 }
 
-.frame {
+.resumeNotice {
   align-items: center;
   display: inline-flex;
   gap: 12px;
@@ -25,7 +25,7 @@
   width: 16px !important;
 }
 
-.div {
+.noticeText {
   color: var(--n-800);
   font-family: var(--headline-1-bold-font-family);
   font-size: var(--headline-1-bold-font-size);
@@ -98,7 +98,7 @@
     border-radius: 10px;
   }
 
-  .frame {
+  .resumeNotice {
     position: relative;
     top: auto;
     left: auto;
@@ -111,7 +111,7 @@
     display: none;
   }
 
-  .div {
+  .noticeText {
     font-size: 14px;
     line-height: 20px;
     font-weight: 700;

@@ -1,0 +1,85 @@
+.helpHeader {
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.helpHeader:hover {
+  background-color: var(--n-50);
+}
+
+.helpContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.helpIcon {
+  width: 16.67px !important;
+  height: 15.51px !important;
+}
+
+.helpText {
+  color: var(--n-800);
+  font-family: var(--body-2-normal-regular-font-family);
+  font-size: var(--body-2-normal-regular-font-size);
+  font-style: var(--body-2-normal-regular-font-style);
+  font-weight: var(--body-2-normal-regular-font-weight);
+  letter-spacing: var(--body-2-normal-regular-letter-spacing);
+  line-height: var(--body-2-normal-regular-line-height);
+  white-space: nowrap;
+}
+
+.dropdownIcon {
+  width: 8.6px !important;
+  height: 4.7px !important;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.dropdownIcon.rotated {
+  transform: rotate(180deg);
+}
+
+.helpExpanded {
+  padding: 0 24px 24px 24px;
+  background-color: var(--n-0);
+  animation: slideDown 0.3s ease-out;
+  overflow: hidden;
+}
+
+.helpGuide {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.helpGuide p {
+  font-family: var(--body-2-normal-regular-font-family);
+  font-size: var(--body-2-normal-regular-font-size);
+  font-weight: var(--body-2-normal-regular-font-weight);
+  color: var(--n-900);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.helpSubtext {
+  color: var(--n-700) !important;
+  margin-left: 16px !important;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    padding-bottom: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+    padding-bottom: 24px;
+  }
+}
