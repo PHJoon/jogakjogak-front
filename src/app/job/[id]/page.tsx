@@ -145,6 +145,7 @@ export default function JobDetailPage() {
         // 백엔드 응답에서 실제 상태로 업데이트
         if (responseData.data) {
           setJdDetail({ ...jdDetail, bookmark: responseData.data.bookmark });
+          queryClient.invalidateQueries({ queryKey: ['jds-list'] });
         }
       }
     } catch (error) {
