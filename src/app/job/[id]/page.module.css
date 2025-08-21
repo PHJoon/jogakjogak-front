@@ -92,8 +92,12 @@
   background-color: var(--n-200);
 }
 
+.iconButton img {
+  filter: brightness(1.1);
+}
+
 .iconButton.bookmarked img {
-  filter: brightness(1.2);
+  filter: brightness(0.8);
 }
 
 /* Job details */

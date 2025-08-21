@@ -121,7 +121,7 @@ export default function useJdsMutation() {
               if (jd.jd_id === jobId) {
                 return {
                   ...jd,
-                  bookmarked: newBookmarkState,
+                  bookmark: newBookmarkState,
                 };
               }
               return jd;

@@ -336,6 +336,14 @@
   background-color: var(--n-100);
 }
 
+.menuTrigger img {
+  filter: brightness(1.1);
+}
+
+.menuTrigger.bookmarked img {
+  filter: brightness(0.8);
+}
+
 .menuDropdown {
   position: absolute;
   top: 100%;
