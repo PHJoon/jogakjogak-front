@@ -1,10 +1,10 @@
 .chip {
-  align-items: center;
   border-radius: 6px;
   display: inline-flex;
   gap: 4px;
   height: 26px;
   justify-content: center;
+  align-items: center;
   padding: 2px 8px;
   position: relative;
 }
@@ -48,6 +48,6 @@
   font-style: var(--label-1-normal-bold-font-style);
   font-weight: var(--label-1-normal-bold-font-weight);
   letter-spacing: var(--label-1-normal-bold-letter-spacing);
-  line-height: var(--label-1-normal-bold-line-height);
   white-space: nowrap;
+  text-align: center;
 }

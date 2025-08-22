@@ -75,7 +75,6 @@
 }
 
 .iconButton {
-  /*background-color: var(--n-100);*/
   background-color: white;
   border-radius: 16px;
   height: 48px;
@@ -90,14 +89,6 @@
 
 .iconButton:hover {
   background-color: var(--n-200);
-}
-
-.iconButton img {
-  filter: brightness(1.1);
-}
-
-.iconButton.bookmarked img {
-  filter: brightness(0.8);
 }
 
 /* Job details */

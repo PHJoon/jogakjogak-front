@@ -6,9 +6,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import contentEmphasisIcon from '@/assets/images/content-emphasis-and-reorganization.svg';
 import scheduleIcon from '@/assets/images/employment-schedule-and-others.svg';
-import bookmarkIcon from '@/assets/images/ic_add_to_bookmark.svg';
 import alarmIcon from '@/assets/images/ic_alarm.svg';
+import alarmOnIcon from '@/assets/images/ic_alarm_on_blue.svg';
 import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
+import bookmarkIcon from '@/assets/images/ic_bookmark.svg';
+import bookmarkCheckIcon from '@/assets/images/ic_bookmark_check.svg';
 import moreIcon from '@/assets/images/ic_more.svg';
 import { DDayChip } from '@/components/DDayChip';
 import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
@@ -146,6 +148,13 @@ export default function JobDetailPage() {
         if (responseData.data) {
           setJdDetail({ ...jdDetail, bookmark: responseData.data.bookmark });
           queryClient.invalidateQueries({ queryKey: ['jds-list'] });
+          setSnackbar({
+            isOpen: true,
+            message: newBookmarkState
+              ? '관심공고로 등록되었습니다.'
+              : '관심공고에서 제외되었습니다.',
+            type: 'success',
+          });
         }
       }
     } catch (error) {
@@ -548,7 +557,9 @@ export default function JobDetailPage() {
       if (response.ok) {
         setSnackbar({
           isOpen: true,
-          message: '지원 완료로 표시되었습니다.',
+          message: jdDetail?.applyAt
+            ? '지원 취소되었습니다.'
+            : '지원 완료되었습니다.',
           type: 'success',
         });
         // 데이터 다시 불러오기
@@ -559,7 +570,7 @@ export default function JobDetailPage() {
         console.error('Failed to mark as applied');
         setSnackbar({
           isOpen: true,
-          message: '지원 완료 처리에 실패했습니다.',
+          message: '지원 상태 처리에 실패했습니다.',
           type: 'error',
         });
       }
@@ -567,7 +578,7 @@ export default function JobDetailPage() {
       console.error('Error marking as applied:', error);
       setSnackbar({
         isOpen: true,
-        message: '지원 완료 처리 중 오류가 발생했습니다.',
+        message: '지원 상태 처리 중 오류가 발생했습니다.',
         type: 'error',
       });
     }
@@ -619,13 +630,7 @@ export default function JobDetailPage() {
               </button>
 
               <button className={`${styles.iconButton} ${styles.bookmarked}`}>
-                <Image
-                  src={bookmarkIcon}
-                  alt="북마크"
-                  width={21.33}
-                  height={24}
-                  style={{ opacity: 0.7 }}
-                />
+                <Image src={bookmarkIcon} alt="북마크" width={24} height={24} />
               </button>
 
               <div style={{ position: 'relative' }}>
@@ -708,19 +713,17 @@ export default function JobDetailPage() {
               <span className={styles.actionButtonText}>채용공고 보기</span>
             </button>
 
-            <button
-              className={`${styles.iconButton} ${
-                jdDetail.bookmark ? styles.bookmarked : ''
-              }`}
-              onClick={toggleBookmark}
-            >
-              <Image
-                src={bookmarkIcon}
-                alt="북마크"
-                width={21.33}
-                height={24}
-                style={{ opacity: jdDetail.bookmark ? 1 : 0.7 }}
-              />
+            <button className={styles.iconButton} onClick={toggleBookmark}>
+              {jdDetail.bookmark ? (
+                <Image
+                  src={bookmarkCheckIcon}
+                  alt="북마크 추가됨"
+                  width={24}
+                  height={24}
+                />
+              ) : (
+                <Image src={bookmarkIcon} alt="북마크" width={24} height={24} />
+              )}
             </button>
 
             <div ref={moreMenuRef} style={{ position: 'relative' }}>
@@ -819,7 +822,12 @@ export default function JobDetailPage() {
               onClick={handleAlarmButtonClick}
               disabled={isTogglingAlarm}
             >
-              <Image src={alarmIcon} alt="알림" width={14.2} height={13.1} />
+              {jdDetail.alarmOn ? (
+                <Image src={alarmOnIcon} alt="알림 중" width={16} height={16} />
+              ) : (
+                <Image src={alarmIcon} alt="알림 신청" width={16} height={16} />
+              )}
+
               <div className={styles.notificationBtnText}>
                 {jdDetail.alarmOn ? '알림 중' : '알림 신청'}
               </div>
