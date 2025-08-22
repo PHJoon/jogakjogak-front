@@ -45,7 +45,8 @@ export default function CreateJobPage() {
       setJobTitle(data.title);
       setCompanyName(data.companyName);
       setJobPosition(data.job);
-      setDeadline(data.endedAt.split('T')[0]);
+      const formattedDate = data.endedAt ? data.endedAt.split('T')[0] : '';
+      setDeadline(formattedDate);
       setJobDescription(data.content);
       setJobUrl(data.jdUrl);
     }
@@ -60,7 +61,7 @@ export default function CreateJobPage() {
       jobTitle === data?.title &&
       companyName === data?.companyName &&
       jobPosition === data?.job &&
-      deadline === data?.endedAt.split('T')[0] &&
+      (data.endedAt ? data.endedAt.split('T')[0] : '') === deadline &&
       jobDescription === data?.content &&
       jobUrl === data?.jdUrl
     ) {
