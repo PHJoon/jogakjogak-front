@@ -25,7 +25,6 @@ export default function CreateJobPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [nextJdId, setNextJdId] = useState<number | null>(null);
-  const jdCount = useBoundStore((state) => state.jdCount);
   const openFeedbackSurveyModal = useBoundStore(
     (state) => state.openFeedbackSurveyModal
   );
