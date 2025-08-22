@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
 import Footer from '@/components/Footer';
@@ -16,7 +16,7 @@ import { useBoundStore } from '@/stores/useBoundStore';
 import FormContentLoading from './components/FormContentLoading';
 import styles from './page.module.css';
 
-export default function CreateJobPage() {
+function JobEditPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const rawJobId = searchParams.get('id');
@@ -253,5 +253,13 @@ export default function CreateJobPage() {
         onCompleteAnimationEnd={handleCompleteAnimationEnd}
       />
     </>
+  );
+}
+
+export default function JobEditPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <JobEditPageContent />
+    </Suspense>
   );
 }
