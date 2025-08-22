@@ -15,6 +15,8 @@ export interface PageInfo {
 
 export interface ApiResponse<T> {
   data: T;
+  message: string;
+  status: string;
 }
 
 export type PaginatedData<
