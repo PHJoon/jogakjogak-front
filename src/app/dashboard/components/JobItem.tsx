@@ -234,7 +234,13 @@ export default function JobItem({
                 {/* More menu dropdown */}
                 {showMoreMenu && (
                   <div className={styles.menuDropdown}>
-                    <button className={`${styles.menuItem} ${styles.edit}`}>
+                    <button
+                      className={`${styles.menuItem} ${styles.edit}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        router.push(`/job/edit?id=${jd.jd_id}`);
+                      }}
+                    >
                       공고 수정
                     </button>
                     <button
@@ -320,7 +326,7 @@ export default function JobItem({
         isOpen={snackbar.isOpen}
         onClose={() => setSnackbar({ ...snackbar, isOpen: false })}
         type={snackbar.type}
-        duration={1000}
+        duration={3000}
       />
     </>
   );
