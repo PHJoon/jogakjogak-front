@@ -320,7 +320,7 @@ export default function JobItem({
         isOpen={snackbar.isOpen}
         onClose={() => setSnackbar({ ...snackbar, isOpen: false })}
         type={snackbar.type}
-        duration={1000}
+        duration={3000}
       />
     </>
   );
