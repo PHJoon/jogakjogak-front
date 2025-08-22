@@ -3,15 +3,14 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   background-color: #ffffff;
-  padding: 10px 6px;
-  cursor: pointer;
-  min-width: 104px;
+  width: 104px;
   height: 42px;
+  padding: 10px 8px;
   border-radius: 8px;
+  border: 1px solid var(--n-300);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid var(--n-300);
 }
 
 .sortButton.open {
@@ -31,22 +30,22 @@
   line-height: var(--body-2-normal-medium-font-line-height);
 }
 
+.dropdownIcon {
+  transition: transform 0.3s ease;
+}
+
+.dropdownIcon.open {
+  transform: rotate(180deg);
+}
+
 .sortDropdown {
   position: relative;
 }
 
 .dropdownMenu {
-  transform: translateY(-4px);
-  background-color: #ffffff;
-  padding-bottom: 3px;
-  border-radius: 0 0 8px 8px;
-  border: 1px solid var(--n-300);
-  border-top: none;
-  width: 104px;
-}
-
-.dropdownMenu:hover {
-  background-color: var(--n-50);
+  right: 0;
+  transform: translateY(-1px);
+  border: none;
 }
 
 .sortSelect {
@@ -55,7 +54,8 @@
   -moz-appearance: none;
   background-color: #ffffff;
   border-style: none;
-  border-top: 1px solid var(--n-300);
+  width: 104px;
+  height: 34px;
   padding: 6px 8px;
   display: flex;
   justify-content: flex-start;
@@ -67,8 +67,22 @@
   font-weight: var(--body-2-normal-medium-font-weight);
   letter-spacing: var(--body-2-normal-medium-letter-spacing);
   line-height: var(--body-2-normal-medium-font-line-height);
+  border-left: 1px solid var(--n-300);
+  border-right: 1px solid var(--n-300);
+}
 
-  width: 102px;
+.sortSelect + .sortSelect {
+  border-top: 1px solid var(--n-300);
+}
+
+.sortSelect:first-child {
+  border-top: 1px solid var(--n-300);
+}
+
+.sortSelect:last-child {
+  border-radius: 0 0 8px 8px;
+  border-bottom: 1px solid var(--n-300);
+  padding-bottom: 9px;
 }
 
 .sortSelect:hover {
@@ -81,9 +95,18 @@
 }
 
 @media (max-width: 768px) {
-  .sortSelect {
-    padding: 10px 32px 10px 12px;
+  .sortButton {
+    width: 100px;
+    height: 34px;
+  }
+
+  .sortButtonText {
     font-size: 13px;
-    min-width: 100px;
+  }
+
+  .sortSelect {
+    width: 100px;
+    height: 34px;
+    font-size: 13px;
   }
 }

@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import React, { useMemo } from 'react';
 
-import alarmWIcon from '@/assets/images/color_chip/ic_alarm_w.svg';
-import applyIcon from '@/assets/images/color_chip/ic_apply.svg';
-import alarmIcon from '@/assets/images/ic_alarm.svg';
+import alarmOnIcon from '@/assets/images/ic_alarm_on_blue.svg';
+import alarmOnWIcon from '@/assets/images/ic_alarm_on_white.svg';
+import applyIcon from '@/assets/images/ic_apply.svg';
 
 import styles from './DDayChip.module.css';
 
@@ -38,10 +38,10 @@ export function DDayChip({ alarmOn, isApplied = false, dDay }: Props) {
       )}
       <span className={styles.text}>{text}</span>
       {!isApplied && alarmOn && chipType !== 'dDay-default' && (
-        <Image src={alarmWIcon} alt="alarm-icon" width={14} height={14} />
+        <Image src={alarmOnWIcon} alt="alarm-icon" width={16} height={16} />
       )}
       {!isApplied && alarmOn && chipType === 'dDay-default' && (
-        <Image src={alarmIcon} alt="alarm-icon" width={14} height={14} />
+        <Image src={alarmOnIcon} alt="alarm-icon" width={16} height={16} />
       )}
     </div>
   );

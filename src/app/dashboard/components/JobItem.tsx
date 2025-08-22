@@ -4,7 +4,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useReducer, useState, useRef, useEffect } from 'react';
 
-import bookmarkIcon from '@/assets/images/ic_add_to_bookmark.svg';
+import bookmarkIcon from '@/assets/images/ic_bookmark.svg';
+import bookmarkCheckIcon from '@/assets/images/ic_bookmark_check.svg';
 import kebabIcon from '@/assets/images/ic_kebab.svg';
 import { DDayChip } from '@/components/DDayChip';
 import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
@@ -118,14 +119,17 @@ export default function JobItem({
   };
 
   // 지원 완료 핸들러
-  const handleMarkAsApplied = async (jobId: number | null) => {
+  const handleMarkAsApplied = async (
+    jobId: number | null,
+    applyAt: string | null
+  ) => {
     if (!jobId) return;
 
     applyMutate(jobId, {
       onSuccess: () => {
         setSnackbar({
           isOpen: true,
-          message: '지원 상태가 변경되었습니다.',
+          message: applyAt ? '지원 취소되었습니다.' : '지원 완료되었습니다.',
           type: 'success',
         });
       },
@@ -153,8 +157,8 @@ export default function JobItem({
           setSnackbar({
             isOpen: true,
             message: newBookmarkState
-              ? '즐겨찾기에 추가되었습니다.'
-              : '즐겨찾기에서 제거되었습니다.',
+              ? '관심공고로 등록되었습니다.'
+              : '관심공고에서 제외되었습니다.',
             type: 'success',
           });
         },
@@ -190,19 +194,27 @@ export default function JobItem({
 
               <div className={styles.menuWrapper} ref={moreMenuRef}>
                 <button
-                  className={`${styles.menuTrigger} ${jd.bookmark ? styles.bookmarked : ''}`}
+                  className={styles.menuTrigger}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleBookmarkToggle(jd.jd_id, !jd.bookmark);
                   }}
                 >
-                  <Image
-                    src={bookmarkIcon}
-                    alt="add-bookmark"
-                    width={20}
-                    height={20}
-                    // style={{ opacity: jd.bookmark ? 1 : 0.7 }}
-                  />
+                  {jd.bookmark ? (
+                    <Image
+                      src={bookmarkCheckIcon}
+                      alt="add-bookmark"
+                      width={24}
+                      height={24}
+                    />
+                  ) : (
+                    <Image
+                      src={bookmarkIcon}
+                      alt="add-bookmark"
+                      width={24}
+                      height={24}
+                    />
+                  )}
                 </button>
                 <button
                   className={styles.menuTrigger}
@@ -222,18 +234,21 @@ export default function JobItem({
                 {/* More menu dropdown */}
                 {showMoreMenu && (
                   <div className={styles.menuDropdown}>
+                    <button className={`${styles.menuItem} ${styles.edit}`}>
+                      공고 수정
+                    </button>
                     <button
-                      className={styles.menuItem}
+                      className={`${styles.menuItem} ${styles.apply}`}
                       onClick={(e) => {
                         e.stopPropagation();
                         setShowMoreMenu(false);
-                        handleMarkAsApplied(jd.jd_id);
+                        handleMarkAsApplied(jd.jd_id, jd.applyAt);
                       }}
                     >
                       {!Boolean(jd.applyAt) ? '지원 완료' : '지원 완료 취소'}
                     </button>
                     <button
-                      className={styles.menuItem}
+                      className={`${styles.menuItem} ${styles.delete}`}
                       onClick={(e) => {
                         e.stopPropagation();
                         setShowMoreMenu(false);

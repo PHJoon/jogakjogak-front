@@ -6,7 +6,6 @@ import dropdownIcon from '@/assets/images/ic_drop_down.svg';
 import {
   Dropdown,
   DropdownButton,
-  DropdownItem,
   DropdownMenu,
 } from '@/components/Dropdown/Dropdown';
 import { ShowOnly, Sort } from '@/types/jds';
@@ -94,17 +93,24 @@ export default function SortDropdown({ setSort, setShowOnly }: Props) {
             alt="Dropdown Icon"
             width={16}
             height={16}
-            className={styles.dropdownIcon}
+            className={`${styles.dropdownIcon} ${isOpen ? styles.open : ''}`}
           />
         </div>
       </DropdownButton>
       <DropdownMenu>
         <div className={styles.dropdownMenu}>
-          {sortOptions.map((opt) => (
-            <DropdownItem key={opt.value} onClick={() => handleClick(opt)}>
-              <button className={styles.sortSelect}>{opt.label}</button>
-            </DropdownItem>
-          ))}
+          {sortOptions.map((opt) => {
+            if (opt.value === optionLabel) return null;
+            return (
+              <button
+                className={styles.sortSelect}
+                key={opt.value}
+                onClick={() => handleClick(opt)}
+              >
+                {opt.label}
+              </button>
+            );
+          })}
         </div>
       </DropdownMenu>
     </Dropdown>

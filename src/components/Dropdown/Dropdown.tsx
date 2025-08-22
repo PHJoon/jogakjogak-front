@@ -52,7 +52,7 @@ export const Dropdown = ({
 
   return (
     <DropdownContext.Provider value={{ isOpen, setIsOpen, toggle }}>
-      <div className={`${styles.dropdownContainer}`} ref={dropdownRef}>
+      <div className={styles.dropdownContainer} ref={dropdownRef}>
         {children}
       </div>
     </DropdownContext.Provider>
@@ -86,7 +86,7 @@ export const DropdownMenu = ({ children }: { children: ReactNode }) => {
     if (isOpen) {
       setShowDropdown(true);
     } else {
-      timeout = setTimeout(() => setShowDropdown(false), 200);
+      timeout = setTimeout(() => setShowDropdown(false), 300);
     }
     return () => {
       clearTimeout(timeout);
@@ -95,30 +95,13 @@ export const DropdownMenu = ({ children }: { children: ReactNode }) => {
 
   return showDropdown ? (
     <div
-      className={`${styles.dropdownMenu} ${isOpen ? styles.dropdownOpen : styles.dropdownClose}`}
+      className={`${styles.dropdownInnerContainer} ${isOpen ? styles.isOpen : ''}`}
     >
-      {children}
+      <div
+        className={`${styles.dropdownMenu} ${isOpen ? styles.dropdownOpen : styles.dropdownClose}`}
+      >
+        {children}
+      </div>
     </div>
   ) : null;
-};
-
-export const DropdownItem = ({
-  children,
-  onClick,
-}: {
-  children: ReactNode;
-  onClick?: () => void;
-}) => {
-  const { toggle } = useDropdown();
-
-  const handleClick = () => {
-    if (onClick) onClick();
-    toggle();
-  };
-
-  return (
-    <div className={styles.dropdownItem} onClick={handleClick}>
-      {children}
-    </div>
-  );
 };
