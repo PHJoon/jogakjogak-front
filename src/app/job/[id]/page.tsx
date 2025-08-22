@@ -743,7 +743,16 @@ export default function JobDetailPage() {
               {showMoreMenu && (
                 <div className={styles.moreMenu}>
                   <button
-                    className={styles.moreMenuItem}
+                    className={`${styles.moreMenuItem} ${styles.edit}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      router.push(`/job/edit?id=${jdDetail.jd_id}`);
+                    }}
+                  >
+                    공고 수정
+                  </button>
+                  <button
+                    className={`${styles.moreMenuItem} ${styles.apply}`}
                     onClick={() => {
                       setShowMoreMenu(false);
                       handleApplyComplete();
@@ -752,7 +761,7 @@ export default function JobDetailPage() {
                     {!jdDetail.applyAt ? '지원 완료' : '지원 완료 취소'}
                   </button>
                   <button
-                    className={styles.moreMenuItem}
+                    className={`${styles.moreMenuItem} ${styles.delete}`}
                     onClick={() => {
                       setShowMoreMenu(false);
                       setIsDeleting(true);
