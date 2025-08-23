@@ -18,11 +18,13 @@ export async function GET(request: NextRequest) {
     const page = searchParams.get('page') || '0';
     const size = searchParams.get('size') || '11';
     const sort = searchParams.get('sort') || 'createdAt,desc';
+    const showOnly = searchParams.get('showOnly') || '';
 
     const queryParams = new URLSearchParams({
       page,
       size,
       sort,
+      showOnly,
     });
 
     const queryString = queryParams.toString();
