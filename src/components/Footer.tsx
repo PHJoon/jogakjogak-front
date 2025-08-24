@@ -6,8 +6,10 @@ import { useState } from 'react';
 
 import emailIcon from '@/assets/images/ico_email.svg';
 import logo from '@/assets/images/logo.svg';
+import { GACategory, GAEvent } from '@/constants/gaEvent';
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
 import { tokenManager } from '@/lib/auth/tokenManager';
+import trackEvent from '@/utils/trackEventGA';
 
 import { DeleteConfirmModal } from './DeleteConfirmModal';
 import styles from './Footer.module.css';
@@ -23,6 +25,11 @@ export default function Footer(
 
   // 탈퇴 처리 함수
   const handleWithdrawal = async () => {
+    trackEvent({
+      event: GAEvent.Auth.REMOVE_ACCOUNT,
+      category: GACategory.AUTH,
+    });
+
     try {
       const accessToken = tokenManager.getAccessToken();
 
@@ -50,6 +57,13 @@ export default function Footer(
     }
   };
 
+  const handleExternalLink = (type: keyof typeof GAEvent.Footer) => {
+    trackEvent({
+      event: GAEvent.Footer[type],
+      category: GACategory.FOOTER,
+    });
+  };
+
   return (
     <footer
       className={`${styles.footer} ${
@@ -72,7 +86,11 @@ export default function Footer(
         <div className={styles.mainContent}>
           {/* Links */}
           <nav className={styles.linkContainer}>
-            <Link href="/?intro=true" className={styles.link}>
+            <Link
+              href="/?intro=true"
+              className={styles.link}
+              onClick={() => handleExternalLink('ABOUT_US')}
+            >
               서비스 소개
             </Link>
             <span className={styles.separator}>|</span>
@@ -81,6 +99,7 @@ export default function Footer(
               target="_blank"
               rel="noopener noreferrer"
               className={styles.link}
+              onClick={() => handleExternalLink('CONTACT_US')}
             >
               문의하기
             </a>
@@ -90,6 +109,7 @@ export default function Footer(
               target="_blank"
               rel="noopener noreferrer"
               className={styles.link}
+              onClick={() => handleExternalLink('TERMS_OF_SERVICE')}
             >
               이용약관
             </a>
@@ -99,6 +119,7 @@ export default function Footer(
               target="_blank"
               rel="noopener noreferrer"
               className={styles.link}
+              onClick={() => handleExternalLink('PRIVACY_POLICY')}
             >
               개인정보 처리방침
             </a>

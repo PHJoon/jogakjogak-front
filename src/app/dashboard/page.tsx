@@ -7,12 +7,14 @@ import { FeedbackSurveyModal } from '@/components/FeedbackSurveyModal';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import NoResumeModal from '@/components/NoResumeModal';
+import { GACategory, GAEvent } from '@/constants/gaEvent';
 import useJdsQuery from '@/hooks/queries/useJdsQuery';
 import useClientMeta from '@/hooks/useClientMeta';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { tokenManager } from '@/lib/auth/tokenManager';
 import { useBoundStore } from '@/stores/useBoundStore';
 import { JobDescription, Sort } from '@/types/jds';
+import trackEvent from '@/utils/trackEventGA';
 
 import JobItem from './components/JobItem';
 import JobItemAdd from './components/JobItemAdd';
@@ -125,6 +127,10 @@ function DashboardContent() {
   }, [isAuthenticated, data, setResume]);
 
   const handleResumeRegisterClick = () => {
+    trackEvent({
+      event: GAEvent.Resume.CREATE_PAGE_VIEW_ON_MODAL,
+      category: GACategory.RESUME,
+    });
     setShowNoResumeModal(false);
     // 이력서 등록 페이지로 이동
     router.push('/resume/create');

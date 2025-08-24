@@ -8,9 +8,11 @@ import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import LoadingModal from '@/components/LoadingModal';
+import { GACategory, GAEvent } from '@/constants/gaEvent';
 import useClientMeta from '@/hooks/useClientMeta';
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
 import { useBoundStore } from '@/stores/useBoundStore';
+import trackEvent from '@/utils/trackEventGA';
 
 import styles from './page.module.css';
 
@@ -47,6 +49,11 @@ export default function CreateJobPage() {
       alert('채용공고 내용을 입력해주세요.');
       return;
     }
+
+    trackEvent({
+      event: GAEvent.JobPosting.CREATE,
+      category: GACategory.JOB_POSTING,
+    });
 
     setIsSubmitting(true);
     try {

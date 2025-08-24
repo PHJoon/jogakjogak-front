@@ -8,10 +8,12 @@ import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import LoadingModal from '@/components/LoadingModal';
+import { GACategory, GAEvent } from '@/constants/gaEvent';
 import useJdQuery from '@/hooks/queries/useJdQuery';
 import useClientMeta from '@/hooks/useClientMeta';
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
 import { useBoundStore } from '@/stores/useBoundStore';
+import trackEvent from '@/utils/trackEventGA';
 
 import FormContentLoading from './components/FormContentLoading';
 import styles from './page.module.css';
@@ -82,6 +84,12 @@ function JobEditPageContent() {
       alert('채용공고 내용을 입력해주세요.');
       return;
     }
+
+    trackEvent({
+      event: GAEvent.JobPosting.EDIT,
+      category: GACategory.JOB_POSTING,
+      jobId: data?.jd_id,
+    });
 
     setIsSubmitting(true);
     try {

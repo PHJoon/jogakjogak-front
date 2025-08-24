@@ -21,11 +21,13 @@ import { MemoBox } from '@/components/MemoBox';
 import NotificationModal from '@/components/NotificationModal';
 import { ProgressBar } from '@/components/ProgressBar';
 import Snackbar from '@/components/Snackbar';
+import { GACategory, GAEvent } from '@/constants/gaEvent';
 import useClientMeta from '@/hooks/useClientMeta';
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
 import { queryClient } from '@/lib/queryClient';
 import { JDDetail, TodoItem } from '@/types/jds';
 import { calculateDDay } from '@/utils/calculateDDay';
+import trackEvent from '@/utils/trackEventGA';
 
 import styles from './page.module.css';
 
@@ -241,6 +243,12 @@ export default function JobDetailPage() {
   // 알림 모달 확인 핸들러
   const handleNotificationConfirm = async (isEnabled: boolean) => {
     setShowNotificationModal(false);
+    trackEvent({
+      event: GAEvent.JobPosting.ALARM_TOGGLE,
+      category: GACategory.JOB_POSTING,
+      status: isEnabled,
+      jobId: jdDetail?.jd_id,
+    });
 
     if (!jdDetail || isTogglingAlarm) return;
 
@@ -315,6 +323,13 @@ export default function JobDetailPage() {
 
   // Todo 완료 상태 토글
   const toggleTodoComplete = async (todo: TodoItem, newStatus: boolean) => {
+    trackEvent({
+      event: GAEvent.TodoList.TOGGLE_TODO,
+      category: GACategory.TODO,
+      status: newStatus,
+      jobId: jdDetail?.jd_id,
+    });
+
     try {
       const response = await fetchWithAuth(
         `/api/jds/${jdId}/to-do-lists/${todo.checklist_id}`,
@@ -382,6 +397,12 @@ export default function JobDetailPage() {
     todoId: string,
     data: { category: string; title: string; content: string }
   ) => {
+    trackEvent({
+      event: GAEvent.TodoList.EDIT_TODO,
+      category: GACategory.TODO,
+      jobId: jdDetail?.jd_id,
+    });
+
     try {
       // 현재 투두의 완료 상태 찾기
       const currentTodo = jdDetail?.toDoLists.find(
@@ -436,6 +457,11 @@ export default function JobDetailPage() {
 
   // Todo 삭제 함수
   const deleteTodo = async (todoId: string) => {
+    trackEvent({
+      event: GAEvent.TodoList.DELETE_TODO,
+      category: GACategory.TODO,
+      jobId: jdDetail?.jd_id,
+    });
     try {
       const response = await fetchWithAuth(
         `/api/jds/${jdId}/to-do-lists/${todoId}`,
@@ -484,6 +510,11 @@ export default function JobDetailPage() {
     title: string;
     content: string;
   }) => {
+    trackEvent({
+      event: GAEvent.TodoList.ADD_TODO,
+      category: GACategory.TODO,
+      jobId: jdDetail?.jd_id,
+    });
     try {
       const response = await fetchWithAuth(`/api/jds/${jdId}/to-do-lists`, {
         method: 'POST',
@@ -527,6 +558,11 @@ export default function JobDetailPage() {
 
   // 삭제 핸들러
   const handleDelete = async () => {
+    trackEvent({
+      event: GAEvent.JobPosting.REMOVE,
+      category: GACategory.JOB_POSTING,
+      jobId: jdDetail?.jd_id,
+    });
     try {
       const response = await fetchWithAuth(`/api/jds/${jdId}`, {
         method: 'DELETE',
@@ -549,6 +585,12 @@ export default function JobDetailPage() {
 
   // 지원 완료 핸들러
   const handleApplyComplete = async () => {
+    trackEvent({
+      event: GAEvent.JobPosting.APPLY_JOB_TOGGLE,
+      category: GACategory.JOB_POSTING,
+      status: jdDetail?.applyAt ? false : true,
+      jobId: jdDetail?.jd_id,
+    });
     try {
       const response = await fetchWithAuth(`/api/jds/${jdId}`, {
         method: 'PATCH',

@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation';
 
 import cautionIcon from '@/assets/images/ic_caution.svg';
 import { Button } from '@/components/Button';
+import { GACategory, GAEvent } from '@/constants/gaEvent';
 import { useBoundStore } from '@/stores/useBoundStore';
+import trackEvent from '@/utils/trackEventGA';
 
 import styles from './ResumeRegistration.module.css';
 
@@ -15,6 +17,12 @@ export default function ResumeRegistration() {
   const hasResume = !!resume;
 
   const handleResumeClick = () => {
+    trackEvent({
+      event: hasResume
+        ? GAEvent.Resume.EDIT_PAGE_VIEW
+        : GAEvent.Resume.CREATE_PAGE_VIEW,
+      category: GACategory.RESUME,
+    });
     if (hasResume) {
       router.push(`/resume/create?id=${resume.resumeId}`);
     } else {

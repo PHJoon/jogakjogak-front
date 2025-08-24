@@ -20,34 +20,8 @@ export default function useJdsMutation() {
   // 채용공고 삭제
   const { mutate: deleteMutate, isPending: deletePending } = useMutation({
     mutationFn: (jobId: number) => deleteJd(jobId),
-    onMutate: (jobId) => {
-      // Optimistically update the cache
-      const previousJds: JdsData | undefined = queryClient.getQueryData([
-        'jds-list',
-        `page=${page}`,
-        `sort=${sort}`,
-        `showOnly=${showOnly}`,
-      ]);
-
-      if (previousJds) {
-        queryClient.setQueryData(
-          ['jds-list', `page=${page}`, `sort=${sort}`, `showOnly=${showOnly}`],
-          {
-            resume: previousJds.resume,
-            pageInfo: previousJds.pageInfo,
-            jds: [...previousJds.jds].filter((jd) => jd.jd_id !== jobId),
-          }
-        );
-      }
-      return { previousJds };
-    },
-    onError: (error, variables, context) => {
-      if (context?.previousJds) {
-        queryClient.setQueryData(
-          ['jds-list', `page=${page}`, `sort=${sort}`, `showOnly=${showOnly}`],
-          context.previousJds
-        );
-      }
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['jds-list'] });
     },
   });
 

@@ -6,7 +6,9 @@ import React, { useEffect, useState } from 'react';
 
 import logoutIcon from '@/assets/images/ic_logout.svg';
 import logo from '@/assets/images/logo.svg';
+import { GACategory, GAEvent } from '@/constants/gaEvent';
 import { logout } from '@/lib/auth/authApi';
+import trackEvent from '@/utils/trackEventGA';
 
 import styles from './Header.module.css';
 import LoginModal from './LoginModal';
@@ -36,6 +38,10 @@ export default function Header({
   };
 
   const handleLogoutClick = () => {
+    trackEvent({
+      event: GAEvent.Auth.LOGOUT,
+      category: GACategory.AUTH,
+    });
     // 즉시 UI 업데이트를 위해 홈으로 이동
     window.location.href = '/';
 
