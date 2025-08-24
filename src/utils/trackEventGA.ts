@@ -1,4 +1,4 @@
-import { sendGTMEvent } from '@next/third-parties/google';
+import { sendGAEvent } from '@next/third-parties/google';
 
 /**
  * Google Analytics 이벤트 전송 시 사용되는 파라미터 정의
@@ -12,7 +12,7 @@ import { sendGTMEvent } from '@next/third-parties/google';
  * @param todo_status - 할 일 여부 (예: true, false)
  * @param jobId - 채용공고 ID (job 관련 이벤트에서 사용)
  */
-type GTagEvent = {
+type GAEvent = {
   event: string;
   event_category: string;
   login_method?: string;
@@ -23,6 +23,6 @@ type GTagEvent = {
   jobId?: number;
 };
 
-export default function trackEvent(params: GTagEvent) {
-  sendGTMEvent(params);
+export default function trackEvent(params: GAEvent) {
+  sendGAEvent(params);
 }
