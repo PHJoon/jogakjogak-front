@@ -131,8 +131,8 @@ export default function JobDetailPage() {
 
     trackEvent({
       event: GAEvent.JobPosting.BOOKMARK_TOGGLE,
-      category: GACategory.JOB_POSTING,
-      status: newBookmarkState,
+      event_category: GACategory.JOB_POSTING,
+      bookmark_status: newBookmarkState,
       jobId: jdDetail?.jd_id,
     });
 
@@ -252,8 +252,8 @@ export default function JobDetailPage() {
     setShowNotificationModal(false);
     trackEvent({
       event: GAEvent.JobPosting.ALARM_TOGGLE,
-      category: GACategory.JOB_POSTING,
-      status: isEnabled,
+      event_category: GACategory.JOB_POSTING,
+      alarm_status: isEnabled,
       jobId: jdDetail?.jd_id,
     });
 
@@ -332,8 +332,8 @@ export default function JobDetailPage() {
   const toggleTodoComplete = async (todo: TodoItem, newStatus: boolean) => {
     trackEvent({
       event: GAEvent.TodoList.TOGGLE_TODO,
-      category: GACategory.TODO,
-      status: newStatus,
+      event_category: GACategory.TODO,
+      todo_status: newStatus,
       jobId: jdDetail?.jd_id,
     });
 
@@ -406,7 +406,7 @@ export default function JobDetailPage() {
   ) => {
     trackEvent({
       event: GAEvent.TodoList.EDIT_TODO,
-      category: GACategory.TODO,
+      event_category: GACategory.TODO,
       jobId: jdDetail?.jd_id,
     });
 
@@ -466,7 +466,7 @@ export default function JobDetailPage() {
   const deleteTodo = async (todoId: string) => {
     trackEvent({
       event: GAEvent.TodoList.DELETE_TODO,
-      category: GACategory.TODO,
+      event_category: GACategory.TODO,
       jobId: jdDetail?.jd_id,
     });
     try {
@@ -519,7 +519,7 @@ export default function JobDetailPage() {
   }) => {
     trackEvent({
       event: GAEvent.TodoList.ADD_TODO,
-      category: GACategory.TODO,
+      event_category: GACategory.TODO,
       jobId: jdDetail?.jd_id,
     });
     try {
@@ -567,7 +567,7 @@ export default function JobDetailPage() {
   const handleDelete = async () => {
     trackEvent({
       event: GAEvent.JobPosting.REMOVE,
-      category: GACategory.JOB_POSTING,
+      event_category: GACategory.JOB_POSTING,
       jobId: jdDetail?.jd_id,
     });
     try {
@@ -594,8 +594,8 @@ export default function JobDetailPage() {
   const handleApplyComplete = async () => {
     trackEvent({
       event: GAEvent.JobPosting.APPLY_JOB_TOGGLE,
-      category: GACategory.JOB_POSTING,
-      status: jdDetail?.applyAt ? false : true,
+      event_category: GACategory.JOB_POSTING,
+      apply_status: jdDetail?.applyAt ? false : true,
       jobId: jdDetail?.jd_id,
     });
     try {
@@ -797,7 +797,7 @@ export default function JobDetailPage() {
                       e.stopPropagation();
                       trackEvent({
                         event: GAEvent.JobPosting.EDIT_PAGE_VIEW,
-                        category: GACategory.JOB_POSTING,
+                        event_category: GACategory.JOB_POSTING,
                         jobId: jdDetail.jd_id,
                       });
                       router.push(`/job/edit?id=${jdDetail.jd_id}`);

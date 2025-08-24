@@ -27,7 +27,7 @@ export default function Footer(
   const handleWithdrawal = async () => {
     trackEvent({
       event: GAEvent.Auth.REMOVE_ACCOUNT,
-      category: GACategory.AUTH,
+      event_category: GACategory.AUTH,
     });
 
     try {
@@ -60,7 +60,7 @@ export default function Footer(
   const handleExternalLink = (type: keyof typeof GAEvent.Footer) => {
     trackEvent({
       event: GAEvent.Footer[type],
-      category: GACategory.FOOTER,
+      event_category: GACategory.FOOTER,
     });
   };
 

@@ -21,7 +21,7 @@ export default function ResumeRegistration() {
       event: hasResume
         ? GAEvent.Resume.EDIT_PAGE_VIEW
         : GAEvent.Resume.CREATE_PAGE_VIEW,
-      category: GACategory.RESUME,
+      event_category: GACategory.RESUME,
     });
     if (hasResume) {
       router.push(`/resume/create?id=${resume.resumeId}`);

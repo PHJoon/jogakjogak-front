@@ -30,8 +30,8 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const handleKakaoLogin = () => {
     trackEvent({
       event: GAEvent.Auth.LOGIN,
-      category: GACategory.AUTH,
-      method: 'kakao',
+      event_category: GACategory.AUTH,
+      login_method: 'kakao',
     });
 
     const apiUrl =
@@ -42,8 +42,8 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const handleGoogleLogin = () => {
     trackEvent({
       event: GAEvent.Auth.LOGIN,
-      category: GACategory.AUTH,
-      method: 'google',
+      event_category: GACategory.AUTH,
+      login_method: 'google',
     });
 
     const apiUrl =
