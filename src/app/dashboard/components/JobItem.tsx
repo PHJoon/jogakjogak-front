@@ -260,6 +260,11 @@ export default function JobItem({
                       className={`${styles.menuItem} ${styles.edit}`}
                       onClick={(e) => {
                         e.stopPropagation();
+                        trackEvent({
+                          event: GAEvent.JobPosting.EDIT_PAGE_VIEW,
+                          category: GACategory.JOB_POSTING,
+                          jobId: jd.jd_id,
+                        });
                         router.push(`/job/edit?id=${jd.jd_id}`);
                       }}
                     >

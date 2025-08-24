@@ -21,8 +21,8 @@ export default function JobItemAdd() {
 
   const handleClick = () => {
     trackEvent({
-      event: GAEvent.Resume.CREATE_PAGE_VIEW,
-      category: GACategory.RESUME,
+      event: GAEvent.JobPosting.CREATE_PAGE_VIEW,
+      category: GACategory.JOB_POSTING,
     });
     if (!hasResume) {
       setShowNoResumeSnackbar(true);
