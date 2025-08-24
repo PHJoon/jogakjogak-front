@@ -129,7 +129,7 @@ function DashboardContent() {
   const handleResumeRegisterClick = () => {
     trackEvent({
       event: GAEvent.Resume.CREATE_PAGE_VIEW_ON_MODAL,
-      category: GACategory.RESUME,
+      event_category: GACategory.RESUME,
     });
     setShowNoResumeModal(false);
     // 이력서 등록 페이지로 이동

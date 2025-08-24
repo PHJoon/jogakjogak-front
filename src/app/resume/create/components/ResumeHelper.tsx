@@ -15,7 +15,7 @@ export default function ResumeHelper() {
     if (!isHelpOpen) {
       trackEvent({
         event: GAEvent.Resume.HELPER,
-        category: GACategory.RESUME,
+        event_category: GACategory.RESUME,
       });
     }
     setIsHelpOpen(!isHelpOpen);

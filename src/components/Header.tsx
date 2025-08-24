@@ -40,7 +40,7 @@ export default function Header({
   const handleLogoutClick = () => {
     trackEvent({
       event: GAEvent.Auth.LOGOUT,
-      category: GACategory.AUTH,
+      event_category: GACategory.AUTH,
     });
     // 즉시 UI 업데이트를 위해 홈으로 이동
     window.location.href = '/';

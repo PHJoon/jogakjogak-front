@@ -52,7 +52,7 @@ export default function CreateJobPage() {
 
     trackEvent({
       event: GAEvent.JobPosting.CREATE,
-      category: GACategory.JOB_POSTING,
+      event_category: GACategory.JOB_POSTING,
     });
 
     setIsSubmitting(true);

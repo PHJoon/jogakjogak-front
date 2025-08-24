@@ -104,7 +104,7 @@ export default function JobItem({
 
     trackEvent({
       event: GAEvent.JobPosting.REMOVE,
-      category: GACategory.JOB_POSTING,
+      event_category: GACategory.JOB_POSTING,
       jobId: jobId,
     });
 
@@ -135,8 +135,8 @@ export default function JobItem({
 
     trackEvent({
       event: GAEvent.JobPosting.APPLY_JOB_TOGGLE,
-      category: GACategory.JOB_POSTING,
-      status: applyAt ? false : true,
+      event_category: GACategory.JOB_POSTING,
+      apply_status: applyAt ? false : true,
       jobId: jobId,
     });
 
@@ -167,8 +167,8 @@ export default function JobItem({
 
     trackEvent({
       event: GAEvent.JobPosting.BOOKMARK_TOGGLE,
-      category: GACategory.JOB_POSTING,
-      status: newBookmarkState,
+      event_category: GACategory.JOB_POSTING,
+      bookmark_status: newBookmarkState,
       jobId: jobId,
     });
 
@@ -262,7 +262,7 @@ export default function JobItem({
                         e.stopPropagation();
                         trackEvent({
                           event: GAEvent.JobPosting.EDIT_PAGE_VIEW,
-                          category: GACategory.JOB_POSTING,
+                          event_category: GACategory.JOB_POSTING,
                           jobId: jd.jd_id,
                         });
                         router.push(`/job/edit?id=${jd.jd_id}`);

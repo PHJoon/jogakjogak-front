@@ -64,7 +64,7 @@ function ResumeCreateContent() {
 
     trackEvent({
       event: resumeId ? GAEvent.Resume.EDIT : GAEvent.Resume.CREATE,
-      category: GACategory.RESUME,
+      event_category: GACategory.RESUME,
     });
 
     if (resumeId) {

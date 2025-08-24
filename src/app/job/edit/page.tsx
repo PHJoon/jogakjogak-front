@@ -87,7 +87,7 @@ function JobEditPageContent() {
 
     trackEvent({
       event: GAEvent.JobPosting.EDIT,
-      category: GACategory.JOB_POSTING,
+      event_category: GACategory.JOB_POSTING,
       jobId: data?.jd_id,
     });
 
