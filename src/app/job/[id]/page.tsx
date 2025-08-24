@@ -129,6 +129,13 @@ export default function JobDetailPage() {
     const newBookmarkState = !jdDetail.bookmark;
     setJdDetail({ ...jdDetail, bookmark: newBookmarkState });
 
+    trackEvent({
+      event: GAEvent.JobPosting.BOOKMARK_TOGGLE,
+      category: GACategory.JOB_POSTING,
+      status: newBookmarkState,
+      jobId: jdDetail?.jd_id,
+    });
+
     try {
       const response = await fetchWithAuth(`/api/jds/${jdId}/bookmark`, {
         method: 'PATCH',
