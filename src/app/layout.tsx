@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 
-import { QueryClientProvider } from '@tanstack/react-query';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import localFont from 'next/font/local';
 
 import './globals.css';
 
 import ScrollToTop from '@/components/ScrollToTop';
-import { queryClient, ReactQueryProvider } from '@/lib/queryClient';
+import { ReactQueryProvider } from '@/lib/queryClient';
 
 const pretendard = localFont({
   src: [
@@ -70,6 +70,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gaId =
+    process.env.NODE_ENV === 'development'
+      ? process.env.NEXT_PUBLIC_GA_ID_DEV
+      : process.env.NEXT_PUBLIC_GA_ID_PROD;
+
   return (
     <html lang="ko">
       <body className={pretendard.variable}>
@@ -78,6 +83,7 @@ export default function RootLayout({
           <ScrollToTop />
         </ReactQueryProvider>
       </body>
+      <GoogleAnalytics gaId={gaId ?? ''} />
     </html>
   );
 }

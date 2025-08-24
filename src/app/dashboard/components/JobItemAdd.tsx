@@ -7,7 +7,9 @@ import { useState } from 'react';
 import addJobIcon from '@/assets/images/add_job.svg';
 import addJobActiveIcon from '@/assets/images/add_job_active.svg';
 import Snackbar from '@/components/Snackbar';
+import { GACategory, GAEvent } from '@/constants/gaEvent';
 import { useBoundStore } from '@/stores/useBoundStore';
+import trackEvent from '@/utils/trackEventGA';
 
 import styles from './JobItemAdd.module.css';
 
@@ -18,6 +20,10 @@ export default function JobItemAdd() {
   const hasResume = !!resume;
 
   const handleClick = () => {
+    trackEvent({
+      event: GAEvent.JobPosting.CREATE_PAGE_VIEW,
+      category: GACategory.JOB_POSTING,
+    });
     if (!hasResume) {
       setShowNoResumeSnackbar(true);
     } else {

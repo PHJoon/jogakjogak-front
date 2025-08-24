@@ -11,10 +11,12 @@ import { DDayChip } from '@/components/DDayChip';
 import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
 import { ProgressBar } from '@/components/ProgressBar';
 import Snackbar from '@/components/Snackbar';
+import { GACategory, GAEvent } from '@/constants/gaEvent';
 import useJdsMutation from '@/hooks/mutations/useJdsMutation';
 import { JobDescription } from '@/types/jds';
 import { calculateDDay } from '@/utils/calculateDDay';
 import { formatDate } from '@/utils/formatDate';
+import trackEvent from '@/utils/trackEventGA';
 
 import styles from './JobItem.module.css';
 
@@ -100,6 +102,12 @@ export default function JobItem({
   const handleJobDelete = async (jobId: number | null) => {
     if (!jobId) return;
 
+    trackEvent({
+      event: GAEvent.JobPosting.REMOVE,
+      category: GACategory.JOB_POSTING,
+      jobId: jobId,
+    });
+
     deleteMutate(jobId, {
       onSuccess: () => {
         setSnackbar({
@@ -125,6 +133,13 @@ export default function JobItem({
   ) => {
     if (!jobId) return;
 
+    trackEvent({
+      event: GAEvent.JobPosting.APPLY_JOB_TOGGLE,
+      category: GACategory.JOB_POSTING,
+      status: applyAt ? false : true,
+      jobId: jobId,
+    });
+
     applyMutate(jobId, {
       onSuccess: () => {
         setSnackbar({
@@ -149,6 +164,13 @@ export default function JobItem({
     newBookmarkState: boolean
   ) => {
     if (!jobId) return;
+
+    trackEvent({
+      event: GAEvent.JobPosting.BOOKMARK_TOGGLE,
+      category: GACategory.JOB_POSTING,
+      status: newBookmarkState,
+      jobId: jobId,
+    });
 
     bookmarkMutate(
       { jobId, newBookmarkState },
@@ -238,6 +260,11 @@ export default function JobItem({
                       className={`${styles.menuItem} ${styles.edit}`}
                       onClick={(e) => {
                         e.stopPropagation();
+                        trackEvent({
+                          event: GAEvent.JobPosting.EDIT_PAGE_VIEW,
+                          category: GACategory.JOB_POSTING,
+                          jobId: jd.jd_id,
+                        });
                         router.push(`/job/edit?id=${jd.jd_id}`);
                       }}
                     >

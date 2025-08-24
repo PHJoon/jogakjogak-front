@@ -8,6 +8,8 @@ import closeIcon from '@/assets/images/login_modal/ic_close.svg';
 import googleIcon from '@/assets/images/login_modal/ic_google.svg';
 import kakaoIcon from '@/assets/images/login_modal/ic_kakao.svg';
 import logo from '@/assets/images/logo.svg';
+import { GACategory, GAEvent } from '@/constants/gaEvent';
+import trackEvent from '@/utils/trackEventGA';
 
 import styles from './LoginModal.module.css';
 
@@ -26,12 +28,24 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   };
 
   const handleKakaoLogin = () => {
+    trackEvent({
+      event: GAEvent.Auth.LOGIN,
+      category: GACategory.AUTH,
+      method: 'kakao',
+    });
+
     const apiUrl =
       process.env.NEXT_PUBLIC_API_URL || 'https://api.jogakjogak.com';
     window.location.href = `${apiUrl}/oauth2/authorization/kakao`;
   };
 
   const handleGoogleLogin = () => {
+    trackEvent({
+      event: GAEvent.Auth.LOGIN,
+      category: GACategory.AUTH,
+      method: 'google',
+    });
+
     const apiUrl =
       process.env.NEXT_PUBLIC_API_URL || 'https://api.jogakjogak.com';
     window.location.href = `${apiUrl}/oauth2/authorization/google`;

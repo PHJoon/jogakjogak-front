@@ -6,10 +6,12 @@ import { useEffect, Suspense } from 'react';
 import { ConfirmModal } from '@/components/ConfirmModal';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
+import { GACategory, GAEvent } from '@/constants/gaEvent';
 import useResumeForm from '@/hooks/resume/useResumeForm';
 import useResumeModal from '@/hooks/resume/useResumeModal';
 import useResumeValidation from '@/hooks/resume/useResumeValidation';
 import useClientMeta from '@/hooks/useClientMeta';
+import trackEvent from '@/utils/trackEventGA';
 
 import ResumeFormHeader from './components/ResumeFormHeader';
 import ResumeFormInput from './components/ResumeFormInput';
@@ -59,6 +61,11 @@ function ResumeCreateContent() {
 
   const handleSubmit = async () => {
     if (!validateResume(resumeTitle, resumeContent)) return;
+
+    trackEvent({
+      event: resumeId ? GAEvent.Resume.EDIT : GAEvent.Resume.CREATE,
+      category: GACategory.RESUME,
+    });
 
     if (resumeId) {
       // 수정

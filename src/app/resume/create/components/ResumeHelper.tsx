@@ -3,17 +3,27 @@ import { useState } from 'react';
 
 import chatInfoIcon from '@/assets/images/ic_chat_info.svg';
 import arrowDropDownIcon from '@/assets/images/ic_drop_down.svg';
+import { GACategory, GAEvent } from '@/constants/gaEvent';
+import trackEvent from '@/utils/trackEventGA';
 
 import styles from './ResumeHelper.module.css';
 
 export default function ResumeHelper() {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+
+  const handleHelperClick = () => {
+    if (!isHelpOpen) {
+      trackEvent({
+        event: GAEvent.Resume.HELPER,
+        category: GACategory.RESUME,
+      });
+    }
+    setIsHelpOpen(!isHelpOpen);
+  };
+
   return (
     <>
-      <div
-        className={styles.helpHeader}
-        onClick={() => setIsHelpOpen(!isHelpOpen)}
-      >
+      <div className={styles.helpHeader} onClick={handleHelperClick}>
         <div className={styles.helpContent}>
           <Image
             src={chatInfoIcon}
