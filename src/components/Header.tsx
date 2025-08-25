@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import logoutIcon from '@/assets/images/ic_logout.svg';
 import logo from '@/assets/images/logo.svg';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
-import { logout } from '@/lib/auth/authApi';
+import { logout } from '@/lib/api/auth/authApi';
 import trackEvent from '@/utils/trackEventGA';
 
 import styles from './Header.module.css';
