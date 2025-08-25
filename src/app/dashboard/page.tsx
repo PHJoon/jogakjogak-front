@@ -3,6 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
+import JobItem from '@/components/dashboard/JobItem';
+import JobItemAdd from '@/components/dashboard/JobItemAdd';
+import ResumeRegistration from '@/components/dashboard/ResumeRegistration';
+import SortDropdown from '@/components/dashboard/SortDropdown';
 import { FeedbackSurveyModal } from '@/components/FeedbackSurveyModal';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
@@ -16,10 +20,6 @@ import { useBoundStore } from '@/stores/useBoundStore';
 import { JobDescription, Sort } from '@/types/jds';
 import trackEvent from '@/utils/trackEventGA';
 
-import JobItem from './components/JobItem';
-import JobItemAdd from './components/JobItemAdd';
-import ResumeRegistration from './components/ResumeRegistration';
-import SortDropdown from './components/SortDropdown';
 import styles from './page.module.css';
 
 function LoadingSkeleton() {

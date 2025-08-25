@@ -6,6 +6,10 @@ import { useEffect, Suspense } from 'react';
 import { ConfirmModal } from '@/components/ConfirmModal';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
+import ResumeFormHeader from '@/components/resume/ResumeFormHeader';
+import ResumeFormInput from '@/components/resume/ResumeFormInput';
+import ResumeHelper from '@/components/resume/ResumeHelper';
+import ResumeLoading from '@/components/resume/ResumeLoading';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
 import useResumeForm from '@/hooks/resume/useResumeForm';
 import useResumeModal from '@/hooks/resume/useResumeModal';
@@ -13,10 +17,6 @@ import useResumeValidation from '@/hooks/resume/useResumeValidation';
 import useClientMeta from '@/hooks/useClientMeta';
 import trackEvent from '@/utils/trackEventGA';
 
-import ResumeFormHeader from './components/ResumeFormHeader';
-import ResumeFormInput from './components/ResumeFormInput';
-import ResumeHelper from './components/ResumeHelper';
-import ResumeLoading from './components/ResumeLoading';
 import styles from './page.module.css';
 
 function ResumeCreateContent() {

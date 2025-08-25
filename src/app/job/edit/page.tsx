@@ -7,11 +7,11 @@ import { Suspense, useEffect } from 'react';
 import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
+import FormContentLoading from '@/components/job/form/FormContentLoading';
+import JobPostingForm from '@/components/job/form/JobPostingForm';
 import useJdQuery from '@/hooks/queries/useJdQuery';
 import useClientMeta from '@/hooks/useClientMeta';
 
-import FormContentLoading from './components/FormContentLoading';
-import JobPostingForm from './components/JobPostingForm';
 import styles from './page.module.css';
 
 function JobEditPageContent() {
