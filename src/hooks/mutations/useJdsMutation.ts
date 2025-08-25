@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { addBookmark, deleteJd, markJobAsApplied } from '@/lib/jds/jdsApi';
+import { addBookmark, deleteJd, markJobAsApplied } from '@/lib/api/jds/jdsApi';
 import { queryClient } from '@/lib/queryClient';
 import { JobDescription, Resume } from '@/types/jds';
 

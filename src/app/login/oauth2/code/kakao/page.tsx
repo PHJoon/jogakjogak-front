@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, Suspense } from 'react';
 
-import { tokenManager } from '@/lib/auth/tokenManager';
+import { tokenManager } from '@/lib/api/tokenManager';
 
 import styles from './page.module.css';
 

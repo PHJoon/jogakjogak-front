@@ -2,7 +2,7 @@ import { ApiResponse, PaginatedData } from '@/types';
 import { JobDescription, Resume, ShowOnly, Sort } from '@/types/jds';
 import throwIfNotOk from '@/utils/throwIfNotOk';
 
-import { fetchWithAuth } from '../api/fetchWithAuth';
+import { fetchWithAuth } from '../fetchWithAuth';
 
 type JdsResponse = ApiResponse<
   PaginatedData<'jds', JobDescription, { resume: Resume | null }>

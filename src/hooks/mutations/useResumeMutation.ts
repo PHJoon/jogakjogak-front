@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
+import { createResume, updateResume } from '@/lib/api/resume/resumeApi';
 import { queryClient } from '@/lib/queryClient';
-import { createResume, updateResume } from '@/lib/resume/resumeApi';
 
 export default function useResumeMutation() {
   const { mutate: createMutate, isPending: isCreatePending } = useMutation({

@@ -8,7 +8,7 @@ import emailIcon from '@/assets/images/ico_email.svg';
 import logo from '@/assets/images/logo.svg';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
-import { tokenManager } from '@/lib/auth/tokenManager';
+import { tokenManager } from '@/lib/api/tokenManager';
 import trackEvent from '@/utils/trackEventGA';
 
 import { DeleteConfirmModal } from './DeleteConfirmModal';

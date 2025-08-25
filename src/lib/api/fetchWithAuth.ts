@@ -1,5 +1,5 @@
-import { reissueToken } from '@/lib/auth/authApi';
-import { tokenManager } from '@/lib/auth/tokenManager';
+import { reissueToken } from '@/lib/api/auth/authApi';
+import { tokenManager } from '@/lib/api/tokenManager';
 
 function buildHeaders(
   accessToken: string | null,

@@ -2,7 +2,7 @@ import { ApiResponse } from '@/types';
 import { JDDetail } from '@/types/jds';
 import throwIfNotOk from '@/utils/throwIfNotOk';
 
-import { fetchWithAuth } from '../api/fetchWithAuth';
+import { fetchWithAuth } from '../fetchWithAuth';
 
 export async function getJd(jobId: number) {
   const response = await fetchWithAuth(`/api/jds/${jobId}`);
