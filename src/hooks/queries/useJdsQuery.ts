@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
-import { getJdsData } from '@/lib/jds/jdsApi';
+import { getJdsData } from '@/lib/api/jds/jdsApi';
 import { useBoundStore } from '@/stores/useBoundStore';
 import { ShowOnly, Sort } from '@/types/jds';
 

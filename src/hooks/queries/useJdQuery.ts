@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { getJd } from '@/lib/jds/jdApi';
+import { getJd } from '@/lib/api/jds/jdApi';
 
 export default function useJdQuery(jobId: number | null) {
   const isEnabled = jobId !== null;
