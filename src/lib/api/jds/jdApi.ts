@@ -10,3 +10,37 @@ export async function getJd(jobId: number) {
   const data: ApiResponse<JDDetail> = await response.json();
   return data.data;
 }
+
+export async function updateJd({
+  jobId,
+  title,
+  companyName,
+  job,
+  link,
+  endDate,
+}: {
+  jobId: number;
+  title: string;
+  companyName: string;
+  job: string;
+  link: string;
+  endDate: string;
+}) {
+  const response = await fetchWithAuth(`/api/jds/update/${jobId}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      title,
+      companyName,
+      job,
+      link,
+      endDate,
+    }),
+  });
+  throwIfNotOk(response, '채용공고를 수정하는 중 오류가 발생했습니다.');
+
+  const data: ApiResponse<JDDetail> = await response.json();
+  return data.data;
+}
