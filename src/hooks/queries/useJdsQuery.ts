@@ -3,11 +3,9 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 import { getJdsData } from '@/lib/api/jds/jdsApi';
-import { useBoundStore } from '@/stores/useBoundStore';
 import { ShowOnly, Sort } from '@/types/jds';
 
 export default function useJdsQuery() {
-  const setJdCount = useBoundStore((state) => state.setJdCount);
   const searchParams = useSearchParams();
   const page = Number(searchParams.get('page')) || 0;
   const sort = (searchParams.get('sort') as Sort) || '';
@@ -22,12 +20,6 @@ export default function useJdsQuery() {
       `showOnly=${showOnly}`,
     ],
   });
-
-  useEffect(() => {
-    if (data?.jds) {
-      setJdCount(data.jds.length);
-    }
-  }, [data, setJdCount]);
 
   return { data, isLoading, isError, error };
 }
