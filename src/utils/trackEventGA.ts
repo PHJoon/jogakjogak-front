@@ -23,6 +23,6 @@ type GAEvent = {
   jobId?: number;
 };
 
-export default function trackEvent(params: GAEvent) {
-  sendGAEvent(params);
+export default function trackEvent({ event: eventName, ...rest }: GAEvent) {
+  sendGAEvent('event', eventName, rest);
 }
