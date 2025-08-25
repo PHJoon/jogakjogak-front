@@ -1,8 +1,7 @@
+import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
 import { ApiResponse } from '@/types';
 import { Resume } from '@/types/jds';
 import throwIfNotOk from '@/utils/throwIfNotOk';
-
-import { fetchWithAuth } from '../api/fetchWithAuth';
 
 export async function getResume(resumeId: number) {
   const response = await fetchWithAuth(`/api/resume/${resumeId}`);

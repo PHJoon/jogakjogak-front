@@ -1,4 +1,4 @@
-import { tokenManager } from '@/lib/auth/tokenManager';
+import { tokenManager } from '@/lib/api/tokenManager';
 
 // 토큰 재발급 함수
 export async function reissueToken(): Promise<boolean> {

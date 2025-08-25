@@ -11,7 +11,7 @@ import { GACategory, GAEvent } from '@/constants/gaEvent';
 import useJdsQuery from '@/hooks/queries/useJdsQuery';
 import useClientMeta from '@/hooks/useClientMeta';
 import { useQueryParams } from '@/hooks/useQueryParams';
-import { tokenManager } from '@/lib/auth/tokenManager';
+import { tokenManager } from '@/lib/api/tokenManager';
 import { useBoundStore } from '@/stores/useBoundStore';
 import { JobDescription, Sort } from '@/types/jds';
 import trackEvent from '@/utils/trackEventGA';

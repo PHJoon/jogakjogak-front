@@ -19,15 +19,15 @@ export async function PATCH(
     }
 
     const body = await request.json();
-    const { title, companyName, job, content, link, endDate } = body;
+    const { title, companyName, job, link, endDate } = body;
 
     // 필수 필드 검증
-    if (!title || !companyName || !job || !content) {
+    if (!title || !companyName || !job) {
       return NextResponse.json(
         {
           code: 400,
           message:
-            'Missing required fields: title, companyName, job, content are required',
+            'Missing required fields: title, companyName, job are required',
         },
         { status: 400 }
       );
@@ -46,7 +46,6 @@ export async function PATCH(
           title,
           companyName,
           job,
-          content,
           jdUrl: link || '', // link → jdUrl, 빈 문자열 기본값
           ...(endDate && { endedAt: `${endDate}T23:59:59` }), // endDate가 있을 때만 추가
         }),

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
-import { getResume } from '@/lib/resume/resumeApi';
+import { getResume } from '@/lib/api/resume/resumeApi';
 import { useBoundStore } from '@/stores/useBoundStore';
 
 export default function useResumeQuery(resumeId: number | null) {
