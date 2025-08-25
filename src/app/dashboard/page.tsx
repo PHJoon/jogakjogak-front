@@ -3,7 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
-import { FeedbackSurveyModal } from '@/components/FeedbackSurveyModal';
+import JobItem from '@/components/dashboard/JobItem';
+import JobItemAdd from '@/components/dashboard/JobItemAdd';
+import ResumeRegistration from '@/components/dashboard/ResumeRegistration';
+import SortDropdown from '@/components/dashboard/SortDropdown';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import NoResumeModal from '@/components/NoResumeModal';
@@ -16,10 +19,6 @@ import { useBoundStore } from '@/stores/useBoundStore';
 import { JobDescription, Sort } from '@/types/jds';
 import trackEvent from '@/utils/trackEventGA';
 
-import JobItem from './components/JobItem';
-import JobItemAdd from './components/JobItemAdd';
-import ResumeRegistration from './components/ResumeRegistration';
-import SortDropdown from './components/SortDropdown';
 import styles from './page.module.css';
 
 function LoadingSkeleton() {
@@ -77,13 +76,6 @@ function DashboardContent() {
 
   const resume = useBoundStore((state) => state.resume);
   const setResume = useBoundStore((state) => state.setResume);
-
-  const showFeedbackSurveyModal = useBoundStore(
-    (state) => state.showFeedbackSurveyModal
-  );
-  const setShowFeedbackSurveyModal = useBoundStore(
-    (state) => state.setShowFeedbackSurveyModal
-  );
 
   // 클라이언트 메타 설정
   useClientMeta(
@@ -187,11 +179,6 @@ function DashboardContent() {
         isOpen={showNoResumeModal}
         onClose={() => setShowNoResumeModal(false)}
         onRegisterClick={handleResumeRegisterClick}
-      />
-
-      <FeedbackSurveyModal
-        isOpen={showFeedbackSurveyModal}
-        onClose={() => setShowFeedbackSurveyModal(false)}
       />
     </>
   );

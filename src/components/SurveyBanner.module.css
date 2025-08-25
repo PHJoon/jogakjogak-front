@@ -1,0 +1,77 @@
+.surveyBanner {
+  position: fixed;
+  top: 64px;
+  width: 100%;
+  height: 36px;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--n-200);
+}
+
+.surveyButton {
+  all: unset;
+  height: 100%;
+  width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.surveyText {
+  font-family: var(--body-2-normal-medium-font-family);
+  font-size: var(--body-2-normal-medium-font-size);
+  font-style: var(--body-2-normal-medium-font-style);
+  font-weight: 600;
+  letter-spacing: var(--body-2-normal-medium-letter-spacing);
+  color: var(--n-800);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.surveyText span {
+  color: var(--primaryjogak-1);
+  font-weight: 700;
+}
+
+.surveyButton:hover > .surveyText {
+  color: var(--n-700);
+}
+
+.surveyButton:hover > .surveyText span {
+  color: var(--primarymain-600);
+}
+
+.surveyButton:hover > img {
+  animation: identifier 1s ease-in-out infinite;
+}
+
+@keyframes identifier {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(3px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.closeButton {
+  all: unset;
+  position: absolute;
+  top: 6px;
+  right: 32px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  background-color: var(--n-300);
+}

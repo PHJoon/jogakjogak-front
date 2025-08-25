@@ -12,6 +12,7 @@ import trackEvent from '@/utils/trackEventGA';
 
 import styles from './Header.module.css';
 import LoginModal from './LoginModal';
+import SurveyBanner from './SurveyBanner';
 
 interface HeaderProps {
   backgroundColor?: 'transparent' | 'white';
@@ -92,6 +93,9 @@ export default function Header({
           </button>
         )}
       </header>
+
+      {/* 설문조사 배너 */}
+      {!landingPage && <SurveyBanner />}
       <LoginModal isOpen={isLoginModalOpen} onClose={handleCloseModal} />
     </>
   );
