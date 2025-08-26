@@ -53,3 +53,12 @@ export interface JDDetail {
 export type Sort = 'createdAt,desc' | 'createdAt,asc' | 'endedAt,asc';
 
 export type ShowOnly = 'bookmark' | 'completed' | 'alarm';
+
+export interface JobPostingFormInput {
+  title: string;
+  companyName: string;
+  job: string;
+  endDate: string;
+  content: string;
+  link: string;
+}
