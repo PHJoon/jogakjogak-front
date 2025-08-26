@@ -65,7 +65,9 @@ export async function markJobAsApplied(jobId: number) {
   });
 
   throwIfNotOk(response, '채용공고 지원 완료 처리 중 오류가 발생했습니다.');
-  return { success: true };
+  const data: ApiResponse<{ jd_id: number; applyAt: string }> =
+    await response.json();
+  return data.data;
 }
 
 // 채용공고 즐겨찾기 등록
@@ -80,5 +82,7 @@ export async function addBookmark(jobId: number, newBookmarkState: boolean) {
     }),
   });
   throwIfNotOk(response, '채용공고 즐겨찾기 등록 중 오류가 발생했습니다.');
-  return { success: true };
+  const data: ApiResponse<{ jd_id: number; isBookmark: boolean }> =
+    await response.json();
+  return data.data;
 }

@@ -12,7 +12,9 @@ import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
 import { ProgressBar } from '@/components/ProgressBar';
 import Snackbar from '@/components/Snackbar';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
-import useJdsMutation from '@/hooks/mutations/useJdsMutation';
+import useApplyJdMutation from '@/hooks/mutations/job/useApplyJdMuation';
+import useBookmarkJdMutation from '@/hooks/mutations/job/useBookmarkJdMutation';
+import useDeleteJdMutation from '@/hooks/mutations/job/useDeleteJdMutation';
 import { JobDescription } from '@/types/jds';
 import { calculateDDay } from '@/utils/calculateDDay';
 import { formatDate } from '@/utils/formatDate';
@@ -74,7 +76,9 @@ export default function JobItem({
     type: 'success' as 'success' | 'error' | 'info',
   });
 
-  const { deleteMutate, applyMutate, bookmarkMutate } = useJdsMutation();
+  const { deleteMutate } = useDeleteJdMutation();
+  const { applyMutate } = useApplyJdMutation();
+  const { bookmarkMutate } = useBookmarkJdMutation();
 
   // 외부 클릭 시 메뉴 닫기
   useEffect(() => {
