@@ -2,15 +2,18 @@
 
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import FormContentLoading from '@/components/job/form/FormContentLoading';
 import JobPostingForm from '@/components/job/form/JobPostingForm';
+import Snackbar from '@/components/Snackbar';
+import { useUpdateJdMutation } from '@/hooks/mutations/useJdMutation';
 import useJdQuery from '@/hooks/queries/useJdQuery';
 import useClientMeta from '@/hooks/useClientMeta';
+import { JobPostingFormInput } from '@/types/jds';
 
 import styles from './page.module.css';
 
@@ -22,8 +25,31 @@ function JobEditPageContent() {
     rawJobId !== null && rawJobId.trim() !== '' && !isNaN(Number(rawJobId))
       ? Number(rawJobId)
       : null;
-
+  const [snackbar, setSnackbar] = useState({
+    isOpen: false,
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info',
+  });
   const { data, isLoading, isError, error } = useJdQuery(jobId);
+  const { updateJdMutate, isUpdatePending } = useUpdateJdMutation(
+    jobId as number
+  );
+
+  const onUpdate = (data: JobPostingFormInput) => {
+    updateJdMutate(data, {
+      onSuccess: () => {
+        alert('채용공고가 수정되었습니다.');
+        router.replace(`/job/${jobId}`);
+      },
+      onError: (error) => {
+        setSnackbar({
+          isOpen: true,
+          message: error.message || '채용공고 수정 중 오류가 발생했습니다.',
+          type: 'error',
+        });
+      },
+    });
+  };
 
   const handleBack = () => {
     router.back();
@@ -65,19 +91,27 @@ function JobEditPageContent() {
             <JobPostingForm
               mode={'edit'}
               jobId={jobId as number}
-              title={data.title}
-              company={data.companyName}
-              position={data.job}
-              deadline={
-                data.endedAt?.split('T')[0] ? data.endedAt.split('T')[0] : ''
-              }
-              description={data.content}
-              url={data.jdUrl}
+              originData={{
+                title: data.title,
+                companyName: data.companyName,
+                job: data.job,
+                endDate: data.endedAt?.split('T')[0] || '',
+                content: data.content,
+                link: data.jdUrl,
+              }}
+              onUpdate={onUpdate}
+              isPending={isUpdatePending}
             />
           )}
         </div>
       </main>
       <Footer />
+      <Snackbar
+        isOpen={snackbar.isOpen}
+        message={snackbar.message}
+        type={snackbar.type}
+        onClose={() => setSnackbar({ ...snackbar, isOpen: false })}
+      />
     </>
   );
 }
