@@ -82,7 +82,7 @@ export async function addBookmark(jobId: number, newBookmarkState: boolean) {
     }),
   });
   throwIfNotOk(response, '채용공고 즐겨찾기 등록 중 오류가 발생했습니다.');
-  const data: ApiResponse<{ jd_id: number; isBookmark: boolean }> =
+  const data: ApiResponse<{ jd_id: number; bookmark: boolean }> =
     await response.json();
   return data.data;
 }

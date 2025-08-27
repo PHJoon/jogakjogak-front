@@ -78,7 +78,7 @@ export default function useBookmarkJdMutation() {
         prev
           ? {
               ...prev,
-              bookmark: data.isBookmark,
+              bookmark: data.bookmark,
             }
           : prev
       );
