@@ -69,7 +69,6 @@ export default function useApplyJdMutation() {
       );
       queryClient.invalidateQueries({
         queryKey: ['jds-list'],
-        refetchType: 'inactive',
       });
     },
   });

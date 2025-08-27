@@ -85,7 +85,6 @@ export default function useBookmarkJdMutation() {
 
       queryClient.invalidateQueries({
         queryKey: ['jds-list'],
-        refetchType: 'inactive',
       });
     },
   });
