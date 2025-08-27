@@ -70,3 +70,13 @@ export type JdsData = {
   jds: JobDescription[];
   pageInfo: PageInfo;
 };
+
+export type CreateTodoRequestData = {
+  category: string;
+  title: string;
+  content: string;
+};
+
+export type UpdateTodoRequestData = CreateTodoRequestData & {
+  is_done: boolean;
+};

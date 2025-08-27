@@ -54,7 +54,7 @@ export async function deleteJd(jobId: number) {
     method: 'DELETE',
   });
 
-  throwIfNotOk(response, '채용공고 삭제 중 오류가 발생했습니다.');
+  await throwIfNotOk(response, '채용공고 삭제 중 오류가 발생했습니다.');
   return { success: true };
 }
 
@@ -64,7 +64,10 @@ export async function markJobAsApplied(jobId: number) {
     method: 'PATCH',
   });
 
-  throwIfNotOk(response, '채용공고 지원 완료 처리 중 오류가 발생했습니다.');
+  await throwIfNotOk(
+    response,
+    '채용공고 지원 완료 처리 중 오류가 발생했습니다.'
+  );
   const data: ApiResponse<{ jd_id: number; applyAt: string }> =
     await response.json();
   return data.data;
@@ -81,7 +84,10 @@ export async function addBookmark(jobId: number, newBookmarkState: boolean) {
       isBookmark: newBookmarkState,
     }),
   });
-  throwIfNotOk(response, '채용공고 즐겨찾기 등록 중 오류가 발생했습니다.');
+  await throwIfNotOk(
+    response,
+    '채용공고 즐겨찾기 등록 중 오류가 발생했습니다.'
+  );
   const data: ApiResponse<{ jd_id: number; bookmark: boolean }> =
     await response.json();
   return data.data;
