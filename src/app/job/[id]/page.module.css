@@ -1,5 +1,4 @@
 .main {
-  min-height: 100vh;
   padding-top: 64px;
   background-color: var(--n-100);
 }
@@ -7,7 +6,7 @@
 .container {
   max-width: 1034px;
   margin: 0 auto;
-  padding: 16px;
+  padding: 16px 16px 80px 16px;
 }
 
 .header {
@@ -94,7 +93,7 @@
 /* Mobile responsive */
 @media (max-width: 768px) {
   .container {
-    padding: 16px;
+    padding: 16px 16px 80px 16px;
   }
 
   .rightSection {

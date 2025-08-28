@@ -1,5 +1,5 @@
 .surveyBanner {
-  position: fixed;
+  position: relative;
   top: 64px;
   width: 100%;
   height: 36px;
@@ -8,6 +8,7 @@
   justify-content: center;
   align-items: center;
   background: var(--n-200);
+  z-index: 1;
 }
 
 .surveyButton {
@@ -74,4 +75,21 @@
 
 .closeButton:hover {
   background-color: var(--n-300);
+}
+
+@media screen and (max-width: 768px) {
+  .surveyBanner {
+    height: 32px;
+  }
+
+  .closeButton {
+    top: 4px;
+    right: 16px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .surveyText {
+    font-size: 13px;
+  }
 }
