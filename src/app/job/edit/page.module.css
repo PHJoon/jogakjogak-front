@@ -1,5 +1,4 @@
 .main {
-  min-height: 100vh;
   padding-top: 64px;
   background-color: var(--n-100);
 }
@@ -7,7 +6,7 @@
 .container {
   max-width: 506px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 24px 24px 40px 24px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -59,7 +58,7 @@
 /* Mobile responsive */
 @media (max-width: 768px) {
   .container {
-    padding: 16px;
+    padding: 16px 16px 32px 16px;
   }
 
   .title {
