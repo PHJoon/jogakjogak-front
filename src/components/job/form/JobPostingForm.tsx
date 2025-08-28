@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 import Snackbar from '@/components/Snackbar';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
-import useJobPostingForm from '@/hooks/Job/useJobPostingForm';
+import useJobPostingForm from '@/hooks/job/useJobPostingForm';
 import { JobPostingFormInput } from '@/types/jds';
 import trackEvent from '@/utils/trackEventGA';
 

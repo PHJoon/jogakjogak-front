@@ -12,13 +12,14 @@ import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
 import { ProgressBar } from '@/components/ProgressBar';
 import Snackbar from '@/components/Snackbar';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
-import useApplyJdMutation from '@/hooks/mutations/job/useApplyJdMuation';
-import useBookmarkJdMutation from '@/hooks/mutations/job/useBookmarkJdMutation';
+import useJobActions from '@/hooks/job/useJobActions';
 import useDeleteJdMutation from '@/hooks/mutations/job/useDeleteJdMutation';
 import { JobDescription } from '@/types/jds';
 import { calculateDDay } from '@/utils/calculateDDay';
 import { formatDate } from '@/utils/formatDate';
 import trackEvent from '@/utils/trackEventGA';
+
+import JobActionMenu from '../JobActionMenu';
 
 import styles from './JobItem.module.css';
 
@@ -76,9 +77,9 @@ export default function JobItem({
     type: 'success' as 'success' | 'error' | 'info',
   });
 
-  const { deleteMutate } = useDeleteJdMutation();
-  const { applyMutate } = useApplyJdMutation();
-  const { bookmarkMutate } = useBookmarkJdMutation();
+  const { deleteJdMutate } = useDeleteJdMutation();
+  const { handleJobEdit, handleMarkAsApplied, handleBookmarkToggle } =
+    useJobActions({ setSnackbar });
 
   // 외부 클릭 시 메뉴 닫기
   useEffect(() => {
@@ -112,7 +113,7 @@ export default function JobItem({
       jobId: jobId,
     });
 
-    deleteMutate(jobId, {
+    deleteJdMutate(jobId, {
       onSuccess: () => {
         setSnackbar({
           isOpen: true,
@@ -128,75 +129,6 @@ export default function JobItem({
         });
       },
     });
-  };
-
-  // 지원 완료 핸들러
-  const handleMarkAsApplied = async (
-    jobId: number | null,
-    applyAt: string | null
-  ) => {
-    if (!jobId) return;
-
-    trackEvent({
-      event: GAEvent.JobPosting.APPLY_JOB_TOGGLE,
-      event_category: GACategory.JOB_POSTING,
-      apply_status: applyAt ? false : true,
-      jobId: jobId,
-    });
-
-    applyMutate(jobId, {
-      onSuccess: () => {
-        setSnackbar({
-          isOpen: true,
-          message: applyAt ? '지원 취소되었습니다.' : '지원 완료되었습니다.',
-          type: 'success',
-        });
-      },
-      onError: (error) => {
-        setSnackbar({
-          isOpen: true,
-          message: error.message,
-          type: 'error',
-        });
-      },
-    });
-  };
-
-  // 즐겨찾기 핸들러
-  const handleBookmarkToggle = async (
-    jobId: number | null,
-    newBookmarkState: boolean
-  ) => {
-    if (!jobId) return;
-
-    trackEvent({
-      event: GAEvent.JobPosting.BOOKMARK_TOGGLE,
-      event_category: GACategory.JOB_POSTING,
-      bookmark_status: newBookmarkState,
-      jobId: jobId,
-    });
-
-    bookmarkMutate(
-      { jobId, newBookmarkState },
-      {
-        onSuccess: () => {
-          setSnackbar({
-            isOpen: true,
-            message: newBookmarkState
-              ? '관심공고로 등록되었습니다.'
-              : '관심공고에서 제외되었습니다.',
-            type: 'success',
-          });
-        },
-        onError: (error) => {
-          setSnackbar({
-            isOpen: true,
-            message: error.message,
-            type: 'error',
-          });
-        },
-      }
-    );
   };
 
   return (
@@ -259,42 +191,21 @@ export default function JobItem({
 
                 {/* More menu dropdown */}
                 {showMoreMenu && (
-                  <div className={styles.menuDropdown}>
-                    <button
-                      className={`${styles.menuItem} ${styles.edit}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        trackEvent({
-                          event: GAEvent.JobPosting.EDIT_PAGE_VIEW,
-                          event_category: GACategory.JOB_POSTING,
-                          jobId: jd.jd_id,
-                        });
-                        router.push(`/job/edit?id=${jd.jd_id}`);
-                      }}
-                    >
-                      공고 수정
-                    </button>
-                    <button
-                      className={`${styles.menuItem} ${styles.apply}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setShowMoreMenu(false);
+                  <JobActionMenu
+                    applyStatus={!!jd.applyAt}
+                    onClose={() => setShowMoreMenu(false)}
+                    onSelect={(action) => {
+                      if (action === 'edit') {
+                        handleJobEdit(jd.jd_id);
+                      }
+                      if (action === 'apply') {
                         handleMarkAsApplied(jd.jd_id, jd.applyAt);
-                      }}
-                    >
-                      {!Boolean(jd.applyAt) ? '지원 완료' : '지원 완료 취소'}
-                    </button>
-                    <button
-                      className={`${styles.menuItem} ${styles.delete}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setShowMoreMenu(false);
-                        setShowDeleteConfirmModal(true);
-                      }}
-                    >
-                      삭제하기
-                    </button>
-                  </div>
+                      }
+                      if (action === 'delete') {
+                        handleJobDelete(jd.jd_id);
+                      }
+                    }}
+                  />
                 )}
               </div>
             </div>
