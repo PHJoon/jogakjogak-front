@@ -30,7 +30,7 @@ function JobEditPageContent() {
     message: '',
     type: 'success' as 'success' | 'error' | 'info',
   });
-  const { data, isLoading, isError, error } = useJdQuery(jobId);
+  const { data, isLoading, isError, error } = useJdQuery({ jobId });
   const { updateJdMutate, isUpdatePending } = useUpdateJdMutation();
 
   const onUpdate = (data: JobPostingFormInput) => {
