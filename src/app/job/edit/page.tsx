@@ -10,7 +10,7 @@ import Header from '@/components/Header';
 import FormContentLoading from '@/components/job/form/FormContentLoading';
 import JobPostingForm from '@/components/job/form/JobPostingForm';
 import Snackbar from '@/components/Snackbar';
-import { useUpdateJdMutation } from '@/hooks/mutations/useJdMutation';
+import useUpdateJdMutation from '@/hooks/mutations/job/useUpdateJdMutation';
 import useJdQuery from '@/hooks/queries/useJdQuery';
 import useClientMeta from '@/hooks/useClientMeta';
 import { JobPostingFormInput } from '@/types/jds';
@@ -30,25 +30,26 @@ function JobEditPageContent() {
     message: '',
     type: 'success' as 'success' | 'error' | 'info',
   });
-  const { data, isLoading, isError, error } = useJdQuery(jobId);
-  const { updateJdMutate, isUpdatePending } = useUpdateJdMutation(
-    jobId as number
-  );
+  const { data, isLoading, isError, error } = useJdQuery({ jobId });
+  const { updateJdMutate, isUpdatePending } = useUpdateJdMutation();
 
   const onUpdate = (data: JobPostingFormInput) => {
-    updateJdMutate(data, {
-      onSuccess: () => {
-        alert('채용공고가 수정되었습니다.');
-        router.replace(`/job/${jobId}`);
-      },
-      onError: (error) => {
-        setSnackbar({
-          isOpen: true,
-          message: error.message || '채용공고 수정 중 오류가 발생했습니다.',
-          type: 'error',
-        });
-      },
-    });
+    updateJdMutate(
+      { jobId: jobId as number, ...data },
+      {
+        onSuccess: () => {
+          alert('채용공고가 수정되었습니다.');
+          router.replace(`/job/${jobId}`);
+        },
+        onError: (error) => {
+          setSnackbar({
+            isOpen: true,
+            message: error.message || '채용공고 수정 중 오류가 발생했습니다.',
+            type: 'error',
+          });
+        },
+      }
+    );
   };
 
   const handleBack = () => {

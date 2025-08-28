@@ -1,9 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { createJd, updateJd } from '@/lib/api/jds/jdApi';
+import { createJd } from '@/lib/api/jds/jdApi';
 import { queryClient } from '@/lib/queryClient';
 
-export function useCreateJdMutation() {
+export default function useCreateJdMutation() {
   const {
     mutate: createJdMutate,
     isPending: isCreatePending,
@@ -30,24 +30,4 @@ export function useCreateJdMutation() {
     isCreatePending,
     isCreateSuccess,
   };
-}
-
-export function useUpdateJdMutation(jobId: number | undefined) {
-  const { mutate: updateJdMutate, isPending: isUpdatePending } = useMutation({
-    mutationFn: (params: {
-      title: string;
-      companyName: string;
-      job: string;
-      link: string;
-      endDate: string;
-    }) => updateJd({ jobId: jobId as number, ...params }),
-    onMutate: () => {},
-    onError: () => {},
-    onSuccess: (data) => {
-      queryClient.setQueryData(['jd', jobId], data);
-      queryClient.invalidateQueries({ queryKey: ['jds-list'] });
-    },
-  });
-
-  return { updateJdMutate, isUpdatePending };
 }

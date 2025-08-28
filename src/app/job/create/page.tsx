@@ -10,7 +10,7 @@ import Header from '@/components/Header';
 import JobPostingForm from '@/components/job/form/JobPostingForm';
 import LoadingModal from '@/components/LoadingModal';
 import Snackbar from '@/components/Snackbar';
-import { useCreateJdMutation } from '@/hooks/mutations/useJdMutation';
+import useCreateJdMutation from '@/hooks/mutations/job/useCreateJdMutation';
 import useClientMeta from '@/hooks/useClientMeta';
 import { JobPostingFormInput } from '@/types/jds';
 

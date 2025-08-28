@@ -5,7 +5,7 @@ import throwIfNotOk from '@/utils/throwIfNotOk';
 
 export async function getResume(resumeId: number) {
   const response = await fetchWithAuth(`/api/resume/${resumeId}`);
-  throwIfNotOk(response, '이력서를 불러오는 중 오류가 발생했습니다.');
+  await throwIfNotOk(response, '이력서를 불러오는 중 오류가 발생했습니다.');
 
   const data: ApiResponse<Resume> = await response.json();
   return data.data;
@@ -23,7 +23,7 @@ export async function createResume(title: string, content: string) {
     }),
   });
 
-  throwIfNotOk(response, '이력서를 생성하는 중 오류가 발생했습니다.');
+  await throwIfNotOk(response, '이력서를 생성하는 중 오류가 발생했습니다.');
   return { success: true };
 }
 
@@ -43,6 +43,6 @@ export async function updateResume(
     }),
   });
 
-  throwIfNotOk(response, '이력서를 수정하는 중 오류가 발생했습니다.');
+  await throwIfNotOk(response, '이력서를 수정하는 중 오류가 발생했습니다.');
   return { success: true };
 }

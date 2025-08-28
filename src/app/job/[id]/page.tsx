@@ -1,32 +1,34 @@
 'use client';
 
-import Image, { StaticImageData } from 'next/image';
+import { StaticImageData } from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import contentEmphasisIcon from '@/assets/images/content-emphasis-and-reorganization.svg';
 import scheduleIcon from '@/assets/images/employment-schedule-and-others.svg';
-import alarmIcon from '@/assets/images/ic_alarm.svg';
-import alarmOnIcon from '@/assets/images/ic_alarm_on_blue.svg';
-import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
-import bookmarkIcon from '@/assets/images/ic_bookmark.svg';
-import bookmarkCheckIcon from '@/assets/images/ic_bookmark_check.svg';
-import moreIcon from '@/assets/images/ic_more.svg';
-import { DDayChip } from '@/components/DDayChip';
+import { Button } from '@/components/Button';
 import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
+import JobDetailLoading from '@/components/jobDetail/JobDetailLoading';
+import JobDetailSection from '@/components/jobDetail/JobDetailSection';
+import JobDetailTopBar from '@/components/jobDetail/JobDetailTopBar';
+import ProgressNotificationSection from '@/components/jobDetail/ProgressNotificationSection';
 import { JogakCategory } from '@/components/JogakCategory';
 import { MemoBox } from '@/components/MemoBox';
 import NotificationModal from '@/components/NotificationModal';
-import { ProgressBar } from '@/components/ProgressBar';
 import Snackbar from '@/components/Snackbar';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
+import useJobActions from '@/hooks/job/useJobActions';
+import useDeleteJdMutation from '@/hooks/mutations/job/useDeleteJdMutation';
+import useCreateTodoMutation from '@/hooks/mutations/job_todolist/useCreateTodoMutation';
+import useDeleteTodoMutation from '@/hooks/mutations/job_todolist/useDeleteTodoMutation';
+import useUpdateTodoAlarmMutation from '@/hooks/mutations/job_todolist/useUpdateTodoAlarmMutation';
+import useUpdateTodoMutation from '@/hooks/mutations/job_todolist/useUpdateTodoMutation';
+import useJdQuery from '@/hooks/queries/useJdQuery';
 import useClientMeta from '@/hooks/useClientMeta';
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
-import { queryClient } from '@/lib/queryClient';
 import { JDDetail, TodoItem } from '@/types/jds';
-import { calculateDDay } from '@/utils/calculateDDay';
 import trackEvent from '@/utils/trackEventGA';
 
 import styles from './page.module.css';
@@ -63,16 +65,13 @@ export default function JobDetailPage() {
   const jdId = params.id as string;
 
   const [jdDetail, setJdDetail] = useState<JDDetail | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [todosByCategory, setTodosByCategory] = useState<{
     [key: string]: TodoItem[];
   }>({});
   const [isSavingMemo, setIsSavingMemo] = useState(false);
   const memoTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [isTogglingAlarm, setIsTogglingAlarm] = useState(false);
-  const [showMoreMenu, setShowMoreMenu] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const moreMenuRef = useRef<HTMLDivElement>(null);
+  const [isJdDeleting, setIsJdDeleting] = useState(false);
   const [showNotificationModal, setShowNotificationModal] = useState(false);
   const [snackbar, setSnackbar] = useState({
     isOpen: false,
@@ -86,115 +85,31 @@ export default function JobDetailPage() {
     'AI가 분석한 채용공고의 투두리스트를 확인하고 관리합니다.'
   );
 
+  const { deleteJdMutate } = useDeleteJdMutation();
+  const { createTodoMutate } = useCreateTodoMutation();
+  const { deleteTodoMutate } = useDeleteTodoMutation();
+  const { updateTodoMutate } = useUpdateTodoMutation();
+  const { updateTodoAlarmMutate } = useUpdateTodoAlarmMutation();
+
+  const { data: jdData, isLoading: isJdLoading } = useJdQuery({
+    jobId: Number(jdId),
+    isJdDeleting: isJdDeleting,
+  });
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetchWithAuth(`/api/jds/${jdId}`);
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data.data) {
-            setJdDetail(data.data);
-
-            // 카테고리별로 투두 그룹화
-            const grouped = data.data.toDoLists.reduce(
-              (acc: { [key: string]: TodoItem[] }, todo: TodoItem) => {
-                if (!acc[todo.category]) acc[todo.category] = [];
-                acc[todo.category].push(todo);
-                return acc;
-              },
-              {}
-            );
-            setTodosByCategory(grouped);
-          }
-        }
-      } catch (error) {
-        console.error('Failed to fetch JD detail:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [jdId]);
-
-  const handleBack = () => {
-    router.back();
-  };
-
-  const toggleBookmark = async () => {
-    if (!jdDetail) return;
-
-    // 즉시 UI 업데이트 (Optimistic update)
-    const newBookmarkState = !jdDetail.bookmark;
-    setJdDetail({ ...jdDetail, bookmark: newBookmarkState });
-
-    trackEvent({
-      event: GAEvent.JobPosting.BOOKMARK_TOGGLE,
-      event_category: GACategory.JOB_POSTING,
-      bookmark_status: newBookmarkState,
-      jobId: jdDetail?.jd_id,
-    });
-
-    try {
-      const response = await fetchWithAuth(`/api/jds/${jdId}/bookmark`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
+    if (jdData) {
+      setJdDetail(jdData);
+      const grouped = jdData.toDoLists.reduce(
+        (acc: { [key: string]: TodoItem[] }, todo: TodoItem) => {
+          if (!acc[todo.category]) acc[todo.category] = [];
+          acc[todo.category].push(todo);
+          return acc;
         },
-        body: JSON.stringify({
-          isBookmark: newBookmarkState,
-        }),
-      });
-
-      if (!response.ok) {
-        // 실패 시 원래 상태로 복원
-        setJdDetail({ ...jdDetail, bookmark: !newBookmarkState });
-        console.error('Failed to toggle bookmark');
-      } else {
-        const responseData = await response.json();
-        // 백엔드 응답에서 실제 상태로 업데이트
-        if (responseData.data) {
-          setJdDetail({ ...jdDetail, bookmark: responseData.data.bookmark });
-          queryClient.invalidateQueries({ queryKey: ['jds-list'] });
-          setSnackbar({
-            isOpen: true,
-            message: newBookmarkState
-              ? '관심공고로 등록되었습니다.'
-              : '관심공고에서 제외되었습니다.',
-            type: 'success',
-          });
-        }
-      }
-    } catch (error) {
-      // 에러 시 원래 상태로 복원
-      setJdDetail({ ...jdDetail, bookmark: !newBookmarkState });
-      console.error('Error toggling bookmark:', error);
+        {}
+      );
+      setTodosByCategory(grouped);
     }
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear().toString().slice(2);
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
-    const weekDay = weekDays[date.getDay()];
-    return `${year}년 ${month}월 ${day}일 ${weekDay}요일`;
-  };
-
-  const formatTimeAgo = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-
-    if (diffInSeconds < 86400) {
-      return '오늘 수정';
-    } else {
-      const days = Math.floor(diffInSeconds / 86400);
-      return `${days}일 전 수정`;
-    }
-  };
+  }, [jdData]);
 
   // 디바운스된 메모 저장 함수
   const saveMemo = useCallback(
@@ -262,40 +177,22 @@ export default function JobDetailPage() {
     // 알림 상태가 변경되는 경우에만 API 호출
     if (jdDetail.alarmOn !== isEnabled) {
       setIsTogglingAlarm(true);
-      setJdDetail({ ...jdDetail, alarmOn: isEnabled });
 
-      try {
-        const response = await fetchWithAuth(`/api/jds/${jdId}/alarm`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            isAlarmOn: isEnabled,
-          }),
-        });
-
-        if (!response.ok) {
-          // 실패 시 원래 상태로 복원
-          setJdDetail({ ...jdDetail, alarmOn: !isEnabled });
-          console.error('Failed to toggle alarm');
-        } else {
-          const responseData = await response.json();
-          // 백엔드 응답에서 실제 상태로 업데이트
-          if (responseData.data) {
-            setJdDetail({ ...jdDetail, alarmOn: responseData.data.alarmOn });
-            queryClient.invalidateQueries({
-              queryKey: ['jds-list'],
+      updateTodoAlarmMutate(
+        { jdId: jdDetail.jd_id, newAlarmState: isEnabled },
+        {
+          onError: (error) => {
+            setSnackbar({
+              isOpen: true,
+              type: 'error',
+              message: error.message || '알림 설정 중 오류가 발생했습니다.',
             });
-          }
+          },
+          onSettled: () => {
+            setIsTogglingAlarm(false);
+          },
         }
-      } catch (error) {
-        // 에러 시 원래 상태로 복원
-        setJdDetail({ ...jdDetail, alarmOn: !isEnabled });
-        console.error('Error toggling alarm:', error);
-      } finally {
-        setIsTogglingAlarm(false);
-      }
+      );
     }
   };
 
@@ -308,95 +205,36 @@ export default function JobDetailPage() {
     };
   }, []);
 
-  // 외부 클릭 시 메뉴 닫기
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        moreMenuRef.current &&
-        !moreMenuRef.current.contains(event.target as Node)
-      ) {
-        setShowMoreMenu(false);
-      }
-    };
-
-    if (showMoreMenu) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showMoreMenu]);
-
   // Todo 완료 상태 토글
   const toggleTodoComplete = async (todo: TodoItem, newStatus: boolean) => {
     trackEvent({
       event: GAEvent.TodoList.TOGGLE_TODO,
       event_category: GACategory.TODO,
       todo_status: newStatus,
-      jobId: jdDetail?.jd_id,
+      jobId: todo.jdId,
     });
 
-    try {
-      const response = await fetchWithAuth(
-        `/api/jds/${jdId}/to-do-lists/${todo.checklist_id}`,
-        {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            category: todo.category,
-            title: todo.title,
-            content: todo.content,
-            is_done: newStatus,
-          }),
-        }
-      );
-
-      if (response.ok) {
-        const responseData = await response.json();
-
-        // 로컬 상태 업데이트 - 실제 응답 구조에 맞춰서 (응답에서는 done 필드 사용)
-        if (jdDetail && responseData.data) {
-          const updatedTodos = jdDetail.toDoLists.map((todoItem) =>
-            todoItem.checklist_id === todo.checklist_id
-              ? {
-                  ...todoItem,
-                  done:
-                    responseData.data.done !== undefined
-                      ? responseData.data.done
-                      : newStatus,
-                  updatedAt: responseData.data.updatedAt,
-                }
-              : todoItem
-          );
-
-          setJdDetail({ ...jdDetail, toDoLists: updatedTodos });
-
-          // 카테고리별 그룹화도 업데이트
-          const grouped = updatedTodos.reduce(
-            (acc: { [key: string]: TodoItem[] }, todo: TodoItem) => {
-              if (!acc[todo.category]) acc[todo.category] = [];
-              acc[todo.category].push(todo);
-              return acc;
-            },
-            {}
-          );
-          setTodosByCategory(grouped);
-          queryClient.invalidateQueries({ queryKey: ['jds-list'] });
-        }
-      } else {
-        const errorData = await response.text();
-        console.error(
-          'Failed to toggle todo status:',
-          response.status,
-          errorData
-        );
+    updateTodoMutate(
+      {
+        jdId: todo.jdId,
+        todoId: todo.checklist_id,
+        updateTodoItem: {
+          category: todo.category,
+          title: todo.title,
+          content: todo.content,
+          is_done: newStatus,
+        },
+      },
+      {
+        onError: (error) => {
+          setSnackbar({
+            isOpen: true,
+            type: 'error',
+            message: error.message || '조각 상태 업데이트 중 오류 발생',
+          });
+        },
       }
-    } catch (error) {
-      console.error('Error toggling todo status:', error);
-    }
+    );
   };
 
   // Todo 수정 함수
@@ -410,56 +248,31 @@ export default function JobDetailPage() {
       jobId: jdDetail?.jd_id,
     });
 
-    try {
-      // 현재 투두의 완료 상태 찾기
-      const currentTodo = jdDetail?.toDoLists.find(
-        (todo) => todo.checklist_id.toString() === todoId
-      );
-      const isDone = currentTodo?.done || false;
-
-      const response = await fetchWithAuth(
-        `/api/jds/${jdId}/to-do-lists/${todoId}`,
-        {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            ...data,
-            is_done: isDone,
-          }),
-        }
-      );
-
-      if (response.ok) {
-        // 데이터 다시 불러오기
-        const detailResponse = await fetchWithAuth(`/api/jds/${jdId}`);
-
-        if (detailResponse.ok) {
-          const detailData = await detailResponse.json();
-          if (detailData.data) {
-            setJdDetail(detailData.data);
-
-            // 카테고리별로 투두 그룹화
-            const grouped = detailData.data.toDoLists.reduce(
-              (acc: { [key: string]: TodoItem[] }, todo: TodoItem) => {
-                if (!acc[todo.category]) acc[todo.category] = [];
-                acc[todo.category].push(todo);
-                return acc;
-              },
-              {}
-            );
-            setTodosByCategory(grouped);
-          }
-        }
-      } else {
-        console.error('Failed to edit todo');
-        alert('조각 수정에 실패했습니다.');
+    const currentTodo = jdDetail?.toDoLists.find(
+      (todo) => todo.checklist_id.toString() === todoId
+    );
+    const isDone = currentTodo?.done || false;
+    updateTodoMutate(
+      {
+        jdId: Number(jdId),
+        todoId: Number(todoId),
+        updateTodoItem: {
+          category: data.category,
+          title: data.title,
+          content: data.content,
+          is_done: isDone,
+        },
+      },
+      {
+        onError: (error) => {
+          setSnackbar({
+            isOpen: true,
+            type: 'error',
+            message: error.message || '조각 내용 수정 중 오류가 발생했습니다.',
+          });
+        },
       }
-    } catch (error) {
-      console.error('Error editing todo:', error);
-      alert('조각 수정 중 오류가 발생했습니다.');
-    }
+    );
   };
 
   // Todo 삭제 함수
@@ -469,46 +282,22 @@ export default function JobDetailPage() {
       event_category: GACategory.TODO,
       jobId: jdDetail?.jd_id,
     });
-    try {
-      const response = await fetchWithAuth(
-        `/api/jds/${jdId}/to-do-lists/${todoId}`,
-        {
-          method: 'DELETE',
-        }
-      );
 
-      if (response.ok) {
-        // 데이터 다시 불러오기
-        const detailResponse = await fetchWithAuth(`/api/jds/${jdId}`);
-
-        if (detailResponse.ok) {
-          const detailData = await detailResponse.json();
-          if (detailData.data) {
-            setJdDetail(detailData.data);
-
-            // 카테고리별로 투두 그룹화
-            const grouped = detailData.data.toDoLists.reduce(
-              (acc: { [key: string]: TodoItem[] }, todo: TodoItem) => {
-                if (!acc[todo.category]) acc[todo.category] = [];
-                acc[todo.category].push(todo);
-                return acc;
-              },
-              {}
-            );
-            setTodosByCategory(grouped);
-            queryClient.invalidateQueries({
-              queryKey: ['jds-list'],
-            });
-          }
-        }
-      } else {
-        console.error('Failed to delete todo');
-        alert('조각 삭제에 실패했습니다.');
+    deleteTodoMutate(
+      {
+        jdId: Number(jdId),
+        todoId: Number(todoId),
+      },
+      {
+        onError: (error) => {
+          setSnackbar({
+            isOpen: true,
+            type: 'error',
+            message: error.message || '조각 삭제 중 오류가 발생했습니다.',
+          });
+        },
       }
-    } catch (error) {
-      console.error('Error deleting todo:', error);
-      alert('조각 삭제 중 오류가 발생했습니다.');
-    }
+    );
   };
 
   // Todo 추가 함수
@@ -522,115 +311,49 @@ export default function JobDetailPage() {
       event_category: GACategory.TODO,
       jobId: jdDetail?.jd_id,
     });
-    try {
-      const response = await fetchWithAuth(`/api/jds/${jdId}/to-do-lists`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+
+    createTodoMutate(
+      {
+        jdId: Number(jdId),
+        newTodoItem: {
+          category: data.category,
+          title: data.title,
+          content: data.content,
         },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        // 데이터 다시 불러오기
-        const detailResponse = await fetchWithAuth(`/api/jds/${jdId}`);
-
-        if (detailResponse.ok) {
-          const detailData = await detailResponse.json();
-          if (detailData.data) {
-            setJdDetail(detailData.data);
-
-            // 카테고리별로 투두 그룹화
-            const grouped = detailData.data.toDoLists.reduce(
-              (acc: { [key: string]: TodoItem[] }, todo: TodoItem) => {
-                if (!acc[todo.category]) acc[todo.category] = [];
-                acc[todo.category].push(todo);
-                return acc;
-              },
-              {}
-            );
-            setTodosByCategory(grouped);
-            queryClient.invalidateQueries({ queryKey: ['jds-list'] });
-          }
-        }
-      } else {
-        console.error('Failed to add todo');
-        alert('조각 추가에 실패했습니다.');
+      },
+      {
+        onError: (error) => {
+          setSnackbar({
+            isOpen: true,
+            type: 'error',
+            message: error.message || '조각 추가 중 오류가 발생했습니다.',
+          });
+        },
       }
-    } catch (error) {
-      console.error('Error adding todo:', error);
-      alert('조각 추가 중 오류가 발생했습니다.');
-    }
+    );
   };
 
-  // 삭제 핸들러
-  const handleDelete = async () => {
+  // 채용공고 삭제 핸들러
+  const handleJobDelete = () => {
+    setIsJdDeleting(true);
     trackEvent({
       event: GAEvent.JobPosting.REMOVE,
       event_category: GACategory.JOB_POSTING,
-      jobId: jdDetail?.jd_id,
+      jobId: Number(jdId),
     });
-    try {
-      const response = await fetchWithAuth(`/api/jds/${jdId}`, {
-        method: 'DELETE',
-      });
-
-      if (response.ok) {
-        // 삭제 성공 시 대시보드로 이동
-        router.push('/dashboard');
-      } else {
-        console.error('Failed to delete JD');
-        alert('채용공고 삭제에 실패했습니다.');
-        setIsDeleting(false);
-      }
-    } catch (error) {
-      console.error('Error deleting JD:', error);
-      alert('채용공고 삭제 중 오류가 발생했습니다.');
-      setIsDeleting(false);
-    }
-  };
-
-  // 지원 완료 핸들러
-  const handleApplyComplete = async () => {
-    trackEvent({
-      event: GAEvent.JobPosting.APPLY_JOB_TOGGLE,
-      event_category: GACategory.JOB_POSTING,
-      apply_status: jdDetail?.applyAt ? false : true,
-      jobId: jdDetail?.jd_id,
-    });
-    try {
-      const response = await fetchWithAuth(`/api/jds/${jdId}`, {
-        method: 'PATCH',
-      });
-
-      if (response.ok) {
+    deleteJdMutate(Number(jdId), {
+      onSuccess: () => {
+        router.replace('/dashboard');
+      },
+      onError: (error) => {
         setSnackbar({
           isOpen: true,
-          message: jdDetail?.applyAt
-            ? '지원 취소되었습니다.'
-            : '지원 완료되었습니다.',
-          type: 'success',
-        });
-        // 데이터 다시 불러오기
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
-      } else {
-        console.error('Failed to mark as applied');
-        setSnackbar({
-          isOpen: true,
-          message: '지원 상태 처리에 실패했습니다.',
+          message: error.message,
           type: 'error',
         });
-      }
-    } catch (error) {
-      console.error('Error marking as applied:', error);
-      setSnackbar({
-        isOpen: true,
-        message: '지원 상태 처리 중 오류가 발생했습니다.',
-        type: 'error',
-      });
-    }
+        setIsJdDeleting(false);
+      },
+    });
   };
 
   // 채용공고 보기 클릭 핸들러
@@ -648,79 +371,19 @@ export default function JobDetailPage() {
     }
   };
 
-  const calculateCompletionRate = () => {
-    if (!jdDetail || !jdDetail.toDoLists || jdDetail.toDoLists.length === 0)
-      return { completed: 0, total: 0 };
-    const total = jdDetail.toDoLists.length;
-    const completed = jdDetail.toDoLists.filter((todo) => todo.done).length;
-    return { completed, total };
-  };
+  const { handleJobEdit, handleMarkAsApplied, handleBookmarkToggle } =
+    useJobActions({ setSnackbar });
 
-  if (isLoading) {
-    return (
-      <>
-        <Header backgroundColor="white" showLogout={true} />
-        <main className={styles.main}>
-          <div className={`${styles.header} ${styles['skeleton--header']}`}>
-            <div className={styles.leftSection}>
-              <button className={styles.backButton}>
-                <Image
-                  src={arrowBackIcon}
-                  alt="뒤로가기"
-                  width={18.17}
-                  height={17.69}
-                />
-              </button>
-            </div>
+  // 조각 완료 현황 계산
+  const { completed, total } = useMemo(() => {
+    const list = jdDetail?.toDoLists ?? [];
+    let done = 0;
+    for (const t of list) if (t.done) done++;
+    return { completed: done, total: list.length };
+  }, [jdDetail?.toDoLists]);
 
-            <div className={styles.rightSection}>
-              <button className={styles.actionButton}>
-                <span className={styles.actionButtonText}>채용공고 보기</span>
-              </button>
-
-              <button className={`${styles.iconButton} ${styles.bookmarked}`}>
-                <Image src={bookmarkIcon} alt="북마크" width={24} height={24} />
-              </button>
-
-              <div style={{ position: 'relative' }}>
-                <button className={styles.iconButton}>
-                  <Image
-                    src={moreIcon}
-                    alt="더보기"
-                    width={21.33}
-                    height={5.33}
-                  />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles['skeleton--container']}>
-            <div
-              className={`${styles.skeleton} ${styles['skeleton--jobDetails']}`}
-            ></div>
-            <div
-              className={`${styles.skeleton} ${styles['skeleton--progressTracker']}`}
-            ></div>
-            <div className={`${styles['skeleton--jogakCategories']}`}>
-              <div
-                className={`${styles.skeleton} ${styles['skeleton--jogakItem']}`}
-              ></div>
-              <div
-                className={`${styles.skeleton} ${styles['skeleton--jogakItem']}`}
-              ></div>
-              <div
-                className={`${styles.skeleton} ${styles['skeleton--jogakItem']}`}
-              ></div>
-            </div>
-            <div
-              className={`${styles.skeleton} ${styles['skeleton--memobox']}`}
-            ></div>
-          </div>
-        </main>
-        <Footer />
-      </>
-    );
+  if (isJdLoading) {
+    return <JobDetailLoading />;
   }
 
   if (!jdDetail) {
@@ -729,8 +392,29 @@ export default function JobDetailPage() {
         <Header backgroundColor="white" showLogout={true} />
         <main className={styles.main}>
           <div className={styles.container}>
-            <div style={{ textAlign: 'center', padding: '50px' }}>
-              채용공고를 찾을 수 없습니다.
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
+                fontSize: '25px',
+                padding: '100px',
+              }}
+            >
+              <div
+                style={{
+                  textAlign: 'center',
+                  fontSize: '25px',
+                  padding: '100px',
+                }}
+              >
+                채용공고를 찾을 수 없습니다.
+              </div>
+              <Button onClick={() => router.push('/dashboard')}>
+                돌아가기
+              </Button>
             </div>
           </div>
         </main>
@@ -739,163 +423,38 @@ export default function JobDetailPage() {
     );
   }
 
-  const { completed, total } = calculateCompletionRate();
-
   return (
     <>
       <Header backgroundColor="white" showLogout={true} />
       <main className={styles.main}>
-        <div className={styles.header}>
-          <div className={styles.leftSection}>
-            <button className={styles.backButton} onClick={handleBack}>
-              <Image
-                src={arrowBackIcon}
-                alt="뒤로가기"
-                width={18.17}
-                height={17.69}
-              />
-            </button>
-          </div>
+        <JobDetailTopBar
+          jdDetail={jdDetail}
+          handleClickJobUrl={handleClickJobUrl}
+          toggleBookmark={() =>
+            handleBookmarkToggle(jdDetail?.jd_id, !jdDetail?.bookmark)
+          }
+          onSelect={(action) => {
+            if (action === 'edit') return handleJobEdit(jdDetail?.jd_id);
+            if (action === 'delete') return setIsJdDeleting(true);
+            if (action === 'apply')
+              return handleMarkAsApplied(jdDetail?.jd_id, jdDetail?.applyAt);
+          }}
+        />
 
-          <div className={styles.rightSection}>
-            <button className={styles.actionButton} onClick={handleClickJobUrl}>
-              <span className={styles.actionButtonText}>채용공고 보기</span>
-            </button>
-
-            <button className={styles.iconButton} onClick={toggleBookmark}>
-              {jdDetail.bookmark ? (
-                <Image
-                  src={bookmarkCheckIcon}
-                  alt="북마크 추가됨"
-                  width={24}
-                  height={24}
-                />
-              ) : (
-                <Image src={bookmarkIcon} alt="북마크" width={24} height={24} />
-              )}
-            </button>
-
-            <div ref={moreMenuRef} style={{ position: 'relative' }}>
-              <button
-                className={styles.iconButton}
-                onClick={() => setShowMoreMenu(!showMoreMenu)}
-              >
-                <Image
-                  src={moreIcon}
-                  alt="더보기"
-                  width={21.33}
-                  height={5.33}
-                />
-              </button>
-
-              {/* More menu dropdown */}
-              {showMoreMenu && (
-                <div className={styles.moreMenu}>
-                  <button
-                    className={`${styles.moreMenuItem} ${styles.edit}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      trackEvent({
-                        event: GAEvent.JobPosting.EDIT_PAGE_VIEW,
-                        event_category: GACategory.JOB_POSTING,
-                        jobId: jdDetail.jd_id,
-                      });
-                      router.push(`/job/edit?id=${jdDetail.jd_id}`);
-                    }}
-                  >
-                    공고 수정
-                  </button>
-                  <button
-                    className={`${styles.moreMenuItem} ${styles.apply}`}
-                    onClick={() => {
-                      setShowMoreMenu(false);
-                      handleApplyComplete();
-                    }}
-                  >
-                    {!jdDetail.applyAt ? '지원 완료' : '지원 완료 취소'}
-                  </button>
-                  <button
-                    className={`${styles.moreMenuItem} ${styles.delete}`}
-                    onClick={() => {
-                      setShowMoreMenu(false);
-                      setIsDeleting(true);
-                    }}
-                  >
-                    삭제하기
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
         <div className={styles.container}>
           {/* Header with navigation */}
 
           {/* Job details */}
-          <div className={styles.jobDetails}>
-            <div className={styles.jobDetailsTop}>
-              <div className={styles.jobDetailsLeft}>
-                <DDayChip
-                  alarmOn={jdDetail.alarmOn}
-                  isApplied={!!jdDetail.applyAt}
-                  dDay={calculateDDay(jdDetail.endedAt)}
-                />
-                <div className={styles.modifiedInfo}>
-                  <div className={styles.modifiedText}>
-                    {formatTimeAgo(jdDetail.updatedAt)}
-                  </div>
-                </div>
-              </div>
-              <div className={styles.jobDetailsRight}>
-                <div className={styles.registerInfo}>
-                  <div className={styles.registerText}>등록일</div>
-                  <div className={styles.separator}>|</div>
-                  <div className={styles.registerText}>
-                    {formatDate(jdDetail.createdAt)}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className={styles.jobDetailsBottom}>
-              <div className={styles.jobTitle}>{jdDetail.title}</div>
-              <div className={styles.companyName}>{jdDetail.companyName}</div>
-            </div>
-          </div>
+          <JobDetailSection jdDetail={jdDetail} />
 
           {/* Progress tracker */}
-          <div className={styles.progressTracker}>
-            <div className={styles.progressContent}>
-              <div className={styles.progressHeader}>
-                <div className={styles.progressTitle}>완료한 조각</div>
-                <p className={styles.progressCount}>
-                  <span className={styles.progressCountActive}>
-                    {completed}
-                  </span>
-                  <span className={styles.progressCountTotal}> / {total}</span>
-                </p>
-              </div>
-              <ProgressBar
-                total={total}
-                completed={completed}
-                className={styles.progressBarInstance}
-              />
-            </div>
-            <button
-              className={styles.notificationBtn}
-              onClick={handleAlarmButtonClick}
-              disabled={isTogglingAlarm}
-            >
-              {jdDetail.alarmOn ? (
-                <Image src={alarmOnIcon} alt="알림 중" width={16} height={16} />
-              ) : (
-                <Image src={alarmIcon} alt="알림 신청" width={16} height={16} />
-              )}
-
-              <div className={styles.notificationBtnText}>
-                {jdDetail.alarmOn ? '알림 중' : '알림 신청'}
-              </div>
-            </button>
-          </div>
+          <ProgressNotificationSection
+            completed={completed}
+            total={total}
+            handleAlarmButtonClick={handleAlarmButtonClick}
+            isTogglingAlarm={isTogglingAlarm}
+            isAlarmOn={jdDetail.alarmOn}
+          />
 
           {/* Jogak Categories */}
           <div className={styles.jogakCategories}>
@@ -966,9 +525,9 @@ export default function JobDetailPage() {
 
       {/* Delete confirmation modal */}
       <DeleteConfirmModal
-        isOpen={isDeleting}
-        onClose={() => setIsDeleting(false)}
-        onConfirm={handleDelete}
+        isOpen={isJdDeleting}
+        onClose={() => setIsJdDeleting(false)}
+        onConfirm={handleJobDelete}
         title="정말 삭제하시겠습니까?"
         message="저장한 내용이 모두 없어져요."
         cancelText="취소"

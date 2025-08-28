@@ -1,3 +1,5 @@
+import { PageInfo } from '.';
+
 export interface Resume {
   resumeId: number;
   title: string;
@@ -62,3 +64,19 @@ export interface JobPostingFormInput {
   content: string;
   link: string;
 }
+
+export type JdsData = {
+  resume: Resume | null;
+  jds: JobDescription[];
+  pageInfo: PageInfo;
+};
+
+export type CreateTodoRequestData = {
+  category: string;
+  title: string;
+  content: string;
+};
+
+export type UpdateTodoRequestData = CreateTodoRequestData & {
+  is_done: boolean;
+};
