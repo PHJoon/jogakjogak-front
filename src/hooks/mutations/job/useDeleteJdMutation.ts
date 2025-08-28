@@ -8,7 +8,7 @@ import { JDDetail, JdsData } from '@/types/jds';
 export default function useDeleteJdMutation() {
   const { page, sort, showOnly } = useQueryParams();
 
-  const { mutate: deleteMutate, isPending: deletePending } = useMutation({
+  const { mutate: deleteJdMutate, isPending: isDeleteJdPending } = useMutation({
     mutationFn: (jobId: number) => deleteJd(jobId),
     onMutate: (jobId) => {
       // Optimistically update the cache
@@ -34,7 +34,6 @@ export default function useDeleteJdMutation() {
         'jd',
         jobId,
       ]);
-      queryClient.removeQueries({ queryKey: ['jd', jobId], exact: true });
 
       return { previousJds, previousJdDetail };
     },
@@ -54,11 +53,11 @@ export default function useDeleteJdMutation() {
       }
     },
 
-    onSuccess: () => {
+    onSuccess: (data, jobId, context) => {
+      queryClient.removeQueries({ queryKey: ['jd', jobId], exact: true });
       queryClient.invalidateQueries({ queryKey: ['jds-list'] });
-      queryClient.invalidateQueries({ queryKey: ['jd'] });
     },
   });
 
-  return { deleteMutate, deletePending };
+  return { deleteJdMutate, isDeleteJdPending };
 }

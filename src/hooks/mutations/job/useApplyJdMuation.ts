@@ -67,9 +67,12 @@ export default function useApplyJdMutation() {
       queryClient.setQueryData(['jd', data.jd_id], (prev?: JDDetail) =>
         prev ? { ...prev, applyAt: data.applyAt } : prev
       );
-      queryClient.invalidateQueries({
-        queryKey: ['jds-list'],
-      });
+
+      if (showOnly === 'completed') {
+        queryClient.invalidateQueries({
+          queryKey: ['jds-list'],
+        });
+      }
     },
   });
 
