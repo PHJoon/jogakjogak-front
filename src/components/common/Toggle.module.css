@@ -1,0 +1,36 @@
+.toggleButton {
+  all: unset;
+  position: relative;
+  width: 52px;
+  height: 32px;
+  border-radius: 100px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 50%;
+  left: 4px;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  background-color: var(--n-0);
+  border-radius: 1000px;
+  transition: left 0.2s ease-in-out;
+}
+
+.toggleButton.on {
+  background-color: var(--primaryjogak-1);
+}
+
+.toggleButton.off {
+  background-color: var(--n-300);
+}
+.toggleThumb.on {
+  left: 24px;
+}
+
+.toggleThumb.off {
+  left: 4px;
+}
