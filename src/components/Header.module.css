@@ -7,7 +7,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 35.4px 0 38.2px;
+  padding: 0 32px 0 38.2px;
   background-color: transparent;
   z-index: 1000;
   transition: background-color 0.3s ease;
@@ -66,23 +66,37 @@
   background: #2a73ea;
 }
 
-.logoutButton {
-  background: transparent;
-  border: none;
-  padding: 0;
+.myPageButton {
+  all: unset;
+  box-sizing: border-box;
+  width: 77px;
+  height: 40px;
+  background-color: var(--primarymain-200);
+  border-radius: 6px;
+  padding: 10px 12px;
   display: flex;
   align-items: center;
   cursor: pointer;
+  gap: 4px;
 }
 
-.logoutButton:hover {
+.myPageButton span {
+  color: var(--primaryjogak-1);
+  font-family: var(--label-1-normal-bold-font-family);
+  font-size: var(--label-1-normal-bold-font-size);
+  font-style: var(--label-1-normal-bold-font-style);
+  font-weight: var(--label-1-normal-bold-font-weight);
+  letter-spacing: var(--label-1-normal-bold-letter-spacing);
+}
+
+.myPageButton:hover {
   opacity: 0.7;
 }
 
 /* Mobile styles */
 @media (max-width: 1032px) {
   .header {
-    padding: 0 19.4px 0 13.09px;
+    padding: 0 16px 0 13.08px;
   }
 
   .logo img {
@@ -96,8 +110,8 @@
     padding: 6px 16px;
   }
 
-  .loginButton span {
-    font-size: 15px;
-    line-height: 20px;
+  .myPageButton {
+    width: 75px;
+    height: 36px;
   }
 }

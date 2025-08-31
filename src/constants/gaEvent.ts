@@ -1,5 +1,6 @@
 // 이벤트명 (action)
 const AuthEvent = {
+  MY_PAGE: 'my_page_view',
   LOGIN: 'login',
   LOGOUT: 'logout',
   REMOVE_ACCOUNT: 'remove_account',

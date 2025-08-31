@@ -2,12 +2,12 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
-import logoutIcon from '@/assets/images/ic_logout.svg';
+import userIcon from '@/assets/images/ic_user.svg';
 import logo from '@/assets/images/logo.svg';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
-import { logout } from '@/lib/api/auth/authApi';
 import trackEvent from '@/utils/trackEventGA';
 
 import styles from './Header.module.css';
@@ -25,6 +25,7 @@ export default function Header({
   showLogout = false,
   landingPage = false,
 }: HeaderProps) {
+  const router = useRouter();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [headerBackgroundColor, setHeaderBackgroundColor] = useState<
     'transparent' | 'white'
@@ -38,18 +39,12 @@ export default function Header({
     setIsLoginModalOpen(false);
   };
 
-  const handleLogoutClick = () => {
+  const handleMyPageClick = () => {
     trackEvent({
-      event: GAEvent.Auth.LOGOUT,
+      event: GAEvent.Auth.MY_PAGE,
       event_category: GACategory.AUTH,
     });
-    // 즉시 UI 업데이트를 위해 홈으로 이동
-    window.location.href = '/';
-
-    // 백그라운드에서 로그아웃 처리
-    logout().catch((error) => {
-      console.error('Logout failed:', error);
-    });
+    router.push('/mypage');
   };
 
   useEffect(() => {
@@ -84,8 +79,9 @@ export default function Header({
           />
         </Link>
         {showLogout ? (
-          <button className={styles.logoutButton} onClick={handleLogoutClick}>
-            <Image src={logoutIcon} alt="로그아웃" width={17.6} height={18} />
+          <button className={styles.myPageButton} onClick={handleMyPageClick}>
+            <Image src={userIcon} alt="마이페이지" width={20} height={20} />
+            <span>마이</span>
           </button>
         ) : (
           <button className={styles.loginButton} onClick={handleLoginClick}>
