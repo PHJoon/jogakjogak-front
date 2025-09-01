@@ -1,7 +1,10 @@
 'use client';
 
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import backIcon from '@/assets/images/ic_back.svg';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import Toggle from '@/components/common/Toggle';
@@ -18,7 +21,10 @@ import trackEvent from '@/utils/trackEventGA';
 import styles from './page.module.css';
 
 export default function MyPage() {
+  const router = useRouter();
   const [isEmailNotificationEnabled, setEmailNotificationEnabled] =
+    useState(false);
+  const [isEmailNotificationModalOpen, setIsEmailNotificationModalOpen] =
     useState(false);
   const [isWithDrawalModalOpen, setIsWithDrawalModalOpen] = useState(false);
 
@@ -73,12 +79,26 @@ export default function MyPage() {
     }
   };
 
+  const handleBackClick = () => {
+    router.back();
+  };
+
   return (
     <>
       <Header backgroundColor="white" showLogout={true} />
       <main className={styles.main}>
         <div className={styles.container}>
-          <h1 className={styles.title}>마이페이지</h1>
+          <div className={styles.titleWrapper}>
+            <Image
+              src={backIcon}
+              alt="뒤로가기"
+              width={28}
+              height={28}
+              onClick={handleBackClick}
+              className={styles.backIcon}
+            />
+            <h1 className={styles.title}>마이페이지</h1>
+          </div>
           <div className={styles.accountInfoSection}>
             <h2 className={styles.subTitle}>로그인 정보</h2>
             <div className={styles.inputGroup}>
@@ -98,9 +118,13 @@ export default function MyPage() {
               <span>알림 기능</span>
               <Toggle
                 isOn={isEmailNotificationEnabled}
-                handleToggle={() =>
-                  setEmailNotificationEnabled(!isEmailNotificationEnabled)
-                }
+                handleToggle={() => {
+                  if (isEmailNotificationEnabled) {
+                    setIsEmailNotificationModalOpen(true);
+                  } else {
+                    setEmailNotificationEnabled(true);
+                  }
+                }}
               />
             </div>
           </div>
@@ -116,7 +140,10 @@ export default function MyPage() {
             <button className={styles.logout} onClick={handleLogoutClick}>
               로그아웃
             </button>
-            <button className={styles.withdraw} onClick={handleWithdrawal}>
+            <button
+              className={styles.withdraw}
+              onClick={() => setIsWithDrawalModalOpen(true)}
+            >
               회원탈퇴
             </button>
           </div>
@@ -128,6 +155,19 @@ export default function MyPage() {
           title="정말 탈퇴하시겠습니까?"
           message="저장한 회원 기록이 모두 삭제돼요."
           cancelText="아니요"
+          confirmText="확인"
+          highlightedText="탈퇴"
+        />
+        <DeleteConfirmModal
+          isOpen={isEmailNotificationModalOpen}
+          onClose={() => setIsEmailNotificationModalOpen(false)}
+          onConfirm={() => {
+            setEmailNotificationEnabled(false);
+            setIsEmailNotificationModalOpen(false);
+          }} // 탈퇴 확인 함수
+          title="이메일 알림 기능을 끄시겠습니까??"
+          message="더이상 알림을 받을 수 없어요."
+          cancelText="취소"
           confirmText="확인"
           highlightedText="탈퇴"
         />
