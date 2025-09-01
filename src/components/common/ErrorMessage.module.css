@@ -1,0 +1,9 @@
+.errorMessage {
+  color: var(--red-3);
+  font-family: var(--label-2-regular-font-family);
+  font-size: var(--label-2-regular-font-size);
+  font-style: var(--label-2-regular-font-style);
+  font-weight: var(--label-2-regular-font-weight);
+  letter-spacing: var(--label-2-regular-letter-spacing);
+  padding: 8px;
+}

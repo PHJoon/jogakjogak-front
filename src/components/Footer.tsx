@@ -2,16 +2,12 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
 
 import emailIcon from '@/assets/images/ico_email.svg';
 import logo from '@/assets/images/logo.svg';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
-import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
-import { tokenManager } from '@/lib/api/tokenManager';
 import trackEvent from '@/utils/trackEventGA';
 
-import { DeleteConfirmModal } from './DeleteConfirmModal';
 import styles from './Footer.module.css';
 
 interface FooterProps {
@@ -21,42 +17,6 @@ interface FooterProps {
 export default function Footer(
   { backgroundColor }: FooterProps = { backgroundColor: 'white' }
 ) {
-  const [isWithDrawalModalOpen, setIsWithDrawalModalOpen] = useState(false);
-
-  // 탈퇴 처리 함수
-  const handleWithdrawal = async () => {
-    trackEvent({
-      event: GAEvent.Auth.REMOVE_ACCOUNT,
-      event_category: GACategory.AUTH,
-    });
-
-    try {
-      const accessToken = tokenManager.getAccessToken();
-
-      if (!accessToken) {
-        alert('로그인이 필요합니다.');
-        return;
-      }
-
-      const response = await fetchWithAuth('/api/member/withdrawal', {
-        method: 'DELETE',
-      });
-
-      if (response.ok) {
-        alert('탈퇴가 완료되었습니다.');
-        // 토큰 삭제하고 홈으로 이동
-        tokenManager.removeAccessToken();
-        window.location.href = '/';
-      } else {
-        const errorData = await response.json();
-        alert(`탈퇴에 실패했습니다: ${errorData.message || '알 수 없는 오류'}`);
-      }
-    } catch (error) {
-      console.error('Withdrawal error:', error);
-      alert('탈퇴 중 오류가 발생했습니다.');
-    }
-  };
-
   const handleExternalLink = (type: keyof typeof GAEvent.Footer) => {
     trackEvent({
       event: GAEvent.Footer[type],
@@ -141,27 +101,8 @@ export default function Footer(
               © 2025. JogakJogak. All rights reserved.
             </p>
           </div>
-
-          {/* Withdraw link */}
-          <button
-            onClick={() => setIsWithDrawalModalOpen(true)}
-            className={styles.withdrawLink}
-          >
-            탈퇴하기
-          </button>
         </div>
       </div>
-
-      <DeleteConfirmModal
-        isOpen={isWithDrawalModalOpen}
-        onClose={() => setIsWithDrawalModalOpen(false)}
-        onConfirm={handleWithdrawal} // 탈퇴 확인 함수
-        title="정말 탈퇴하시겠습니까?"
-        message="저장한 회원 기록이 모두 삭제돼요."
-        cancelText="아니요"
-        confirmText="확인"
-        highlightedText="탈퇴"
-      />
     </footer>
   );
 }

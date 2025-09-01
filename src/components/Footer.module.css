@@ -1,5 +1,6 @@
 .footer {
   width: 100%;
+  height: 150px;
   background-color: transparent;
 }
 
@@ -9,19 +10,19 @@
 
 .container {
   position: relative;
-  max-width: 1920px;
-  height: 190px;
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
 /* Logo section */
 .logoSection {
   position: absolute;
-  left: 46.47px;
   top: 21.44px;
+  left: 38.2px;
 }
 
 .logo {
@@ -35,15 +36,14 @@
   flex-direction: column;
   align-items: center;
   gap: 24px;
-  padding: 0 12px;
 }
 
 /* Links */
 .linkContainer {
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 43.83px;
-  justify-content: center;
 }
 
 .link {
@@ -109,60 +109,20 @@
   white-space: nowrap;
 }
 
-/* Withdraw link */
-.withdrawLink {
-  color: var(--n-500);
-  font-family: var(--body-2-normal-regular-font-family);
-  font-size: var(--body-2-normal-regular-font-size);
-  font-weight: var(--body-2-normal-regular-font-weight);
-  letter-spacing: var(--body-2-normal-regular-letter-spacing);
-  line-height: var(--body-2-normal-regular-line-height);
-  white-space: nowrap;
-  transition: color 0.2s ease;
-  border: none;
-  background: none;
-}
-
-.withdrawLink:hover {
-  color: var(--n-800);
-}
-
-/* Scroll to top button */
-.scrollToTop {
-  position: absolute;
-  right: 32px;
-  top: 12px;
-  width: 48px;
-  height: 48px;
-  background-color: var(--primarymain-600);
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s ease;
-}
-
-.scrollToTop:hover {
-  background-color: var(--primarymain-700);
-}
-
 /* Mobile styles */
 @media (max-width: 1032px) {
-  .container {
+  .footer {
     height: 330px;
+  }
+  .container {
     flex-direction: column;
+    justify-content: flex-start;
     align-items: flex-start;
-    padding: 0 16px 32px 40px;
+    padding: 68px 38.2px;
   }
 
   .logoSection {
-    position: static;
-    transform: none;
-    margin-bottom: 22.29px;
-    margin-top: 26.29px;
-    margin-left: 5.53px;
+    top: 26.29px;
   }
 
   .logo {
@@ -212,25 +172,5 @@
 
   .copyright {
     order: 2;
-  }
-
-  .withdrawLink {
-    order: 2;
-    margin-left: 0;
-    margin-bottom: 40px;
-    font-family: var(--label-2-medium-font-family);
-    font-size: var(--label-2-medium-font-size);
-    font-weight: var(--label-2-medium-font-weight);
-    letter-spacing: var(--label-2-medium-letter-spacing);
-    line-height: var(--label-2-medium-line-height);
-    border: none;
-    background: none;
-  }
-
-  .scrollToTop {
-    position: absolute;
-    right: 16px;
-    top: 24px;
-    transform: none;
   }
 }
