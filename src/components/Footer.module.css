@@ -1,6 +1,6 @@
 .footer {
   width: 100%;
-  height: 120px;
+  height: 150px;
   background-color: transparent;
 }
 
@@ -111,8 +111,10 @@
 
 /* Mobile styles */
 @media (max-width: 1032px) {
+  .footer {
+    height: 330px;
+  }
   .container {
-    height: 330;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
