@@ -2,15 +2,19 @@ import styles from './Toggle.module.css';
 
 export default function Toggle({
   isOn,
-  handleToggle,
+  onChange,
 }: {
   isOn: boolean;
-  handleToggle: () => void;
+  onChange: (next: boolean) => void;
 }) {
   return (
     <button
       className={`${styles.toggleButton} ${isOn ? styles.on : styles.off}`}
-      onClick={handleToggle}
+      onClick={(e) => {
+        e.preventDefault();
+        onChange(!isOn);
+      }}
+      type="button"
     >
       <div
         className={`${styles.toggleThumb} ${isOn ? styles.on : styles.off}`}
