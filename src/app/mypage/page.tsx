@@ -2,31 +2,76 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Controller, type SubmitHandler } from 'react-hook-form';
 
 import backIcon from '@/assets/images/ic_back.svg';
 import Button from '@/components/common/Button';
+import ErrorMessage from '@/components/common/ErrorMessage';
 import Input from '@/components/common/Input';
 import Toggle from '@/components/common/Toggle';
 import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
+import Snackbar from '@/components/Snackbar';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
+import useProfileMutation from '@/hooks/mutations/useProfileMutation';
+import useProfileForm from '@/hooks/mypage/useProfileForm';
+import useMyProfileQuery from '@/hooks/queries/useMyProfileQuery';
 import { logout } from '@/lib/api/auth/authApi';
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
 import { tokenManager } from '@/lib/api/tokenManager';
 import { queryClient } from '@/lib/queryClient';
+import { ProfileFormInput } from '@/types/profile';
 import trackEvent from '@/utils/trackEventGA';
 
 import styles from './page.module.css';
 
 export default function MyPage() {
   const router = useRouter();
-  const [isEmailNotificationEnabled, setEmailNotificationEnabled] =
-    useState(false);
   const [isEmailNotificationModalOpen, setIsEmailNotificationModalOpen] =
     useState(false);
   const [isWithDrawalModalOpen, setIsWithDrawalModalOpen] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    isOpen: false,
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info',
+  });
+
+  const {
+    fields,
+    nickname,
+    email,
+    notificationEnabled,
+    errors,
+    handleSubmit,
+    setValue,
+    reset,
+    control,
+  } = useProfileForm();
+
+  const { data, isLoading } = useMyProfileQuery();
+  const {
+    updateProfileMutate,
+    isUpdateProfilePending,
+    toggleNotificationMutate,
+    isToggleNotificationPending,
+  } = useProfileMutation();
+
+  const isFormDirty = () => {
+    return nickname !== data?.nickname;
+  };
+
+  // 프로필 데이터 세팅
+  useEffect(() => {
+    if (data) {
+      reset({
+        nickname: data.nickname,
+        email: data.email,
+        notificationEnabled: data.notificationEnabled,
+      });
+    }
+  }, [data, reset]);
 
   // 로그아웃
   const handleLogoutClick = () => {
@@ -83,6 +128,56 @@ export default function MyPage() {
     router.back();
   };
 
+  const onSubmit: SubmitHandler<Omit<ProfileFormInput, 'email'>> = (data) => {
+    updateProfileMutate(
+      {
+        nickname: data.nickname,
+      },
+      {
+        onError: (error) => {
+          setSnackbar({
+            isOpen: true,
+            message: error.message || '프로필 업데이트 중 오류가 발생했습니다.',
+            type: 'error',
+          });
+        },
+        onSuccess: () => {
+          setSnackbar({
+            isOpen: true,
+            message: '프로필이 업데이트되었습니다.',
+            type: 'success',
+          });
+        },
+      }
+    );
+  };
+
+  const handleToggleNotification = (newState: boolean) => {
+    if (isToggleNotificationPending) return;
+    toggleNotificationMutate(undefined, {
+      onError: (error) => {
+        setSnackbar({
+          isOpen: true,
+          message: error.message || '알림 설정 중 오류가 발생했습니다.',
+          type: 'error',
+        });
+      },
+      onSuccess: () => {
+        setSnackbar({
+          isOpen: true,
+          message: newState
+            ? '알림 기능이 켜졌습니다.'
+            : '알림 기능이 해제되었습니다.',
+          type: 'success',
+        });
+      },
+    });
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <Header backgroundColor="white" showLogout={true} />
@@ -99,42 +194,86 @@ export default function MyPage() {
             />
             <h1 className={styles.title}>마이페이지</h1>
           </div>
-          <div className={styles.accountInfoSection}>
-            <h2 className={styles.subTitle}>로그인 정보</h2>
-            <div className={styles.inputGroup}>
-              <Input id={'nickname'} label="닉네임" defaultValue="" />
-              <Input
-                id={'email'}
-                label="가입 이메일"
-                defaultValue="email@example.com"
-                readOnly={true}
-              />
-            </div>
-          </div>
 
-          <div className={styles.notificationSection}>
-            <h2 className={styles.subTitle}>이메일 알림 설정</h2>
-            <div className={styles.emailToggleWrapper}>
-              <span>알림 기능</span>
-              <Toggle
-                isOn={isEmailNotificationEnabled}
-                handleToggle={() => {
-                  if (isEmailNotificationEnabled) {
-                    setIsEmailNotificationModalOpen(true);
-                  } else {
-                    setEmailNotificationEnabled(true);
-                  }
-                }}
-              />
-            </div>
-          </div>
-
-          <Button
-            variant={'primary'}
-            style={{ width: '100%', height: '64px', marginBottom: '40px' }}
+          <form
+            className={styles.profileForm}
+            onSubmit={handleSubmit(onSubmit)}
           >
-            저장하기
-          </Button>
+            <div className={styles.accountInfoSection}>
+              <h2 className={styles.subTitle}>로그인 정보</h2>
+              <div className={styles.inputGroup}>
+                <Input
+                  id={'nickname'}
+                  label="닉네임"
+                  value={nickname}
+                  field={fields.nickname}
+                  maxLength={12}
+                  warning={!!errors.nickname}
+                  style={{ marginBottom: errors.nickname ? '0' : '31px' }}
+                />
+                {errors.nickname && (
+                  <ErrorMessage message={errors.nickname?.message || ''} />
+                )}
+                <Input
+                  id={'email'}
+                  label="가입 이메일"
+                  value={email}
+                  readOnly={true}
+                  field={fields.email}
+                />
+              </div>
+            </div>
+            <div className={styles.notificationSection}>
+              <h2 className={styles.subTitle}>이메일 알림 설정</h2>
+              <div className={styles.emailToggleWrapper}>
+                <span>알림 기능</span>
+                <Controller
+                  control={control}
+                  name="notificationEnabled"
+                  render={({ field }) => (
+                    <>
+                      <Toggle
+                        isOn={field.value}
+                        onChange={(next) => {
+                          if (next) {
+                            field.onChange(next);
+                            handleToggleNotification(next);
+                            return;
+                          }
+                          setIsEmailNotificationModalOpen(true);
+                        }}
+                      />
+                      {/* 알림 끄기 모달 */}
+                      <DeleteConfirmModal
+                        isOpen={isEmailNotificationModalOpen}
+                        onClose={() => {
+                          setIsEmailNotificationModalOpen(false);
+                        }}
+                        onConfirm={() => {
+                          setIsEmailNotificationModalOpen(false);
+                          field.onChange(false);
+                          handleToggleNotification(false);
+                        }}
+                        title="이메일 알림 기능을 끄시겠습니까??"
+                        message="더이상 알림을 받을 수 없어요."
+                        cancelText="취소"
+                        confirmText="확인"
+                      />
+                    </>
+                  )}
+                />
+              </div>
+            </div>
+            <Button
+              variant={'primary'}
+              style={{ width: '100%', height: '64px' }}
+              type={'submit'}
+              disabled={!isFormDirty()}
+              isLoading={isUpdateProfilePending}
+            >
+              저장하기
+            </Button>
+          </form>
 
           <div className={styles.dangerZone}>
             <button className={styles.logout} onClick={handleLogoutClick}>
@@ -148,28 +287,24 @@ export default function MyPage() {
             </button>
           </div>
         </div>
+
+        {/* 회원 탈퇴 모달 */}
         <DeleteConfirmModal
           isOpen={isWithDrawalModalOpen}
           onClose={() => setIsWithDrawalModalOpen(false)}
-          onConfirm={handleWithdrawal} // 탈퇴 확인 함수
+          onConfirm={handleWithdrawal}
           title="정말 탈퇴하시겠습니까?"
           message="저장한 회원 기록이 모두 삭제돼요."
           cancelText="아니요"
           confirmText="확인"
           highlightedText="탈퇴"
         />
-        <DeleteConfirmModal
-          isOpen={isEmailNotificationModalOpen}
-          onClose={() => setIsEmailNotificationModalOpen(false)}
-          onConfirm={() => {
-            setEmailNotificationEnabled(false);
-            setIsEmailNotificationModalOpen(false);
-          }} // 탈퇴 확인 함수
-          title="이메일 알림 기능을 끄시겠습니까??"
-          message="더이상 알림을 받을 수 없어요."
-          cancelText="취소"
-          confirmText="확인"
-          highlightedText="탈퇴"
+
+        <Snackbar
+          message={snackbar.message}
+          isOpen={snackbar.isOpen}
+          onClose={() => setSnackbar({ ...snackbar, isOpen: false })}
+          type={snackbar.type}
         />
       </main>
       <Footer />

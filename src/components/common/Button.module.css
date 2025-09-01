@@ -12,6 +12,7 @@
   font-weight: var(--body-1-normal-bold-font-weight);
   letter-spacing: var(--body-1-normal-bold-letter-spacing);
   line-height: var(--body-1-normal-bold-line-height);
+  cursor: pointer;
 }
 
 /* primary */

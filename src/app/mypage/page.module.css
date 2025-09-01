@@ -14,6 +14,13 @@
   min-height: calc(100vh - 290px);
 }
 
+.profileForm {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
 .titleWrapper {
   display: flex;
   align-items: center;
@@ -60,7 +67,6 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 .notificationSection {
