@@ -13,15 +13,18 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
+    const requestBody = await request.json();
+
     // 백엔드 서버로 요청
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL || 'https://api.jogakjogak.com'}/member/my-page`,
+      `${process.env.NEXT_PUBLIC_API_URL || 'https://api.jogakjogak.com'}/member/my-page/update`,
       {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify(requestBody),
       }
     );
 
