@@ -34,6 +34,7 @@ export default function MyPage() {
     useState(false);
   const [isEmailNotificationModalOpen, setIsEmailNotificationModalOpen] =
     useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isWithDrawalModalOpen, setIsWithDrawalModalOpen] = useState(false);
   const [snackbar, setSnackbar] = useState({
     isOpen: false,
@@ -270,7 +271,10 @@ export default function MyPage() {
           </div>
 
           <div className={styles.dangerZone}>
-            <button className={styles.logout} onClick={handleLogoutClick}>
+            <button
+              className={styles.logout}
+              onClick={() => setIsLogoutModalOpen(true)}
+            >
               로그아웃
             </button>
             <button
@@ -281,6 +285,18 @@ export default function MyPage() {
             </button>
           </div>
         </div>
+
+        {/* 로그아웃 모달 */}
+        <DeleteConfirmModal
+          isOpen={isLogoutModalOpen}
+          onClose={() => setIsLogoutModalOpen(false)}
+          onConfirm={handleLogoutClick}
+          title="정말 로그아웃 하시겠습니까?"
+          message="다시 로그인해야해요."
+          cancelText="아니요"
+          confirmText="확인"
+          highlightedText="로그아웃"
+        />
 
         {/* 회원 탈퇴 모달 */}
         <DeleteConfirmModal
