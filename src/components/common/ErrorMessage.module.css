@@ -5,5 +5,5 @@
   font-style: var(--label-2-regular-font-style);
   font-weight: var(--label-2-regular-font-weight);
   letter-spacing: var(--label-2-regular-letter-spacing);
-  padding: 8px;
+  padding-left: 8px;
 }
