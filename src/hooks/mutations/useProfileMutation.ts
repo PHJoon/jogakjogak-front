@@ -62,6 +62,8 @@ export default function useProfileMutation() {
           return { nickname: '', email: '', notificationEnabled: data };
         return { ...prev, notificationEnabled: data };
       });
+      queryClient.invalidateQueries({ queryKey: ['jds-list'] });
+      queryClient.invalidateQueries({ queryKey: ['jd'] });
     },
   });
 
