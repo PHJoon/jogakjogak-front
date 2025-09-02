@@ -21,25 +21,29 @@
 }
 
 .modalTitle {
-  font-size: 18px;
-  font-weight: 700;
-  font-style: Bold;
+  font-family: var(--headline-1-bold-font-family);
+  font-size: var(--headline-1-bold-font-size);
+  font-style: var(--headline-1-bold-font-style);
+  font-weight: var(--headline-1-bold-font-weight);
+  letter-spacing: var(--headline-1-bold-letter-spacing);
+  line-height: var(--headline-1-bold-line-height);
+
   color: var(--n-900);
   margin-bottom: 8px;
   text-align: center;
-  line-height: 145%;
-  letter-spacing: -0.02%;
 }
 
 .modalMessage {
-  font-size: 16px;
-  font-weight: 500;
-  font-style: Medium;
+  font-style: var(--body-1-normal-medium-font-family);
+  font-size: var(--body-1-normal-medium-font-size);
+  font-style: var(--body-1-normal-medium-font-style);
+  font-weight: var(--body-1-normal-medium-font-weight);
+  letter-spacing: var(--body-1-normal-medium-letter-spacing);
+  line-height: var(--body-1-normal-medium-line-height);
+
   color: var(--n-700);
   text-align: center;
-  line-height: 150%;
   margin-bottom: 24px;
-  letter-spacing: 0.57%;
 }
 
 .modalButtons {
@@ -54,11 +58,6 @@
 .modalConfirm {
   padding: 12px 24px;
   border-radius: 8px;
-  font-size: 17px;
-  font-weight: 700;
-  font-style: Bold;
-  line-height: 141%;
-  letter-spacing: 0%;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s;
@@ -68,17 +67,29 @@
 }
 
 .modalCancel {
-  background-color: var(--n-200);
+  background-color: var(--n-300);
   color: var(--n-800);
+  font-style: var(--body-1-normal-medium-font-family);
+  font-size: var(--body-1-normal-medium-font-size);
+  font-style: var(--body-1-normal-medium-font-style);
+  font-weight: var(--body-1-normal-medium-font-weight);
+  letter-spacing: var(--body-1-normal-medium-letter-spacing);
+  line-height: var(--body-1-normal-medium-line-height);
 }
 
 .modalCancel:hover {
-  background-color: var(--n-300);
+  background-color: var(--n-400);
 }
 
 .modalConfirm {
   background-color: var(--red-2);
-  color: white;
+  color: var(--n-100);
+  font-style: var(--body-1-normal-bold-font-family);
+  font-size: var(--body-1-normal-bold-font-size);
+  font-style: var(--body-1-normal-bold-font-style);
+  font-weight: var(--body-1-normal-bold-font-weight);
+  letter-spacing: var(--body-1-normal-bold-letter-spacing);
+  line-height: var(--body-1-normal-bold-line-height);
 }
 
 .modalConfirm:hover {

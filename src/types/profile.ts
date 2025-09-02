@@ -7,5 +7,4 @@ export interface Profile {
 export type ProfileFormInput = {
   nickname: string;
   email: string;
-  notificationEnabled: boolean;
 };

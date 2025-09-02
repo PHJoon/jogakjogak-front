@@ -18,7 +18,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 .titleWrapper {
@@ -60,13 +60,14 @@
   flex-direction: column;
   width: 100%;
   padding: 8px 0px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .inputGroup {
   width: 100%;
   display: flex;
   flex-direction: column;
+  gap: 8px;
 }
 
 .notificationSection {
@@ -74,7 +75,7 @@
   flex-direction: column;
   width: 100%;
   padding: 8px 0px;
-  margin-bottom: 32px;
+  margin-bottom: 40px;
 }
 
 .emailToggleWrapper {

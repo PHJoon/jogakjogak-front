@@ -45,6 +45,7 @@ export default function useUpdateTodoAlarmMutation() {
         prev ? { ...prev, alarmOn: data.alarmOn } : prev
       );
       queryClient.invalidateQueries({ queryKey: ['jds-list'] });
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
     },
   });
 

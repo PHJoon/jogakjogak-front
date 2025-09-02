@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import closeIcon from '@/assets/notification_modal/ic_close.svg';
 import letterIcon from '@/assets/notification_modal/ic_letter.svg';
@@ -28,6 +28,11 @@ export default function NotificationModal({
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [showCancelModal, setShowCancelModal] = useState(false);
+
+  useEffect(() => {
+    setIsEnabled(initialEnabled);
+    setIsAgreed(initialEnabled);
+  }, [initialEnabled]);
 
   if (!isOpen) return null;
 

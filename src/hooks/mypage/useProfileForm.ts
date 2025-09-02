@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { ProfileFormInput } from '@/types/profile';
@@ -16,7 +15,6 @@ export default function useProfileForm() {
     defaultValues: {
       nickname: '',
       email: '',
-      notificationEnabled: false,
     },
   });
 
@@ -30,18 +28,15 @@ export default function useProfileForm() {
         '닉네임에는 한글, 영문, 숫자만 사용할 수 있습니다.',
     }),
     email: register('email'),
-    notificationEnabled: register('notificationEnabled'),
   };
 
   const nickname = watch('nickname');
   const email = watch('email');
-  const notificationEnabled = watch('notificationEnabled');
 
   return {
     fields,
     nickname,
     email,
-    notificationEnabled,
     errors,
     handleSubmit,
     setValue,
