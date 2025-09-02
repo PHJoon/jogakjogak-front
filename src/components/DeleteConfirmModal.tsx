@@ -36,7 +36,7 @@ export function DeleteConfirmModal({
         <h3 className={styles.modalTitle}>
           {titleWords.map((word, idx) => {
             return word === highlightedText ? (
-              <span key={idx} style={{ color: 'var(--red-2)' }}>
+              <span key={idx} style={{ color: 'var(--red-3)' }}>
                 {word}
               </span>
             ) : (
