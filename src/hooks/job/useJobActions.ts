@@ -2,25 +2,17 @@ import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useCallback } from 'react';
 
 import { GACategory, GAEvent } from '@/constants/gaEvent';
+import { useBoundStore } from '@/stores/useBoundStore';
 import trackEvent from '@/utils/trackEventGA';
 
 import useApplyJdMutation from '../mutations/job/useApplyJdMuation';
 import useBookmarkJdMutation from '../mutations/job/useBookmarkJdMutation';
 
-interface Props {
-  setSnackbar: Dispatch<
-    SetStateAction<{
-      isOpen: boolean;
-      message: string;
-      type: 'success' | 'error' | 'info';
-    }>
-  >;
-}
-
-export default function useJobActions({ setSnackbar }: Props) {
+export default function useJobActions() {
   const router = useRouter();
   const { applyMutate } = useApplyJdMutation();
   const { bookmarkMutate } = useBookmarkJdMutation();
+  const setSnackbar = useBoundStore((state) => state.setSnackbar);
 
   // 채용공고 수정 핸들러
   const handleJobEdit = useCallback(
@@ -50,7 +42,6 @@ export default function useJobActions({ setSnackbar }: Props) {
       applyMutate(jobId, {
         onSuccess: (data) => {
           setSnackbar({
-            isOpen: true,
             message: data.applyAt
               ? '지원 완료되었습니다.'
               : '지원 취소되었습니다.',
@@ -59,7 +50,6 @@ export default function useJobActions({ setSnackbar }: Props) {
         },
         onError: (error) => {
           setSnackbar({
-            isOpen: true,
             message: error.message,
             type: 'error',
           });
@@ -86,7 +76,6 @@ export default function useJobActions({ setSnackbar }: Props) {
         {
           onSuccess: (data) => {
             setSnackbar({
-              isOpen: true,
               message: data.bookmark
                 ? '관심공고로 등록되었습니다.'
                 : '관심공고에서 제외되었습니다.',
@@ -95,7 +84,6 @@ export default function useJobActions({ setSnackbar }: Props) {
           },
           onError: (error) => {
             setSnackbar({
-              isOpen: true,
               message: error.message,
               type: 'error',
             });

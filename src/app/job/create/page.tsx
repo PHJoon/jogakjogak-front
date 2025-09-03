@@ -9,20 +9,16 @@ import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import JobPostingForm from '@/components/job/form/JobPostingForm';
 import LoadingModal from '@/components/LoadingModal';
-import Snackbar from '@/components/Snackbar';
 import useCreateJdMutation from '@/hooks/mutations/job/useCreateJdMutation';
 import useClientMeta from '@/hooks/useClientMeta';
+import { useBoundStore } from '@/stores/useBoundStore';
 import { JobPostingFormInput } from '@/types/jds';
 
 import styles from './page.module.css';
 
 export default function CreateJobPage() {
   const router = useRouter();
-  const [snackbar, setSnackbar] = useState({
-    isOpen: false,
-    message: '',
-    type: 'success' as 'success' | 'error' | 'info',
-  });
+  const setSnackbar = useBoundStore((state) => state.setSnackbar);
   const [nextJdId, setNextJdId] = useState<number | null>(null);
 
   const { createJdMutate, isCreatePending, isCreateSuccess } =
@@ -35,7 +31,6 @@ export default function CreateJobPage() {
       },
       onError: (error) => {
         setSnackbar({
-          isOpen: true,
           message: error.message || '채용공고 등록 중 오류가 발생했습니다.',
           type: 'error',
         });
@@ -88,12 +83,6 @@ export default function CreateJobPage() {
         isOpen={isCreatePending}
         isComplete={isCreateSuccess}
         onCompleteAnimationEnd={handleCompleteAnimationEnd}
-      />
-      <Snackbar
-        isOpen={snackbar.isOpen}
-        message={snackbar.message}
-        type={snackbar.type}
-        onClose={() => setSnackbar({ ...snackbar, isOpen: false })}
       />
     </>
   );

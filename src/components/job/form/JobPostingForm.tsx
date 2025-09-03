@@ -1,11 +1,11 @@
 import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 
-import Snackbar from '@/components/Snackbar';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
 import useJobPostingForm from '@/hooks/job/useJobPostingForm';
+import { useBoundStore } from '@/stores/useBoundStore';
 import { JobPostingFormInput } from '@/types/jds';
 import trackEvent from '@/utils/trackEventGA';
 
@@ -28,12 +28,7 @@ export default function JobPostingForm({
   onUpdate,
   isPending,
 }: Props) {
-  const router = useRouter();
-  const [snackbar, setSnackbar] = useState({
-    isOpen: false,
-    message: '',
-    type: 'success' as 'success' | 'error' | 'info',
-  });
+  const setSnackbar = useBoundStore((state) => state.setSnackbar);
 
   const { fields, fieldOrder, errors, formValues, handleSubmit, setValue } =
     useJobPostingForm();
@@ -71,7 +66,6 @@ export default function JobPostingForm({
     if (mode === 'edit') {
       if (!isFormChanged()) {
         setSnackbar({
-          isOpen: true,
           message: '변경된 내용이 없습니다.',
           type: 'info',
         });
@@ -87,7 +81,6 @@ export default function JobPostingForm({
     const firstErrorField = errors[firstErrorFieldKey!];
 
     setSnackbar({
-      isOpen: true,
       message: firstErrorField?.message || '알 수 없는 오류가 발생했습니다.',
       type: 'error',
     });
@@ -207,12 +200,6 @@ export default function JobPostingForm({
           </button>
         </fieldset>
       </form>
-      <Snackbar
-        isOpen={snackbar.isOpen}
-        message={snackbar.message}
-        type={snackbar.type}
-        onClose={() => setSnackbar({ ...snackbar, isOpen: false })}
-      />
     </>
   );
 }

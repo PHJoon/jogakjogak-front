@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 import closeIcon from '@/assets/notification_modal/ic_close.svg';
 import letterIcon from '@/assets/notification_modal/ic_letter.svg';
-import Snackbar from '@/components/Snackbar';
+import { useBoundStore } from '@/stores/useBoundStore';
 
 import { NotificationCancelModal } from './NotificationCancelModal';
 import styles from './NotificationModal.module.css';
@@ -25,9 +25,8 @@ export default function NotificationModal({
 }: NotificationModalProps) {
   const [isEnabled, setIsEnabled] = useState(initialEnabled);
   const [isAgreed, setIsAgreed] = useState(initialEnabled); // 알림이 켜져있으면 동의한 것으로 간주
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const setSnackbar = useBoundStore((state) => state.setSnackbar);
 
   useEffect(() => {
     setIsEnabled(initialEnabled);
@@ -133,8 +132,10 @@ export default function NotificationModal({
               }
               // 토글을 켜려면 개인정보 처리방침에 동의해야 함
               if (!isAgreed) {
-                setSnackbarMessage('개인정보 처리 방침에 동의해주세요.');
-                setShowSnackbar(true);
+                setSnackbar({
+                  message: '개인정보 처리 방침에 동의해주세요.',
+                  type: 'error',
+                });
                 return;
               }
               setIsEnabled(true);
@@ -148,13 +149,6 @@ export default function NotificationModal({
           확인
         </button>
       </div>
-
-      <Snackbar
-        message={snackbarMessage}
-        isOpen={showSnackbar}
-        onClose={() => setShowSnackbar(false)}
-        type="info"
-      />
 
       <NotificationCancelModal
         isOpen={showCancelModal}
