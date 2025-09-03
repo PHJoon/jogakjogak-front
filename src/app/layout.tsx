@@ -6,6 +6,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 
 import ScrollToTop from '@/components/ScrollToTop';
+import SnackbarStack from '@/components/SnackbarStack';
 import { ReactQueryProvider } from '@/lib/queryClient';
 
 const pretendard = localFont({
@@ -81,6 +82,7 @@ export default function RootLayout({
         <ReactQueryProvider>
           {children}
           <ScrollToTop />
+          <SnackbarStack />
         </ReactQueryProvider>
       </body>
       <GoogleAnalytics gaId={gaId ?? ''} />

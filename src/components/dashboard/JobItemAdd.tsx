@@ -2,11 +2,9 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 
 import addJobIcon from '@/assets/images/add_job.svg';
 import addJobActiveIcon from '@/assets/images/add_job_active.svg';
-import Snackbar from '@/components/Snackbar';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
 import { useBoundStore } from '@/stores/useBoundStore';
 import trackEvent from '@/utils/trackEventGA';
@@ -15,9 +13,9 @@ import styles from './JobItemAdd.module.css';
 
 export default function JobItemAdd() {
   const router = useRouter();
-  const [showNoResumeSnackbar, setShowNoResumeSnackbar] = useState(false);
   const resume = useBoundStore((state) => state.resume);
   const hasResume = !!resume;
+  const setSnackbar = useBoundStore((state) => state.setSnackbar);
 
   const handleClick = () => {
     trackEvent({
@@ -25,7 +23,10 @@ export default function JobItemAdd() {
       event_category: GACategory.JOB_POSTING,
     });
     if (!hasResume) {
-      setShowNoResumeSnackbar(true);
+      setSnackbar({
+        message: '채용공고를 추가하기 전에 먼저 이력서를 등록해주세요.',
+        type: 'info',
+      });
     } else {
       router.push('/job/create');
     }
@@ -61,14 +62,6 @@ export default function JobItemAdd() {
           <div className={styles.textWrapper}>채용공고 추가하기</div>
         </div>
       </div>
-
-      <Snackbar
-        message="채용공고를 추가하기 전에 먼저 이력서를 등록해주세요."
-        isOpen={showNoResumeSnackbar}
-        onClose={() => setShowNoResumeSnackbar(false)}
-        type="info"
-        duration={3000}
-      />
     </>
   );
 }

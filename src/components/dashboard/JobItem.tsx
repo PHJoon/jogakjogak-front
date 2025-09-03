@@ -10,10 +10,10 @@ import kebabIcon from '@/assets/images/ic_kebab.svg';
 import { DDayChip } from '@/components/DDayChip';
 import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
 import { ProgressBar } from '@/components/ProgressBar';
-import Snackbar from '@/components/Snackbar';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
 import useJobActions from '@/hooks/job/useJobActions';
 import useDeleteJdMutation from '@/hooks/mutations/job/useDeleteJdMutation';
+import { useBoundStore } from '@/stores/useBoundStore';
 import { JobDescription } from '@/types/jds';
 import { calculateDDay } from '@/utils/calculateDDay';
 import { formatDate } from '@/utils/formatDate';
@@ -71,15 +71,11 @@ export default function JobItem({
   const moreMenuRef = useRef<HTMLDivElement>(null);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
-  const [snackbar, setSnackbar] = useState({
-    isOpen: false,
-    message: '',
-    type: 'success' as 'success' | 'error' | 'info',
-  });
+  const setSnackbar = useBoundStore((state) => state.setSnackbar);
 
   const { deleteJdMutate } = useDeleteJdMutation();
   const { handleJobEdit, handleMarkAsApplied, handleBookmarkToggle } =
-    useJobActions({ setSnackbar });
+    useJobActions();
 
   // 외부 클릭 시 메뉴 닫기
   useEffect(() => {
@@ -116,14 +112,12 @@ export default function JobItem({
     deleteJdMutate(jobId, {
       onSuccess: () => {
         setSnackbar({
-          isOpen: true,
           message: '채용공고가 삭제되었습니다.',
           type: 'success',
         });
       },
       onError: (error) => {
         setSnackbar({
-          isOpen: true,
           message: error.message,
           type: 'error',
         });
@@ -261,14 +255,6 @@ export default function JobItem({
         cancelText="취소"
         confirmText="삭제"
         highlightedText="삭제"
-      />
-
-      <Snackbar
-        message={snackbar.message}
-        isOpen={snackbar.isOpen}
-        onClose={() => setSnackbar({ ...snackbar, isOpen: false })}
-        type={snackbar.type}
-        duration={3000}
       />
     </>
   );

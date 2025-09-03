@@ -7,7 +7,7 @@ import {
   Dropdown,
   DropdownButton,
   DropdownMenu,
-} from '@/components/Dropdown/Dropdown';
+} from '@/components/common/Dropdown';
 import { ShowOnly, Sort } from '@/types/jds';
 
 import styles from './SortDropdown.module.css';

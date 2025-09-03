@@ -17,7 +17,6 @@ import ProgressNotificationSection from '@/components/jobDetail/ProgressNotifica
 import { JogakCategory } from '@/components/JogakCategory';
 import { MemoBox } from '@/components/MemoBox';
 import NotificationModal from '@/components/NotificationModal';
-import Snackbar from '@/components/Snackbar';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
 import useJobActions from '@/hooks/job/useJobActions';
 import useDeleteJdMutation from '@/hooks/mutations/job/useDeleteJdMutation';
@@ -28,6 +27,7 @@ import useUpdateTodoMutation from '@/hooks/mutations/job_todolist/useUpdateTodoM
 import useJdQuery from '@/hooks/queries/useJdQuery';
 import useClientMeta from '@/hooks/useClientMeta';
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
+import { useBoundStore } from '@/stores/useBoundStore';
 import { JDDetail, TodoItem } from '@/types/jds';
 import trackEvent from '@/utils/trackEventGA';
 
@@ -73,11 +73,8 @@ export default function JobDetailPage() {
   const [isTogglingAlarm, setIsTogglingAlarm] = useState(false);
   const [isJdDeleting, setIsJdDeleting] = useState(false);
   const [showNotificationModal, setShowNotificationModal] = useState(false);
-  const [snackbar, setSnackbar] = useState({
-    isOpen: false,
-    message: '',
-    type: 'success' as 'success' | 'error' | 'info',
-  });
+
+  const setSnackbar = useBoundStore((state) => state.setSnackbar);
 
   // 클라이언트 메타 설정
   useClientMeta(
@@ -183,7 +180,6 @@ export default function JobDetailPage() {
         {
           onError: (error) => {
             setSnackbar({
-              isOpen: true,
               type: 'error',
               message: error.message || '알림 설정 중 오류가 발생했습니다.',
             });
@@ -228,7 +224,6 @@ export default function JobDetailPage() {
       {
         onError: (error) => {
           setSnackbar({
-            isOpen: true,
             type: 'error',
             message: error.message || '조각 상태 업데이트 중 오류 발생',
           });
@@ -266,7 +261,6 @@ export default function JobDetailPage() {
       {
         onError: (error) => {
           setSnackbar({
-            isOpen: true,
             type: 'error',
             message: error.message || '조각 내용 수정 중 오류가 발생했습니다.',
           });
@@ -291,7 +285,6 @@ export default function JobDetailPage() {
       {
         onError: (error) => {
           setSnackbar({
-            isOpen: true,
             type: 'error',
             message: error.message || '조각 삭제 중 오류가 발생했습니다.',
           });
@@ -324,7 +317,6 @@ export default function JobDetailPage() {
       {
         onError: (error) => {
           setSnackbar({
-            isOpen: true,
             type: 'error',
             message: error.message || '조각 추가 중 오류가 발생했습니다.',
           });
@@ -347,7 +339,6 @@ export default function JobDetailPage() {
       },
       onError: (error) => {
         setSnackbar({
-          isOpen: true,
           message: error.message,
           type: 'error',
         });
@@ -361,7 +352,6 @@ export default function JobDetailPage() {
     if (jdDetail) {
       if (jdDetail.jdUrl === '') {
         setSnackbar({
-          isOpen: true,
           message: '저장된 채용공고 링크가 없습니다.',
           type: 'error',
         });
@@ -372,7 +362,7 @@ export default function JobDetailPage() {
   };
 
   const { handleJobEdit, handleMarkAsApplied, handleBookmarkToggle } =
-    useJobActions({ setSnackbar });
+    useJobActions();
 
   // 조각 완료 현황 계산
   const { completed, total } = useMemo(() => {
@@ -541,14 +531,6 @@ export default function JobDetailPage() {
         onClose={() => setShowNotificationModal(false)}
         onConfirm={handleNotificationConfirm}
         initialEnabled={jdDetail.alarmOn}
-      />
-
-      {/* Snackbar */}
-      <Snackbar
-        message={snackbar.message}
-        isOpen={snackbar.isOpen}
-        onClose={() => setSnackbar({ ...snackbar, isOpen: false })}
-        type={snackbar.type}
       />
     </>
   );

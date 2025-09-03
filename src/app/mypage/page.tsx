@@ -14,7 +14,6 @@ import Toggle from '@/components/common/Toggle';
 import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import Snackbar from '@/components/Snackbar';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
 import useProfileMutation from '@/hooks/mutations/useProfileMutation';
 import useProfileForm from '@/hooks/mypage/useProfileForm';
@@ -23,6 +22,7 @@ import { logout } from '@/lib/api/auth/authApi';
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
 import { tokenManager } from '@/lib/api/tokenManager';
 import { queryClient } from '@/lib/queryClient';
+import { useBoundStore } from '@/stores/useBoundStore';
 import { ProfileFormInput } from '@/types/profile';
 import trackEvent from '@/utils/trackEventGA';
 
@@ -36,22 +36,10 @@ export default function MyPage() {
     useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isWithDrawalModalOpen, setIsWithDrawalModalOpen] = useState(false);
-  const [snackbar, setSnackbar] = useState({
-    isOpen: false,
-    message: '',
-    type: 'success' as 'success' | 'error' | 'info',
-  });
+  const setSnackbar = useBoundStore((state) => state.setSnackbar);
 
-  const {
-    fields,
-    nickname,
-    email,
-    errors,
-    handleSubmit,
-    setValue,
-    reset,
-    control,
-  } = useProfileForm();
+  const { fields, nickname, email, errors, handleSubmit, reset } =
+    useProfileForm();
 
   const { data, isLoading } = useMyProfileQuery();
   const {
@@ -139,14 +127,12 @@ export default function MyPage() {
       {
         onError: (error) => {
           setSnackbar({
-            isOpen: true,
             message: error.message || '프로필 업데이트 중 오류가 발생했습니다.',
             type: 'error',
           });
         },
         onSuccess: () => {
           setSnackbar({
-            isOpen: true,
             message: '프로필이 업데이트되었습니다.',
             type: 'success',
           });
@@ -160,18 +146,16 @@ export default function MyPage() {
     toggleNotificationMutate(undefined, {
       onError: (error) => {
         setSnackbar({
-          isOpen: true,
           message: error.message || '알림 설정 중 오류가 발생했습니다.',
           type: 'error',
         });
       },
       onSuccess: () => {
         setSnackbar({
-          isOpen: true,
           message: newState
             ? '알림 기능이 켜졌습니다.'
             : '알림 기능이 해제되었습니다.',
-          type: 'success',
+          type: newState ? 'success' : 'info',
         });
       },
     });
@@ -308,13 +292,6 @@ export default function MyPage() {
           cancelText="아니요"
           confirmText="확인"
           highlightedText="탈퇴"
-        />
-
-        <Snackbar
-          message={snackbar.message}
-          isOpen={snackbar.isOpen}
-          onClose={() => setSnackbar({ ...snackbar, isOpen: false })}
-          type={snackbar.type}
         />
       </main>
       <Footer />
