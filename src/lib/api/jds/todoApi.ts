@@ -7,8 +7,31 @@ import {
 } from '@/types/jds';
 import throwIfNotOk from '@/utils/throwIfNotOk';
 
+// Todo 완료 상태 토글
+export async function toggleCompleteTodo(
+  jdId: number,
+  todoId: number,
+  updatedDoneState: boolean
+) {
+  const response = await fetchWithAuth(
+    `/api/jds/${jdId}/to-do-lists/${todoId}/isDone`,
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ is_done: updatedDoneState }),
+    }
+  );
+  await throwIfNotOk(
+    response,
+    '할 일을 완료 상태로 변경하는 중 오류가 발생했습니다.'
+  );
+  const data: ApiResponse<TodoItem> = await response.json();
+  return data.data;
+}
+
 // Todo 상태 수정
-// Todo: 완료상태만 업데이트하는 api와 분리 (백엔드 작업 필요)
 export async function updateTodo(
   jdId: number,
   todoId: number,
