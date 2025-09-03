@@ -22,6 +22,7 @@ import useJobActions from '@/hooks/job/useJobActions';
 import useDeleteJdMutation from '@/hooks/mutations/job/useDeleteJdMutation';
 import useCreateTodoMutation from '@/hooks/mutations/job_todolist/useCreateTodoMutation';
 import useDeleteTodoMutation from '@/hooks/mutations/job_todolist/useDeleteTodoMutation';
+import useToggleCompleteTodoMutation from '@/hooks/mutations/job_todolist/useToggleCompleteTodoMutation';
 import useUpdateTodoAlarmMutation from '@/hooks/mutations/job_todolist/useUpdateTodoAlarmMutation';
 import useUpdateTodoMutation from '@/hooks/mutations/job_todolist/useUpdateTodoMutation';
 import useJdQuery from '@/hooks/queries/useJdQuery';
@@ -87,6 +88,7 @@ export default function JobDetailPage() {
   const { deleteTodoMutate } = useDeleteTodoMutation();
   const { updateTodoMutate } = useUpdateTodoMutation();
   const { updateTodoAlarmMutate } = useUpdateTodoAlarmMutation();
+  const { toggleCompleteTodoMutate } = useToggleCompleteTodoMutation();
 
   const { data: jdData, isLoading: isJdLoading } = useJdQuery({
     jobId: Number(jdId),
@@ -209,23 +211,19 @@ export default function JobDetailPage() {
       todo_status: newStatus,
       jobId: todo.jdId,
     });
-
-    updateTodoMutate(
+    toggleCompleteTodoMutate(
       {
         jdId: todo.jdId,
         todoId: todo.checklist_id,
-        updateTodoItem: {
-          category: todo.category,
-          title: todo.title,
-          content: todo.content,
-          is_done: newStatus,
-        },
+        updatedDoneState: newStatus,
       },
       {
         onError: (error) => {
           setSnackbar({
             type: 'error',
-            message: error.message || '조각 상태 업데이트 중 오류 발생',
+            message:
+              error.message ||
+              '할 일을 완료 상태로 변경하는 중 오류가 발생했습니다.',
           });
         },
       }

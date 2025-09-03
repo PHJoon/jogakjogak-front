@@ -135,3 +135,40 @@
     min-height: auto;
   }
 }
+
+/* skeleton ui */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--n-200) 25%,
+    var(--n-300) 50%,
+    var(--n-200) 75%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 12px;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.backBtnLoading {
+  width: 28px;
+  height: 28px;
+}
+
+.inputLoading {
+  width: 100%;
+  height: 72px;
+}
+
+.buttonLoading {
+  width: 100%;
+  height: 64px;
+}

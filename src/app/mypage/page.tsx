@@ -28,6 +28,45 @@ import trackEvent from '@/utils/trackEventGA';
 
 import styles from './page.module.css';
 
+function MyPageLoading() {
+  return (
+    <>
+      <Header backgroundColor="white" showLogout={true} />
+      <main className={styles.main}>
+        <div className={styles.container}>
+          <div className={styles.profileForm}>
+            <div className={styles.titleWrapper}>
+              <div className={styles.backBtnLoading} />
+              <h1 className={styles.title}>마이페이지</h1>
+            </div>
+            <div className={styles.accountInfoSection}>
+              <h2 className={`${styles.subTitle}`}>로그인 정보</h2>
+              <div className={styles.inputGroup}>
+                <div
+                  className={`${styles.inputLoading} ${styles.skeleton}`}
+                ></div>
+                <div
+                  className={`${styles.inputLoading} ${styles.skeleton}`}
+                ></div>
+              </div>
+            </div>
+            <div className={`${styles.buttonLoading} ${styles.skeleton}`}></div>
+          </div>
+          <div className={styles.notificationSection}>
+            <h2 className={`${styles.subTitle}`}>이메일 알림 설정</h2>
+            <div className={`${styles.inputLoading} ${styles.skeleton}`}></div>
+          </div>
+          <div className={styles.dangerZone}>
+            <div className={styles.logout}>로그아웃</div>
+            <div className={styles.withdraw}>탈퇴하기</div>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </>
+  );
+}
+
 export default function MyPage() {
   const router = useRouter();
   const [isEmailNotificationEnabled, setIsEmailNotificationEnabled] =
@@ -162,7 +201,7 @@ export default function MyPage() {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <MyPageLoading />;
   }
 
   return (
