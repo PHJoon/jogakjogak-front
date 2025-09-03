@@ -1,0 +1,81 @@
+.snackbarStack {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.snackbar {
+  min-width: 335px;
+  width: auto;
+  height: 52px;
+  padding: 15px 16px 15px 18px;
+  border-radius: 10px;
+  border: 1px solid;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: var(--n-0);
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  transform: translateY(-100%);
+  opacity: 0;
+  transition:
+    transform 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
+}
+
+.snackbar.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.snackbar.hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.snackbar.success {
+  border: 1px solid var(--gr-1);
+}
+
+.snackbar.error {
+  border: 1px solid var(--red-1);
+}
+
+.snackbar.info {
+  border: 1px solid var(--primaryjogak-1);
+}
+
+.message {
+  font-family: var(--body-2-normal-bold-font-family);
+  font-size: var(--body-2-normal-bold-font-size);
+  font-style: var(--body-2-normal-bold-font-style);
+  font-weight: var(--body-2-normal-bold-font-weight);
+  letter-spacing: var(--body-2-normal-bold-letter-spacing);
+}
+
+.message.success {
+  color: var(--gr-4);
+}
+
+.message.error {
+  color: var(--red-3);
+}
+
+.message.info {
+  color: var(--primarymain-700);
+}
+
+.dismissButton {
+  all: unset;
+  font-family: var(--body-2-normal-medium-font-family);
+  font-size: var(--body-2-normal-medium-font-size);
+  font-style: var(--body-2-normal-medium-font-style);
+  font-weight: var(--body-2-normal-medium-font-weight);
+  letter-spacing: var(--body-2-normal-medium-letter-spacing);
+  color: var(--n-700);
+}
