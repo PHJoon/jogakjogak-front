@@ -45,7 +45,7 @@ export default function useJobActions() {
             message: data.applyAt
               ? '지원 완료되었습니다.'
               : '지원 취소되었습니다.',
-            type: 'success',
+            type: data.applyAt ? 'success' : 'info',
           });
         },
         onError: (error) => {
@@ -79,7 +79,7 @@ export default function useJobActions() {
               message: data.bookmark
                 ? '관심공고로 등록되었습니다.'
                 : '관심공고에서 제외되었습니다.',
-              type: 'success',
+              type: data.bookmark ? 'success' : 'info',
             });
           },
           onError: (error) => {

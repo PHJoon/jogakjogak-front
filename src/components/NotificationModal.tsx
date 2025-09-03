@@ -134,7 +134,7 @@ export default function NotificationModal({
               if (!isAgreed) {
                 setSnackbar({
                   message: '개인정보 처리 방침에 동의해주세요.',
-                  type: 'error',
+                  type: 'info',
                 });
                 return;
               }

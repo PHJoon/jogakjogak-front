@@ -155,7 +155,7 @@ export default function MyPage() {
           message: newState
             ? '알림 기능이 켜졌습니다.'
             : '알림 기능이 해제되었습니다.',
-          type: 'success',
+          type: newState ? 'success' : 'info',
         });
       },
     });
