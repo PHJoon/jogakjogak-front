@@ -7,6 +7,7 @@ export const ERROR_CODES = {
   TOKEN_REISSUE_FAILED: 'TOKEN_REISSUE_FAILED',
   NEXT_SERVER_ERROR: 'NEXT_SERVER_ERROR',
   REPLAY_REQUIRED: 'REPLAY_REQUIRED',
+  LOGOUT_COMPLETED: 'LOGOUT_COMPLETED',
 
   // Auth 관련
   NOT_FOUND_TOKEN: 'NOT_FOUND_TOKEN',
@@ -63,6 +64,7 @@ export const ERROR_MESSAGES = {
   NEXT_SERVER_ERROR:
     '일시적인 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
   REPLAY_REQUIRED: '세션이 끊겼습니다. 다시 시도해 주세요.',
+  LOGOUT_COMPLETED: '로그아웃 되었습니다.',
 
   // Auth 관련
   NOT_FOUND_TOKEN: '유효하지 않은 로그인 정보입니다. 다시 시도해 주세요.',

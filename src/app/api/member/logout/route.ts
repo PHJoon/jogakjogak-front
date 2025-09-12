@@ -63,6 +63,10 @@ export async function GET(request: NextRequest) {
     sameSite: 'none',
   });
 
+  if (process.env.NODE_ENV === 'development') {
+    nextResponse.cookies.delete('refresh');
+  }
+
   // 쿠키 토큰 삭제
   nextResponse.cookies.delete('access_token');
 
@@ -135,6 +139,10 @@ export async function POST(request: NextRequest) {
     httpOnly: true,
     sameSite: 'none',
   });
+
+  if (process.env.NODE_ENV === 'development') {
+    nextResponse.cookies.delete('refresh');
+  }
 
   // 쿠키 토큰 삭제
   nextResponse.cookies.delete('access_token');
