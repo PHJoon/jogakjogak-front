@@ -109,7 +109,8 @@ export async function POST(request: NextRequest) {
         },
         cache: 'no-store',
       });
-      nextResponse = NextResponse.json({}, { status: response.status });
+      const data = await response.json();
+      nextResponse = NextResponse.json(data, { status: response.status });
     } catch (error) {
       nextResponse = NextResponse.json(
         {
