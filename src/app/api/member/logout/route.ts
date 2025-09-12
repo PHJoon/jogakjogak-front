@@ -6,6 +6,7 @@ import { API_BASE_URL } from '@/lib/config';
 // 로그아웃 리다이렉트로 들어온 경우
 export async function GET(request: NextRequest) {
   let redirectParams = '';
+  let response: Response | null = null;
   const searchParams = request.nextUrl.searchParams;
   const errorCode = searchParams.get('error');
   const refreshToken = request.cookies.get('refresh')?.value ?? null;
@@ -17,7 +18,7 @@ export async function GET(request: NextRequest) {
   if (refreshToken) {
     try {
       // 백엔드 서버로 로그아웃 요청
-      const response = await fetch(`${API_BASE_URL}/member/logout`, {
+      response = await fetch(`${API_BASE_URL}/member/logout`, {
         method: 'POST',
         headers: {
           Cookie: `refresh=${refreshToken}`,
@@ -34,8 +35,6 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  console.log(redirectParams);
-
   const nextResponse = NextResponse.redirect(
     new URL(`/${redirectParams}`, request.url),
     {
@@ -43,8 +42,13 @@ export async function GET(request: NextRequest) {
     }
   );
 
+  // 새로운 리프레시 토큰 재설정
+  const setCookie = response?.headers.get('set-cookie');
+  if (setCookie) {
+    nextResponse.headers.set('set-cookie', setCookie);
+  }
+
   // 쿠키 토큰 삭제
-  nextResponse.cookies.delete('refresh');
   nextResponse.cookies.delete('access_token');
 
   // 클라이언트 캐시 제거하는 플래그
@@ -96,8 +100,13 @@ export async function POST(request: NextRequest) {
     }
   }
 
+  // 새로운 리프레시 토큰 재설정
+  const setCookie = response?.headers.get('set-cookie');
+  if (setCookie) {
+    nextResponse.headers.set('set-cookie', setCookie);
+  }
+
   // 쿠키 토큰 삭제
-  nextResponse.cookies.delete('refresh');
   nextResponse.cookies.delete('access_token');
 
   // 클라이언트 캐시 제거하는 플래그
