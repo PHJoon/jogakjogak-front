@@ -36,10 +36,22 @@ export function middleware(request: NextRequest) {
   }
 
   if (WITH_AUTH.some((path) => pathname.startsWith(path))) {
+    const nextResponse = NextResponse.redirect(
+      new URL(
+        `/api/auth/bootstrap?redirect=${encodeURIComponent(request.url)}`,
+        request.url
+      )
+    );
+
+    nextResponse.headers.append(
+      'Cache-Control',
+      'no-store, no-cache, must-revalidate'
+    );
+    nextResponse.headers.append('Pragma', 'no-cache');
+    nextResponse.headers.append('Expires', '0');
+
     if (!hasAccessToken) {
-      return NextResponse.redirect(
-        new URL(`/api/auth/bootstrap?redirect=${request.url}`, request.url)
-      );
+      return nextResponse;
     }
   }
 

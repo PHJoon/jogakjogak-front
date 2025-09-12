@@ -6,8 +6,10 @@ import { API_BASE_URL } from '@/lib/config';
 export async function GET(request: NextRequest) {
   try {
     const refreshToken = request.cookies.get('refresh')?.value;
-    const redirect =
-      request.nextUrl.searchParams.get('redirect') || '/dashboard';
+    const redirectParam = request.nextUrl.searchParams.get('redirect');
+    const redirectUrl = redirectParam
+      ? decodeURIComponent(redirectParam)
+      : '/dashboard';
 
     if (!refreshToken) {
       return NextResponse.redirect(
@@ -38,9 +40,12 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const nextResponse = NextResponse.redirect(new URL(redirect, request.url), {
-      status: 303,
-    });
+    const nextResponse = NextResponse.redirect(
+      new URL(redirectUrl, request.url),
+      {
+        status: 303,
+      }
+    );
 
     nextResponse.headers.append('Cache-Control', 'no-store');
 
