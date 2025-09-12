@@ -42,7 +42,11 @@ export async function POST(request: NextRequest) {
     // 새로운 리프레시 토큰 재설정
     const setCookie = response?.headers.get('set-cookie');
     if (setCookie) {
-      nextResponse.headers.set('set-cookie', setCookie);
+      // 쉼표로 연결된 다중 Set-Cookie를 안전하게 분리
+      const parts = setCookie.split(/,(?=\s*\w+=)/).map((s) => s.trim());
+      for (const c of parts) {
+        nextResponse.headers.append('set-cookie', c);
+      }
     }
 
     // 액세스 토큰 설정

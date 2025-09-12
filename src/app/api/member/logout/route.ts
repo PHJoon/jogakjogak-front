@@ -42,10 +42,23 @@ export async function GET(request: NextRequest) {
     }
   );
 
-  // 새로운 리프레시 토큰 재설정
+  // 서버에서 넘어온 만료된 리프레시 토큰 재설정
   const setCookie = response?.headers.get('set-cookie');
   if (setCookie) {
-    nextResponse.headers.set('set-cookie', setCookie);
+    // 쉼표로 연결된 다중 Set-Cookie를 안전하게 분리
+    const parts = setCookie.split(/,(?=\s*\w+=)/).map((s) => s.trim());
+    for (const c of parts) {
+      nextResponse.headers.append('set-cookie', c);
+    }
+  }
+
+  // 프로덕션용 도메인 변형도 같이 만료 처리 (브라우저가 무시하는 건 그냥 스킵됨)
+  for (const domain of [
+    '.jogakjogak.com',
+    'jogakjogak.com',
+    'www.jogakjogak.com',
+  ]) {
+    nextResponse.cookies.set('refresh', '', { path: '/', maxAge: 0, domain });
   }
 
   // 쿠키 토큰 삭제
@@ -100,10 +113,23 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // 새로운 리프레시 토큰 재설정
+  // 서버에서 넘어온 만료된 리프레시 토큰 재설정
   const setCookie = response?.headers.get('set-cookie');
   if (setCookie) {
-    nextResponse.headers.set('set-cookie', setCookie);
+    // 쉼표로 연결된 다중 Set-Cookie를 안전하게 분리
+    const parts = setCookie.split(/,(?=\s*\w+=)/).map((s) => s.trim());
+    for (const c of parts) {
+      nextResponse.headers.append('set-cookie', c);
+    }
+  }
+
+  // 프로덕션용 도메인 변형도 같이 만료 처리 (브라우저가 무시하는 건 그냥 스킵됨)
+  for (const domain of [
+    '.jogakjogak.com',
+    'jogakjogak.com',
+    'www.jogakjogak.com',
+  ]) {
+    nextResponse.cookies.set('refresh', '', { path: '/', maxAge: 0, domain });
   }
 
   // 쿠키 토큰 삭제
