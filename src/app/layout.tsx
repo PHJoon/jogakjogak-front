@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 
 import { GoogleAnalytics } from '@next/third-parties/google';
 import localFont from 'next/font/local';
-
 import './globals.css';
 
+import GlobalErrorRedirector from '@/components/GlobalErrorRedirector';
 import ScrollToTop from '@/components/ScrollToTop';
 import SnackbarStack from '@/components/SnackbarStack';
 import { ReactQueryProvider } from '@/lib/queryClient';
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -83,6 +83,7 @@ export default function RootLayout({
           {children}
           <ScrollToTop />
           <SnackbarStack />
+          <GlobalErrorRedirector />
         </ReactQueryProvider>
       </body>
       <GoogleAnalytics gaId={gaId ?? ''} />
