@@ -115,7 +115,7 @@ export default function MyPage() {
           type: 'success',
           message: '로그아웃 되었습니다.',
         });
-        router.replace('/');
+        // router.replace('/');
       });
   };
 
