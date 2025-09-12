@@ -1,9 +1,13 @@
+import { ERROR_CODES } from '@/constants/errorCode';
 import { HttpError } from '@/lib/HttpError';
+import { useBoundStore } from '@/stores/useBoundStore';
 
 export default function useResumeValidation(
   hasUnsavedChanges: boolean,
   showResumeErrorModal: (title: string, content: string) => void
 ) {
+  const setSnackbar = useBoundStore((state) => state.setSnackbar);
+
   const validateResume = (title: string, content: string): boolean => {
     if (!hasUnsavedChanges) {
       showResumeErrorModal(
@@ -38,6 +42,10 @@ export default function useResumeValidation(
 
   const handleError = (error: unknown) => {
     if (error instanceof HttpError) {
+      if (error.errorCode === ERROR_CODES.REPLAY_REQUIRED) {
+        return;
+      }
+
       if (error.status === 409) {
         showResumeErrorModal(
           '이력서 등록 오류',
@@ -46,10 +54,8 @@ export default function useResumeValidation(
         return;
       }
       showResumeErrorModal(
-        error.message ? '이력서 내용이 유효하지 않아요' : '이력서 등록 오류',
-        error.message
-          ? '반복된 내용이 있어 올바른 작성이 필요해요.'
-          : '이력서 등록 중 오류가 발생했습니다.'
+        '이력서 내용이 유효하지 않아요',
+        '반복된 내용이 있어 올바른 작성이 필요해요.'
       );
       return;
     }
