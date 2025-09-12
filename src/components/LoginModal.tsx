@@ -35,7 +35,9 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     });
 
     const apiUrl =
-      process.env.NEXT_PUBLIC_API_URL || 'https://api.jogakjogak.com';
+      process.env.NODE_ENV === 'development'
+        ? process.env.NEXT_PUBLIC_TEST_API_BASE_URL
+        : process.env.NEXT_PUBLIC_API_BASE_URL;
     window.location.href = `${apiUrl}/oauth2/authorization/kakao`;
   };
 
@@ -47,7 +49,9 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     });
 
     const apiUrl =
-      process.env.NEXT_PUBLIC_API_URL || 'https://api.jogakjogak.com';
+      process.env.NODE_ENV === 'development'
+        ? process.env.NEXT_PUBLIC_TEST_API_BASE_URL
+        : process.env.NEXT_PUBLIC_API_BASE_URL;
     window.location.href = `${apiUrl}/oauth2/authorization/google`;
   };
 

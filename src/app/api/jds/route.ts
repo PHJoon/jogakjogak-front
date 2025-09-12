@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { ERROR_CODES, ERROR_MESSAGES } from '@/constants/errorCode';
+import { API_BASE_URL } from '@/lib/config';
+
 export async function GET(request: NextRequest) {
   try {
-    // Authorization 헤더에서 토큰 추출
-    const authHeader = request.headers.get('authorization');
-    const accessToken = authHeader?.replace('Bearer ', '');
-
+    const accessToken = request.cookies.get('access_token')?.value ?? null;
     if (!accessToken) {
       return NextResponse.json(
-        { code: 401, message: 'Unauthorized' },
+        {
+          errorCode: ERROR_CODES.NO_ACCESS_TOKEN,
+          message: ERROR_MESSAGES.NO_ACCESS_TOKEN,
+        },
         { status: 401 }
       );
     }
@@ -30,34 +33,23 @@ export async function GET(request: NextRequest) {
     const queryString = queryParams.toString();
 
     // 백엔드 서버로 요청
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL || 'https://api.jogakjogak.com'}/jds?${queryString}`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const response = await fetch(`${API_BASE_URL}/jds?${queryString}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
 
     const data = await response.json();
-
-    if (!response.ok) {
-      return NextResponse.json(
-        {
-          code: response.status,
-          message: data.message || 'Failed to fetch jds',
-        },
-        { status: response.status }
-      );
-    }
-
-    return NextResponse.json(data);
+    return NextResponse.json(data, { status: response.status });
   } catch (error) {
-    console.error('JDs fetch error:', error);
+    console.error('Next server error [GET /api/jds]: ', error);
     return NextResponse.json(
-      { code: 500, message: 'Internal server error' },
+      {
+        errorCode: ERROR_CODES.NEXT_SERVER_ERROR,
+        message: ERROR_MESSAGES.NEXT_SERVER_ERROR,
+      },
       { status: 500 }
     );
   }

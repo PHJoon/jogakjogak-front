@@ -116,12 +116,6 @@ export default function JobItem({
           type: 'success',
         });
       },
-      onError: (error) => {
-        setSnackbar({
-          message: error.message,
-          type: 'error',
-        });
-      },
     });
   };
 

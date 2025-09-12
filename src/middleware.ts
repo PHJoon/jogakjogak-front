@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+const WITH_AUTH = ['/dashboard', '/resume', '/job', '/mypage'];
+
 export function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
+
+  const accessTokenFromCookie = request.cookies.get('access_token')?.value;
+  const refreshTokenFromCookie = request.cookies.get('refresh')?.value;
+  const hasAccessToken = !!accessTokenFromCookie;
+  const hasRefreshToken = !!refreshTokenFromCookie;
 
   // 루트 경로('/') 에서만 실행
   if (pathname === '/') {
@@ -11,24 +18,35 @@ export function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
-    // Authorization 헤더에서 토큰 확인
-    const authHeader = request.headers.get('authorization');
-    // 쿠키에서 토큰 확인 (브라우저에서는 보통 쿠키에 저장됨)
-    const tokenFromCookie = request.cookies.get('accessToken')?.value;
-    const tokenFromAuth = authHeader?.replace('Bearer ', '');
+    // error 파라미터 있어도 그대로 진행
+    const error = searchParams.get('error');
+    if (error) {
+      return NextResponse.next();
+    }
 
-    const hasToken = tokenFromCookie || tokenFromAuth;
+    // 파라미터 없는 경우 로그인 상태에 따라 리다이렉트
+    if (hasAccessToken) {
+      return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
+    if (hasRefreshToken) {
+      return NextResponse.redirect(
+        new URL('/api/auth/bootstrap?redirect=/dashboard', request.url)
+      );
+    }
+  }
 
-    // 로그인 상태이고 intro 파라미터가 없으면 대시보드로 리다이렉트
-    if (hasToken) {
-      const dashboardUrl = new URL('/dashboard', request.url);
-      return NextResponse.redirect(dashboardUrl);
+  if (WITH_AUTH.some((path) => pathname.startsWith(path))) {
+    if (!hasAccessToken) {
+      return NextResponse.redirect(
+        new URL(`/api/auth/bootstrap?redirect=${request.url}`, request.url)
+      );
     }
   }
 
   return NextResponse.next();
 }
 
+// 제외되는 경로 설정
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };

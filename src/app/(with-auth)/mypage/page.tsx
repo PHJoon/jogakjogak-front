@@ -12,16 +12,14 @@ import ErrorMessage from '@/components/common/ErrorMessage';
 import Input from '@/components/common/Input';
 import Toggle from '@/components/common/Toggle';
 import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
+import { ERROR_CODES, ERROR_MESSAGES } from '@/constants/errorCode';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
-import useProfileMutation from '@/hooks/mutations/useProfileMutation';
+import useProfileMutation from '@/hooks/mutations/mypage/useProfileMutation';
+import useWithdrawalMutation from '@/hooks/mutations/mypage/useWithdrawalMutation';
 import useProfileForm from '@/hooks/mypage/useProfileForm';
 import useMyProfileQuery from '@/hooks/queries/useMyProfileQuery';
-import { logout } from '@/lib/api/auth/authApi';
-import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
-import { tokenManager } from '@/lib/api/tokenManager';
-import { queryClient } from '@/lib/queryClient';
+import { logout, withdrawal } from '@/lib/api/auth/authApi';
+import { HttpError } from '@/lib/HttpError';
 import { useBoundStore } from '@/stores/useBoundStore';
 import { ProfileFormInput } from '@/types/profile';
 import trackEvent from '@/utils/trackEventGA';
@@ -30,40 +28,36 @@ import styles from './page.module.css';
 
 function MyPageLoading() {
   return (
-    <>
-      <Header backgroundColor="white" showLogout={true} />
-      <main className={styles.main}>
-        <div className={styles.container}>
-          <div className={styles.profileForm}>
-            <div className={styles.titleWrapper}>
-              <div className={styles.backBtnLoading} />
-              <h1 className={styles.title}>마이페이지</h1>
+    <main className={styles.main}>
+      <div className={styles.container}>
+        <div className={styles.profileForm}>
+          <div className={styles.titleWrapper}>
+            <div className={styles.backBtnLoading} />
+            <h1 className={styles.title}>마이페이지</h1>
+          </div>
+          <div className={styles.accountInfoSection}>
+            <h2 className={`${styles.subTitle}`}>로그인 정보</h2>
+            <div className={styles.inputGroup}>
+              <div
+                className={`${styles.inputLoading} ${styles.skeleton}`}
+              ></div>
+              <div
+                className={`${styles.inputLoading} ${styles.skeleton}`}
+              ></div>
             </div>
-            <div className={styles.accountInfoSection}>
-              <h2 className={`${styles.subTitle}`}>로그인 정보</h2>
-              <div className={styles.inputGroup}>
-                <div
-                  className={`${styles.inputLoading} ${styles.skeleton}`}
-                ></div>
-                <div
-                  className={`${styles.inputLoading} ${styles.skeleton}`}
-                ></div>
-              </div>
-            </div>
-            <div className={`${styles.buttonLoading} ${styles.skeleton}`}></div>
           </div>
-          <div className={styles.notificationSection}>
-            <h2 className={`${styles.subTitle}`}>이메일 알림 설정</h2>
-            <div className={`${styles.inputLoading} ${styles.skeleton}`}></div>
-          </div>
-          <div className={styles.dangerZone}>
-            <div className={styles.logout}>로그아웃</div>
-            <div className={styles.withdraw}>탈퇴하기</div>
-          </div>
+          <div className={`${styles.buttonLoading} ${styles.skeleton}`}></div>
         </div>
-      </main>
-      <Footer />
-    </>
+        <div className={styles.notificationSection}>
+          <h2 className={`${styles.subTitle}`}>이메일 알림 설정</h2>
+          <div className={`${styles.inputLoading} ${styles.skeleton}`}></div>
+        </div>
+        <div className={styles.dangerZone}>
+          <div className={styles.logout}>로그아웃</div>
+          <div className={styles.withdraw}>탈퇴하기</div>
+        </div>
+      </div>
+    </main>
   );
 }
 
@@ -92,6 +86,8 @@ export default function MyPage() {
     return nickname !== data?.nickname;
   };
 
+  const { withdrawalMutation } = useWithdrawalMutation();
+
   // 프로필 데이터 세팅
   useEffect(() => {
     if (data) {
@@ -104,19 +100,23 @@ export default function MyPage() {
   }, [data, reset]);
 
   // 로그아웃
-  const handleLogoutClick = () => {
+  const handleLogoutClick = async () => {
     trackEvent({
       event: GAEvent.Auth.LOGOUT,
       event_category: GACategory.AUTH,
     });
-    // 즉시 UI 업데이트를 위해 홈으로 이동
-    queryClient.clear();
-    window.location.href = '/';
 
-    // 백그라운드에서 로그아웃 처리
-    logout().catch((error) => {
-      console.error('Logout failed:', error);
-    });
+    await logout()
+      .catch((error) => {
+        console.warn('[logout failed]', (error as Error)?.message);
+      })
+      .finally(() => {
+        setSnackbar({
+          type: 'success',
+          message: '로그아웃 되었습니다.',
+        });
+        router.replace('/');
+      });
   };
 
   // 탈퇴하기
@@ -126,38 +126,22 @@ export default function MyPage() {
       event_category: GACategory.AUTH,
     });
 
-    try {
-      const accessToken = tokenManager.getAccessToken();
-
-      if (!accessToken) {
-        alert('로그인이 필요합니다.');
-        return;
-      }
-
-      const response = await fetchWithAuth('/api/member/withdrawal', {
-        method: 'DELETE',
-      });
-
-      if (response.ok) {
-        alert('탈퇴가 완료되었습니다.');
-        // 토큰 삭제하고 홈으로 이동
-        queryClient.clear();
-        tokenManager.removeAccessToken();
-        window.location.href = '/';
-      } else {
-        const errorData = await response.json();
-        alert(`탈퇴에 실패했습니다: ${errorData.message || '알 수 없는 오류'}`);
-      }
-    } catch (error) {
-      console.error('Withdrawal error:', error);
-      alert('탈퇴 중 오류가 발생했습니다.');
-    }
+    withdrawalMutation(undefined, {
+      onSuccess: () => {
+        setSnackbar({
+          type: 'success',
+          message: '탈퇴가 완료되었습니다.',
+        });
+        router.replace('/');
+      },
+    });
   };
 
   const handleBackClick = () => {
     router.back();
   };
 
+  // 닉네임 설정 폼 제출 핸들러
   const onSubmit: SubmitHandler<Omit<ProfileFormInput, 'email'>> = (data) => {
     updateProfileMutate(
       {
@@ -165,6 +149,12 @@ export default function MyPage() {
       },
       {
         onError: (error) => {
+          if (
+            error instanceof HttpError &&
+            error.errorCode === ERROR_CODES.REPLAY_REQUIRED
+          ) {
+            return;
+          }
           setSnackbar({
             message: error.message || '프로필 업데이트 중 오류가 발생했습니다.',
             type: 'error',
@@ -180,15 +170,10 @@ export default function MyPage() {
     );
   };
 
+  // 알림 설정 핸들러
   const handleToggleNotification = (newState: boolean) => {
     if (isToggleNotificationPending) return;
     toggleNotificationMutate(undefined, {
-      onError: (error) => {
-        setSnackbar({
-          message: error.message || '알림 설정 중 오류가 발생했습니다.',
-          type: 'error',
-        });
-      },
       onSuccess: () => {
         setSnackbar({
           message: newState
@@ -206,7 +191,6 @@ export default function MyPage() {
 
   return (
     <>
-      <Header backgroundColor="white" showLogout={true} />
       <main className={styles.main}>
         <div className={styles.container}>
           <div className={styles.titleWrapper}>
@@ -333,7 +317,6 @@ export default function MyPage() {
           highlightedText="탈퇴"
         />
       </main>
-      <Footer />
     </>
   );
 }

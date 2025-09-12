@@ -2,34 +2,32 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 import userIcon from '@/assets/images/ic_user.svg';
 import logo from '@/assets/images/logo.svg';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
+import useSession from '@/hooks/useSession';
 import trackEvent from '@/utils/trackEventGA';
 
 import styles from './Header.module.css';
 import LoginModal from './LoginModal';
 import SurveyBanner from './SurveyBanner';
 
-interface HeaderProps {
-  backgroundColor?: 'transparent' | 'white';
-  showLogout?: boolean;
-  landingPage?: boolean;
-}
-
-export default function Header({
-  backgroundColor = 'transparent',
-  showLogout = false,
-  landingPage = false,
-}: HeaderProps) {
+export default function Header() {
   const router = useRouter();
+  const pathname = usePathname();
+  const isLandingPage = pathname === '/';
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [headerBackgroundColor, setHeaderBackgroundColor] = useState<
     'transparent' | 'white'
-  >(backgroundColor);
+  >('white');
+  const { isLoggedIn, refetch } = useSession();
+
+  useEffect(() => {
+    refetch();
+  }, [isLandingPage, refetch]);
 
   const handleLoginClick = () => {
     setIsLoginModalOpen(true);
@@ -47,8 +45,16 @@ export default function Header({
     router.push('/mypage');
   };
 
+  // 랜딩페이지에서만 배경 투명하게 초기화
   useEffect(() => {
-    if (!landingPage) return;
+    if (isLandingPage) {
+      setHeaderBackgroundColor('transparent');
+    }
+  }, [isLandingPage]);
+
+  // 랜딩페이지에서만 헤더 스크롤 시 배경 투명 -> 화이트로 변경
+  useEffect(() => {
+    if (!isLandingPage) return;
 
     const scrollHandler = () => {
       if (window.scrollY > 64) {
@@ -60,16 +66,16 @@ export default function Header({
 
     window.addEventListener('scroll', scrollHandler);
     return () => window.removeEventListener('scroll', scrollHandler);
-  }, [landingPage]);
+  }, [isLandingPage]);
 
   return (
     <>
       <header
         className={`${styles.header} ${
           headerBackgroundColor === 'white' ? styles.whiteBackground : ''
-        } ${landingPage ? styles.landingPage : ''}`}
+        } ${isLandingPage ? styles.landingPage : ''}`}
       >
-        <Link href={showLogout ? '/dashboard' : '/'} className={styles.logo}>
+        <Link href={isLoggedIn ? '/dashboard' : '/'} className={styles.logo}>
           <Image
             src={logo}
             alt="조각조각 로고"
@@ -78,7 +84,7 @@ export default function Header({
             priority
           />
         </Link>
-        {showLogout ? (
+        {isLoggedIn ? (
           <button className={styles.myPageButton} onClick={handleMyPageClick}>
             <Image src={userIcon} alt="마이페이지" width={20} height={20} />
             <span>마이</span>
@@ -91,7 +97,7 @@ export default function Header({
       </header>
 
       {/* 설문조사 배너 */}
-      {!landingPage && <SurveyBanner />}
+      {!isLandingPage && <SurveyBanner />}
       <LoginModal isOpen={isLoginModalOpen} onClose={handleCloseModal} />
     </>
   );

@@ -3,15 +3,12 @@ import Image from 'next/image';
 import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
 import bookmarkIcon from '@/assets/images/ic_bookmark.svg';
 import moreIcon from '@/assets/images/ic_more.svg';
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
 
 import styles from './JobDetailLoading.module.css';
 
 export default function JobDetailLoading() {
   return (
     <>
-      <Header backgroundColor="white" showLogout={true} />
       <main className={styles.main}>
         <div className={`${styles.header} ${styles['skeleton--header']}`}>
           <div className={styles.leftSection}>
@@ -70,7 +67,6 @@ export default function JobDetailLoading() {
           ></div>
         </div>
       </main>
-      <Footer />
     </>
   );
 }

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation';
-import { Dispatch, SetStateAction, useCallback } from 'react';
+import { useCallback } from 'react';
 
 import { GACategory, GAEvent } from '@/constants/gaEvent';
 import { useBoundStore } from '@/stores/useBoundStore';
@@ -48,12 +48,6 @@ export default function useJobActions() {
             type: data.applyAt ? 'success' : 'info',
           });
         },
-        onError: (error) => {
-          setSnackbar({
-            message: error.message,
-            type: 'error',
-          });
-        },
       });
     },
     [applyMutate, setSnackbar]
@@ -80,12 +74,6 @@ export default function useJobActions() {
                 ? '관심공고로 등록되었습니다.'
                 : '관심공고에서 제외되었습니다.',
               type: data.bookmark ? 'success' : 'info',
-            });
-          },
-          onError: (error) => {
-            setSnackbar({
-              message: error.message,
-              type: 'error',
             });
           },
         }

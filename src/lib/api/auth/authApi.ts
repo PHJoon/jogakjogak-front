@@ -1,54 +1,25 @@
-import { tokenManager } from '@/lib/api/tokenManager';
+import throwIfNotOk from '@/utils/throwIfNotOk';
 
-// 토큰 재발급 함수
-export async function reissueToken(): Promise<boolean> {
-  try {
-    const refreshToken = await tokenManager.getRefreshToken();
+import { fetchWithAuth } from '../fetchWithAuth';
 
-    const response = await fetch('/api/member/reissue', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({
-        refresh_token: refreshToken,
-      }),
-    });
+// 로그아웃
+export async function logout() {
+  const response = await fetch('/api/member/logout', {
+    method: 'POST',
+    credentials: 'include',
+  });
 
-    const data = await response.json();
-
-    if (data.code === 200 && data.data?.access_token) {
-      tokenManager.setAccessToken(data.data.access_token);
-      return true;
-    }
-
-    return false;
-  } catch (error) {
-    console.error('Token reissue failed:', error);
-    return false;
-  }
+  await throwIfNotOk(response, 'Logout failed');
+  const data = await response.json();
+  return data;
 }
 
-// 로그아웃 함수
-export async function logout() {
-  // 즉시 토큰 제거
-  tokenManager.removeAccessToken();
-
-  try {
-    const refreshToken = await tokenManager.getRefreshToken();
-
-    if (refreshToken) {
-      await fetch('/api/member/logout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ refresh_token: refreshToken }),
-      });
-    }
-  } catch (error) {
-    console.error('Logout error:', error);
-  }
+// 탈퇴하기
+export async function withdrawal() {
+  const response = await fetchWithAuth('/api/member/withdrawal', {
+    method: 'DELETE',
+  });
+  await throwIfNotOk(response, '회원 탈퇴 중에 오류가 발생했습니다.');
+  const data = await response.json();
+  return data;
 }

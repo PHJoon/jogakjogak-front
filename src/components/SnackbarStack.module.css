@@ -20,6 +20,7 @@
   background-color: var(--n-0);
   display: flex;
   justify-content: space-between;
+  gap: 20px;
   cursor: pointer;
   transform: translateY(-100%);
   opacity: 0;

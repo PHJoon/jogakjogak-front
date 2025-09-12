@@ -1,6 +1,6 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, Suspense, useState } from 'react';
 
 import section1 from '@/assets/images/section1.png';
@@ -12,69 +12,57 @@ import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import LoginModal from '@/components/LoginModal';
-import { tokenManager } from '@/lib/api/tokenManager';
+import { ERROR_MESSAGES } from '@/constants/errorCode';
+import useSession from '@/hooks/useSession';
+import { queryClient } from '@/lib/queryClient';
+import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './page.module.css';
 
 function HomeContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-
-  useEffect(() => {
-    // 로그인 상태 확인
-    const checkAuth = () => {
-      const token = tokenManager.getAccessToken();
-
-      // 기존 토큰이 있지만 쿠키에 없는 경우 마이그레이션
-      if (token && !document.cookie.includes('accessToken=')) {
-        tokenManager.setAccessToken(token); // 쿠키에도 저장
-      }
-
-      setIsAuthenticated(!!token);
-    };
-
-    checkAuth();
-
-    // 토큰 변경 시 리스너 등록 (로그아웃 시 대응)
-    window.addEventListener('storage', checkAuth);
-    return () => window.removeEventListener('storage', checkAuth);
-  }, []);
+  const setSnackbar = useBoundStore((state) => state.setSnackbar);
+  const { isLoggedIn } = useSession();
 
   useEffect(() => {
     const error = searchParams.get('error');
-    if (error) {
-      let message = '';
-      switch (error) {
-        case 'no_code':
-          message = '인증 코드를 받지 못했습니다.';
-          break;
-        case 'login_failed':
-          message = '로그인에 실패했습니다. 다시 시도해 주세요.';
-          break;
-        default:
-          message = '오류가 발생했습니다.';
-      }
+    if (!error) return;
+    const message =
+      ERROR_MESSAGES[error as keyof typeof ERROR_MESSAGES] ||
+      '알 수 없는 오류가 발생했습니다.';
+    setSnackbar({ type: 'error', message });
 
-      // 에러 메시지를 사용자에게 표시 (추후 토스트나 모달로 개선 가능)
-      console.error('Login error:', message);
+    // URL에서 에러 파라미터 제거
+    router.replace('/');
+  }, [searchParams, setSnackbar, router]);
 
-      // URL에서 에러 파라미터 제거
-      window.history.replaceState({}, '', '/');
+  // 로그아웃, 회원탈퇴 시 쿼리 캐시 제거
+  useEffect(() => {
+    const hasCleanupCookie = document.cookie
+      .split(';')
+      .map((c) => c.trim())
+      .some((c) => c.startsWith('clear_cache='));
+
+    if (hasCleanupCookie) {
+      queryClient.clear();
+      document.cookie = 'clear_cache=; Max-Age=0; path=/; SameSite=Lax; Secure';
     }
-  }, [searchParams]);
-
-  // 로딩 중인 경우만 처리 (리다이렉트는 middleware에서 처리)
-  if (isAuthenticated === null) {
-    return null; // 로딩 중
-  }
+  }, []);
 
   return (
     <div className={styles.container}>
       <Background />
-      <Header showLogout={!!isAuthenticated} landingPage={true} />
-
-      <HeroSection onLoginClick={() => setIsLoginModalOpen(true)} />
+      <Header />
+      <HeroSection
+        onCtaButtonClick={() => {
+          if (isLoggedIn) {
+            return router.push('/dashboard');
+          }
+          setIsLoginModalOpen(true);
+        }}
+      />
 
       <FeatureSection
         image={section1}

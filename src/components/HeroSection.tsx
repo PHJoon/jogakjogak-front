@@ -1,38 +1,12 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
-
-import { tokenManager } from '@/lib/api/tokenManager';
-
 import styles from './HeroSection.module.css';
 
 interface HeroSectionProps {
-  onLoginClick?: () => void;
+  onCtaButtonClick?: () => void;
 }
 
-export default function HeroSection({ onLoginClick }: HeroSectionProps) {
-  const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const checkAuth = () => {
-      const token = tokenManager.getAccessToken();
-      setIsAuthenticated(!!token);
-    };
-
-    checkAuth();
-    window.addEventListener('storage', checkAuth);
-    return () => window.removeEventListener('storage', checkAuth);
-  }, []);
-
-  const handleCtaClick = () => {
-    if (isAuthenticated) {
-      router.push('/dashboard');
-    } else {
-      onLoginClick?.();
-    }
-  };
+export default function HeroSection({ onCtaButtonClick }: HeroSectionProps) {
   return (
     <section className={styles.hero}>
       <div className={styles.badge}>
@@ -45,7 +19,7 @@ export default function HeroSection({ onLoginClick }: HeroSectionProps) {
       <p className={styles.description}>
         AI가 함께하는 나의 취업 성공 투두 리스트
       </p>
-      <button className={styles.ctaButton} onClick={handleCtaClick}>
+      <button className={styles.ctaButton} onClick={onCtaButtonClick}>
         지금 취업 성공하기
       </button>
     </section>

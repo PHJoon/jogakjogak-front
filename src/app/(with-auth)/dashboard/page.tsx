@@ -7,14 +7,11 @@ import JobItem from '@/components/dashboard/JobItem';
 import JobItemAdd from '@/components/dashboard/JobItemAdd';
 import ResumeRegistration from '@/components/dashboard/ResumeRegistration';
 import SortDropdown from '@/components/dashboard/SortDropdown';
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
 import NoResumeModal from '@/components/NoResumeModal';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
 import useJdsQuery from '@/hooks/queries/useJdsQuery';
 import useClientMeta from '@/hooks/useClientMeta';
 import { useQueryParams } from '@/hooks/useQueryParams';
-import { tokenManager } from '@/lib/api/tokenManager';
 import { useBoundStore } from '@/stores/useBoundStore';
 import { JobDescription, Sort } from '@/types/jds';
 import trackEvent from '@/utils/trackEventGA';
@@ -23,30 +20,23 @@ import styles from './page.module.css';
 
 function LoadingSkeleton() {
   return (
-    <>
-      <Header backgroundColor="white" showLogout={true} />
-      <main className={styles.main}>
-        <div className={styles.containerLoading}>
-          <div className={`${styles.skeleton} ${styles.resumeLoading}`} />
-          <div
-            className={`${styles.skeleton} ${styles.sortContainerLoading}`}
-          />
-          <div className={styles.jobSectionLoading}>
-            <JobItemAdd />
-            <div className={`${styles.skeleton} ${styles.jobLoading}`} />
-            <div className={`${styles.skeleton} ${styles.jobLoading}`} />
-            <div className={`${styles.skeleton} ${styles.jobLoading}`} />
-          </div>
+    <main className={styles.main}>
+      <div className={styles.containerLoading}>
+        <div className={`${styles.skeleton} ${styles.resumeLoading}`} />
+        <div className={`${styles.skeleton} ${styles.sortContainerLoading}`} />
+        <div className={styles.jobSectionLoading}>
+          <JobItemAdd />
+          <div className={`${styles.skeleton} ${styles.jobLoading}`} />
+          <div className={`${styles.skeleton} ${styles.jobLoading}`} />
+          <div className={`${styles.skeleton} ${styles.jobLoading}`} />
         </div>
-      </main>
-      <Footer />
-    </>
+      </div>
+    </main>
   );
 }
 
 function DashboardContent() {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [jds, setJds] = useState<JobDescription[]>([]);
   const [showNoResumeModal, setShowNoResumeModal] = useState(false);
 
@@ -74,7 +64,6 @@ function DashboardContent() {
     isLast: false,
   });
 
-  const resume = useBoundStore((state) => state.resume);
   const setResume = useBoundStore((state) => state.setResume);
 
   // 클라이언트 메타 설정
@@ -84,39 +73,16 @@ function DashboardContent() {
   );
 
   useEffect(() => {
-    // 로그인 상태 확인
-    const checkAuth = () => {
-      const token = tokenManager.getAccessToken();
-      setIsAuthenticated(!!token);
-    };
-    checkAuth();
-
-    // 토큰 변경 시 리스너 등록 (로그아웃 시 대응)
-    window.addEventListener('storage', checkAuth);
-    return () => window.removeEventListener('storage', checkAuth);
-  }, []);
-
-  useEffect(() => {
-    if (isAuthenticated === false) {
-      tokenManager.removeAccessToken();
-      router.push('/');
-    }
-  }, [isAuthenticated, router]);
-
-  // 로그인 상태일 때 데이터 불러오기
-  useEffect(() => {
-    if (isAuthenticated) {
-      if (data) {
-        if (!data.resume) {
-          setShowNoResumeModal(true);
-          return;
-        }
-        setResume(data.resume);
-        setJds(data.jds);
-        setPageInfo(data.pageInfo);
+    if (data) {
+      if (!data.resume) {
+        setShowNoResumeModal(true);
+        return;
       }
+      setResume(data.resume);
+      setJds(data.jds);
+      setPageInfo(data.pageInfo);
     }
-  }, [isAuthenticated, data, setResume]);
+  }, [data, setResume]);
 
   const handleResumeRegisterClick = () => {
     trackEvent({
@@ -128,17 +94,12 @@ function DashboardContent() {
     router.push('/resume/create');
   };
 
-  if (!isAuthenticated) {
-    return null;
-  }
-
-  if (isAuthenticated === null || isLoading || paginationPending) {
+  if (isLoading || paginationPending) {
     return <LoadingSkeleton />;
   }
 
   return (
     <>
-      <Header backgroundColor="white" showLogout={true} />
       <main className={styles.main}>
         <div className={styles.container}>
           <ResumeRegistration />
@@ -173,7 +134,6 @@ function DashboardContent() {
           </div>
         </div>
       </main>
-      <Footer />
 
       <NoResumeModal
         isOpen={showNoResumeModal}

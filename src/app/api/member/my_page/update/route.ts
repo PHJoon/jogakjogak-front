@@ -1,55 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { ERROR_CODES, ERROR_MESSAGES } from '@/constants/errorCode';
+import { API_BASE_URL } from '@/lib/config';
+
 export async function PATCH(request: NextRequest) {
   try {
-    // Authorization 헤더에서 토큰 추출
-    const authHeader = request.headers.get('authorization');
-    const accessToken = authHeader?.replace('Bearer ', '');
-
+    const accessToken = request.cookies.get('access_token')?.value ?? null;
     if (!accessToken) {
       return NextResponse.json(
-        { code: 401, message: 'Unauthorized' },
+        {
+          errorCode: ERROR_CODES.NO_ACCESS_TOKEN,
+          message: ERROR_MESSAGES.NO_ACCESS_TOKEN,
+        },
         { status: 401 }
       );
     }
-
-    const requestBody = await request.json();
+    const body = await request.json();
 
     // 백엔드 서버로 요청
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL || 'https://api.jogakjogak.com'}/member/my-page/update`,
-      {
-        method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
-      }
-    );
+    const response = await fetch(`${API_BASE_URL}/member/my-page/update`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
 
-    let data;
-    try {
-      data = await response.json();
-    } catch (error) {
-      data = null;
-    }
-
-    if (!response.ok) {
-      return NextResponse.json(
-        data || {
-          code: response.status,
-          message: 'UnExpected error response',
-        },
-        { status: response.status }
-      );
-    }
-
+    const data = await response.json();
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
-    console.error('member my-page fetch error:', error);
+    console.error(
+      'Next server error [PATCH /api/member/my_page/update]: ',
+      error
+    );
     return NextResponse.json(
-      { code: 500, message: 'Internal server error' },
+      {
+        errorCode: ERROR_CODES.NEXT_SERVER_ERROR,
+        message: ERROR_MESSAGES.NEXT_SERVER_ERROR,
+      },
       { status: 500 }
     );
   }
