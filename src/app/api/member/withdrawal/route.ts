@@ -59,8 +59,16 @@ export async function DELETE(request: NextRequest) {
     'jogakjogak.com',
     'www.jogakjogak.com',
   ]) {
-    nextResponse.cookies.set('refresh', '', { path: '/', maxAge: 0, domain });
+    nextResponse.cookies.set('refresh', '', {
+      path: '/',
+      maxAge: 0,
+      domain,
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      sameSite: 'none',
+    });
   }
+  nextResponse.cookies.delete('refresh');
 
   // 쿠키 토큰 삭제
   nextResponse.cookies.delete('access_token');

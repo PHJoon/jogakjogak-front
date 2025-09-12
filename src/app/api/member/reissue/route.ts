@@ -39,6 +39,8 @@ export async function POST(request: NextRequest) {
 
     const nextResponse = NextResponse.json(data, { status: response.status });
 
+    nextResponse.headers.append('Cache-Control', 'no-store');
+
     // 새로운 리프레시 토큰 재설정
     const setCookie = response?.headers.get('set-cookie');
     if (setCookie) {

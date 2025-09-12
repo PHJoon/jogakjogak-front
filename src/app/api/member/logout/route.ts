@@ -25,9 +25,8 @@ export async function GET(request: NextRequest) {
         },
         cache: 'no-store',
       });
-      const data = await response.json();
       if (!response.ok) {
-        redirectParams = `?error=${data?.message || ERROR_CODES.INVALID_REFRESH_TOKEN}`;
+        redirectParams = `?error=${ERROR_CODES.INVALID_REFRESH_TOKEN}`;
       }
     } catch (error: unknown) {
       console.error('Logout error:', error);
@@ -41,6 +40,8 @@ export async function GET(request: NextRequest) {
       status: 303,
     }
   );
+
+  nextResponse.headers.append('Cache-Control', 'no-store');
 
   // 서버에서 넘어온 만료된 리프레시 토큰 재설정
   const setCookie = response?.headers.get('set-cookie');
@@ -58,8 +59,16 @@ export async function GET(request: NextRequest) {
     'jogakjogak.com',
     'www.jogakjogak.com',
   ]) {
-    nextResponse.cookies.set('refresh', '', { path: '/', maxAge: 0, domain });
+    nextResponse.cookies.set('refresh', '', {
+      path: '/',
+      maxAge: 0,
+      domain,
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      sameSite: 'none',
+    });
   }
+  nextResponse.cookies.delete('refresh');
 
   // 쿠키 토큰 삭제
   nextResponse.cookies.delete('access_token');
@@ -100,8 +109,7 @@ export async function POST(request: NextRequest) {
         },
         cache: 'no-store',
       });
-      const data = await response.json();
-      nextResponse = NextResponse.json(data, { status: response.status });
+      nextResponse = NextResponse.json({}, { status: response.status });
     } catch (error) {
       nextResponse = NextResponse.json(
         {
@@ -112,6 +120,8 @@ export async function POST(request: NextRequest) {
       );
     }
   }
+
+  nextResponse.headers.append('Cache-Control', 'no-store');
 
   // 서버에서 넘어온 만료된 리프레시 토큰 재설정
   const setCookie = response?.headers.get('set-cookie');
@@ -129,8 +139,16 @@ export async function POST(request: NextRequest) {
     'jogakjogak.com',
     'www.jogakjogak.com',
   ]) {
-    nextResponse.cookies.set('refresh', '', { path: '/', maxAge: 0, domain });
+    nextResponse.cookies.set('refresh', '', {
+      path: '/',
+      maxAge: 0,
+      domain,
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      sameSite: 'none',
+    });
   }
+  nextResponse.cookies.delete('refresh');
 
   // 쿠키 토큰 삭제
   nextResponse.cookies.delete('access_token');
