@@ -12,13 +12,12 @@ import ErrorMessage from '@/components/common/ErrorMessage';
 import Input from '@/components/common/Input';
 import Toggle from '@/components/common/Toggle';
 import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
-import { ERROR_CODES, ERROR_MESSAGES } from '@/constants/errorCode';
+import { ERROR_CODES } from '@/constants/errorCode';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
 import useProfileMutation from '@/hooks/mutations/mypage/useProfileMutation';
 import useWithdrawalMutation from '@/hooks/mutations/mypage/useWithdrawalMutation';
 import useProfileForm from '@/hooks/mypage/useProfileForm';
 import useMyProfileQuery from '@/hooks/queries/useMyProfileQuery';
-import { logout, withdrawal } from '@/lib/api/auth/authApi';
 import { HttpError } from '@/lib/HttpError';
 import { useBoundStore } from '@/stores/useBoundStore';
 import { ProfileFormInput } from '@/types/profile';
@@ -106,17 +105,7 @@ export default function MyPage() {
       event_category: GACategory.AUTH,
     });
 
-    await logout()
-      .catch((error) => {
-        console.warn('[logout failed]', (error as Error)?.message);
-      })
-      .finally(() => {
-        setSnackbar({
-          type: 'success',
-          message: '로그아웃 되었습니다.',
-        });
-        router.replace('/');
-      });
+    window.location.href = `/api/member/logout?error=${ERROR_CODES.LOGOUT_COMPLETED}`;
   };
 
   // 탈퇴하기

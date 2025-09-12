@@ -62,6 +62,10 @@ export async function DELETE(request: NextRequest) {
     sameSite: 'none',
   });
 
+  if (process.env.NODE_ENV === 'development') {
+    nextResponse.cookies.delete('refresh');
+  }
+
   // 쿠키 토큰 삭제
   nextResponse.cookies.delete('access_token');
 
