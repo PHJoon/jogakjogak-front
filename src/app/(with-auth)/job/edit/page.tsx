@@ -2,11 +2,9 @@
 
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect } from 'react';
 
 import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
 import FormContentLoading from '@/components/job/form/FormContentLoading';
 import JobPostingForm from '@/components/job/form/JobPostingForm';
 import useUpdateJdMutation from '@/hooks/mutations/job/useUpdateJdMutation';
@@ -40,12 +38,6 @@ function JobEditPageContent() {
           });
           router.replace(`/job/${jobId}`);
         },
-        onError: (error) => {
-          setSnackbar({
-            message: error.message || '채용공고 수정 중 오류가 발생했습니다.',
-            type: 'error',
-          });
-        },
       }
     );
   };
@@ -69,7 +61,6 @@ function JobEditPageContent() {
 
   return (
     <>
-      <Header backgroundColor="white" showLogout={true} />
       <main className={styles.main}>
         <div className={styles.container}>
           <div className={styles.header}>
@@ -104,7 +95,6 @@ function JobEditPageContent() {
           )}
         </div>
       </main>
-      <Footer />
     </>
   );
 }

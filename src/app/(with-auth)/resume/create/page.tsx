@@ -4,8 +4,6 @@ import { useRouter } from 'next/navigation';
 import { useEffect, Suspense } from 'react';
 
 import { ConfirmModal } from '@/components/ConfirmModal';
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
 import ResumeFormHeader from '@/components/resume/ResumeFormHeader';
 import ResumeFormInput from '@/components/resume/ResumeFormInput';
 import ResumeHelper from '@/components/resume/ResumeHelper';
@@ -15,12 +13,14 @@ import useResumeForm from '@/hooks/resume/useResumeForm';
 import useResumeModal from '@/hooks/resume/useResumeModal';
 import useResumeValidation from '@/hooks/resume/useResumeValidation';
 import useClientMeta from '@/hooks/useClientMeta';
+import { useBoundStore } from '@/stores/useBoundStore';
 import trackEvent from '@/utils/trackEventGA';
 
 import styles from './page.module.css';
 
 function ResumeCreateContent() {
   const router = useRouter();
+  const setSnackbar = useBoundStore((state) => state.setSnackbar);
 
   const {
     resumeId,
@@ -73,7 +73,10 @@ function ResumeCreateContent() {
         { resumeId, title: resumeTitle, content: resumeContent },
         {
           onSuccess: () => {
-            alert(`이력서가 수정되었습니다.`);
+            setSnackbar({
+              message: '이력서가 수정되었습니다.',
+              type: 'success',
+            });
             router.replace('/dashboard');
           },
           onError: handleError,
@@ -85,7 +88,10 @@ function ResumeCreateContent() {
         { title: resumeTitle, content: resumeContent },
         {
           onSuccess: () => {
-            alert(`이력서가 등록되었습니다.`);
+            setSnackbar({
+              message: '이력서가 등록되었습니다.',
+              type: 'success',
+            });
             router.replace('/dashboard');
           },
           onError: handleError,
@@ -117,7 +123,6 @@ function ResumeCreateContent() {
 
   return (
     <>
-      <Header backgroundColor="white" showLogout={true} />
       <main className={styles.main}>
         <div className={styles.container}>
           <ResumeFormHeader
@@ -161,7 +166,6 @@ function ResumeCreateContent() {
           </div>
         </div>
       </main>
-      <Footer />
 
       <ConfirmModal
         isOpen={isResumeErrorModalOpen}

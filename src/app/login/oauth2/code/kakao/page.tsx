@@ -1,63 +1,19 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect, Suspense } from 'react';
-
-import { tokenManager } from '@/lib/api/tokenManager';
+import { useEffect, Suspense, useRef } from 'react';
 
 import styles from './page.module.css';
 
 function KakaoCallbackContent() {
   const router = useRouter();
+  const ranRef = useRef(false);
 
   useEffect(() => {
-    const handleCallback = async () => {
-      try {
-        // API를 통해 쿠키에서 refresh token 확인
-        const getRefreshTokenResponse = await fetch(
-          '/api/auth/get-refresh-token',
-          {
-            credentials: 'include',
-          }
-        );
-
-        const refreshTokenData = await getRefreshTokenResponse.json();
-
-        if (!refreshTokenData.refresh_token) {
-          router.push('/?error=login_failed');
-          return;
-        }
-
-        const refreshToken = refreshTokenData.refresh_token;
-
-        // refresh_token으로 access_token 받기
-        const response = await fetch('/api/member/reissue', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
-          body: JSON.stringify({
-            refresh_token: refreshToken,
-          }),
-        });
-
-        const data = await response.json();
-
-        if (data.code === 200 && data.data?.access_token) {
-          // access_token을 localStorage에 저장
-          tokenManager.setAccessToken(data.data.access_token);
-          router.push('/dashboard');
-        } else {
-          throw new Error(data.message || 'Failed to get tokens');
-        }
-      } catch (error) {
-        console.error('Kakao callback error:', error);
-        router.push('/?error=login_failed');
-      }
-    };
-
-    handleCallback();
+    // Strict mode에서 두 번 실행 방지
+    if (ranRef.current) return;
+    ranRef.current = true;
+    router.replace('/api/auth/bootstrap?redirect=/dashboard');
   }, [router]);
 
   return (

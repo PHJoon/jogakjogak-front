@@ -5,20 +5,16 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
 import JobPostingForm from '@/components/job/form/JobPostingForm';
 import LoadingModal from '@/components/LoadingModal';
 import useCreateJdMutation from '@/hooks/mutations/job/useCreateJdMutation';
 import useClientMeta from '@/hooks/useClientMeta';
-import { useBoundStore } from '@/stores/useBoundStore';
 import { JobPostingFormInput } from '@/types/jds';
 
 import styles from './page.module.css';
 
 export default function CreateJobPage() {
   const router = useRouter();
-  const setSnackbar = useBoundStore((state) => state.setSnackbar);
   const [nextJdId, setNextJdId] = useState<number | null>(null);
 
   const { createJdMutate, isCreatePending, isCreateSuccess } =
@@ -28,12 +24,6 @@ export default function CreateJobPage() {
     createJdMutate(data, {
       onSuccess: (data) => {
         setNextJdId(data.jd_id);
-      },
-      onError: (error) => {
-        setSnackbar({
-          message: error.message || '채용공고 등록 중 오류가 발생했습니다.',
-          type: 'error',
-        });
       },
     });
   };
@@ -56,7 +46,6 @@ export default function CreateJobPage() {
 
   return (
     <>
-      <Header backgroundColor="white" showLogout={true} />
       <main className={styles.main}>
         <div className={styles.container}>
           <div className={styles.header}>
@@ -78,7 +67,6 @@ export default function CreateJobPage() {
           />
         </div>
       </main>
-      <Footer />
       <LoadingModal
         isOpen={isCreatePending}
         isComplete={isCreateSuccess}

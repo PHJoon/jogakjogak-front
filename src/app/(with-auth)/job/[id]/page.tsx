@@ -17,6 +17,7 @@ import ProgressNotificationSection from '@/components/jobDetail/ProgressNotifica
 import { JogakCategory } from '@/components/JogakCategory';
 import { MemoBox } from '@/components/MemoBox';
 import NotificationModal from '@/components/NotificationModal';
+import { ERROR_CODES } from '@/constants/errorCode';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
 import useJobActions from '@/hooks/job/useJobActions';
 import useDeleteJdMutation from '@/hooks/mutations/job/useDeleteJdMutation';
@@ -28,6 +29,7 @@ import useUpdateTodoMutation from '@/hooks/mutations/job_todolist/useUpdateTodoM
 import useJdQuery from '@/hooks/queries/useJdQuery';
 import useClientMeta from '@/hooks/useClientMeta';
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
+import { HttpError } from '@/lib/HttpError';
 import { useBoundStore } from '@/stores/useBoundStore';
 import { JDDetail, TodoItem } from '@/types/jds';
 import trackEvent from '@/utils/trackEventGA';
@@ -180,12 +182,6 @@ export default function JobDetailPage() {
       updateTodoAlarmMutate(
         { jdId: jdDetail.jd_id, newAlarmState: isEnabled },
         {
-          onError: (error) => {
-            setSnackbar({
-              type: 'error',
-              message: error.message || '알림 설정 중 오류가 발생했습니다.',
-            });
-          },
           onSettled: () => {
             setIsTogglingAlarm(false);
           },
@@ -211,23 +207,11 @@ export default function JobDetailPage() {
       todo_status: newStatus,
       jobId: todo.jdId,
     });
-    toggleCompleteTodoMutate(
-      {
-        jdId: todo.jdId,
-        todoId: todo.checklist_id,
-        updatedDoneState: newStatus,
-      },
-      {
-        onError: (error) => {
-          setSnackbar({
-            type: 'error',
-            message:
-              error.message ||
-              '할 일을 완료 상태로 변경하는 중 오류가 발생했습니다.',
-          });
-        },
-      }
-    );
+    toggleCompleteTodoMutate({
+      jdId: todo.jdId,
+      todoId: todo.checklist_id,
+      updatedDoneState: newStatus,
+    });
   };
 
   // Todo 수정 함수
@@ -245,26 +229,16 @@ export default function JobDetailPage() {
       (todo) => todo.checklist_id.toString() === todoId
     );
     const isDone = currentTodo?.done || false;
-    updateTodoMutate(
-      {
-        jdId: Number(jdId),
-        todoId: Number(todoId),
-        updateTodoItem: {
-          category: data.category,
-          title: data.title,
-          content: data.content,
-          is_done: isDone,
-        },
+    updateTodoMutate({
+      jdId: Number(jdId),
+      todoId: Number(todoId),
+      updateTodoItem: {
+        category: data.category,
+        title: data.title,
+        content: data.content,
+        is_done: isDone,
       },
-      {
-        onError: (error) => {
-          setSnackbar({
-            type: 'error',
-            message: error.message || '조각 내용 수정 중 오류가 발생했습니다.',
-          });
-        },
-      }
-    );
+    });
   };
 
   // Todo 삭제 함수
@@ -275,20 +249,10 @@ export default function JobDetailPage() {
       jobId: jdDetail?.jd_id,
     });
 
-    deleteTodoMutate(
-      {
-        jdId: Number(jdId),
-        todoId: Number(todoId),
-      },
-      {
-        onError: (error) => {
-          setSnackbar({
-            type: 'error',
-            message: error.message || '조각 삭제 중 오류가 발생했습니다.',
-          });
-        },
-      }
-    );
+    deleteTodoMutate({
+      jdId: Number(jdId),
+      todoId: Number(todoId),
+    });
   };
 
   // Todo 추가 함수
@@ -303,24 +267,14 @@ export default function JobDetailPage() {
       jobId: jdDetail?.jd_id,
     });
 
-    createTodoMutate(
-      {
-        jdId: Number(jdId),
-        newTodoItem: {
-          category: data.category,
-          title: data.title,
-          content: data.content,
-        },
+    createTodoMutate({
+      jdId: Number(jdId),
+      newTodoItem: {
+        category: data.category,
+        title: data.title,
+        content: data.content,
       },
-      {
-        onError: (error) => {
-          setSnackbar({
-            type: 'error',
-            message: error.message || '조각 추가 중 오류가 발생했습니다.',
-          });
-        },
-      }
-    );
+    });
   };
 
   // 채용공고 삭제 핸들러
@@ -336,10 +290,11 @@ export default function JobDetailPage() {
         router.replace('/dashboard');
       },
       onError: (error) => {
-        setSnackbar({
-          message: error.message,
-          type: 'error',
-        });
+        if (error instanceof HttpError) {
+          if (error.errorCode === ERROR_CODES.REPLAY_REQUIRED) {
+            return;
+          }
+        }
         setIsJdDeleting(false);
       },
     });
@@ -377,7 +332,7 @@ export default function JobDetailPage() {
   if (!jdDetail) {
     return (
       <>
-        <Header backgroundColor="white" showLogout={true} />
+        {/* <Header backgroundColor="white" showLogout={true} /> */}
         <main className={styles.main}>
           <div className={styles.container}>
             <div
@@ -406,14 +361,14 @@ export default function JobDetailPage() {
             </div>
           </div>
         </main>
-        <Footer />
+        {/* <Footer /> */}
       </>
     );
   }
 
   return (
     <>
-      <Header backgroundColor="white" showLogout={true} />
+      {/* <Header backgroundColor="white" showLogout={true} /> */}
       <main className={styles.main}>
         <JobDetailTopBar
           jdDetail={jdDetail}
@@ -509,7 +464,7 @@ export default function JobDetailPage() {
           )}
         </div>
       </main>
-      <Footer />
+      {/* <Footer /> */}
 
       {/* Delete confirmation modal */}
       <DeleteConfirmModal
