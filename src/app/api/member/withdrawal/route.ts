@@ -43,8 +43,13 @@ export async function DELETE(request: NextRequest) {
 
   const nextResponse = NextResponse.json(data, { status: response.status });
 
+  // 새로운 리프레시 토큰 재설정
+  const setCookie = response?.headers.get('set-cookie');
+  if (setCookie) {
+    nextResponse.headers.set('set-cookie', setCookie);
+  }
+
   // 쿠키 토큰 삭제
-  nextResponse.cookies.delete('refresh');
   nextResponse.cookies.delete('access_token');
 
   // 클라이언트 캐시 제거하는 플래그

@@ -38,50 +38,17 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const setCookieHeader = response.headers.get('Set-Cookie');
-    let newRefreshToken = null;
-    if (setCookieHeader) {
-      // Set-Cookie 헤더 파싱
-      const cookies = setCookieHeader
-        .split(/,(?=\s*\w+=)/)
-        .map((c) => c.trim());
-      for (const cookie of cookies) {
-        if (cookie.startsWith('refresh=')) {
-          newRefreshToken = cookie.split('=')[1].split(';')[0];
-          break;
-        }
-      }
-    }
-
-    const accessToken = data.data;
-    if (!accessToken) {
-      return NextResponse.redirect(
-        new URL(
-          `/api/member/logout?error=${ERROR_CODES.TOKEN_REISSUE_FAILED}`,
-          request.url
-        ),
-        {
-          status: 303,
-        }
-      );
-    }
-
     const nextResponse = NextResponse.redirect(new URL(redirect, request.url), {
       status: 303,
     });
 
     // 새로운 리프레시 토큰 재설정
-    if (newRefreshToken) {
-      nextResponse.cookies.set('refresh', newRefreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7, // 7일
-        path: '/',
-      });
+    const setCookie = response?.headers.get('set-cookie');
+    if (setCookie) {
+      nextResponse.headers.set('set-cookie', setCookie);
     }
 
-    nextResponse.cookies.set('access_token', accessToken, {
+    nextResponse.cookies.set('access_token', data.data, {
       httpOnly: true,
       path: '/',
       secure: process.env.NODE_ENV === 'production',
