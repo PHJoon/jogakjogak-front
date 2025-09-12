@@ -54,21 +54,14 @@ export async function GET(request: NextRequest) {
   }
 
   // 프로덕션용 도메인 변형도 같이 만료 처리 (브라우저가 무시하는 건 그냥 스킵됨)
-  for (const domain of [
-    '.jogakjogak.com',
-    'jogakjogak.com',
-    'www.jogakjogak.com',
-  ]) {
-    nextResponse.cookies.set('refresh', '', {
-      path: '/',
-      maxAge: 0,
-      domain,
-      secure: process.env.NODE_ENV === 'production',
-      httpOnly: true,
-      sameSite: 'none',
-    });
-  }
-  nextResponse.cookies.delete('refresh');
+  nextResponse.cookies.set('refresh', '', {
+    path: '/',
+    maxAge: 0,
+    domain: '.jogakjogak.com',
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: 'none',
+  });
 
   // 쿠키 토큰 삭제
   nextResponse.cookies.delete('access_token');
@@ -134,22 +127,14 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // 프로덕션용 도메인 변형도 같이 만료 처리 (브라우저가 무시하는 건 그냥 스킵됨)
-  for (const domain of [
-    '.jogakjogak.com',
-    'jogakjogak.com',
-    'www.jogakjogak.com',
-  ]) {
-    nextResponse.cookies.set('refresh', '', {
-      path: '/',
-      maxAge: 0,
-      domain,
-      secure: process.env.NODE_ENV === 'production',
-      httpOnly: true,
-      sameSite: 'none',
-    });
-  }
-  nextResponse.cookies.delete('refresh');
+  nextResponse.cookies.set('refresh', '', {
+    path: '/',
+    maxAge: 0,
+    domain: '.jogakjogak.com',
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: 'none',
+  });
 
   // 쿠키 토큰 삭제
   nextResponse.cookies.delete('access_token');
