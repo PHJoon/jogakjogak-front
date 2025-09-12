@@ -5,7 +5,9 @@ import throwIfNotOk from '@/utils/throwIfNotOk';
 
 // 공고 상세 내용 조회
 export async function getJd(jobId: number) {
-  const response = await fetchWithAuth(`/api/jds/${jobId}`);
+  const response = await fetchWithAuth(`/api/jds/${jobId}`, {
+    method: 'GET',
+  });
   await throwIfNotOk(response, '채용공고를 가져오는 중 오류가 발생했습니다.');
 
   const data: ApiResponse<JDDetail> = await response.json();

@@ -4,7 +4,9 @@ import { Resume } from '@/types/jds';
 import throwIfNotOk from '@/utils/throwIfNotOk';
 
 export async function getResume(resumeId: number) {
-  const response = await fetchWithAuth(`/api/resume/${resumeId}`);
+  const response = await fetchWithAuth(`/api/resume/${resumeId}`, {
+    method: 'GET',
+  });
   await throwIfNotOk(response, '이력서를 불러오는 중 오류가 발생했습니다.');
 
   const data: ApiResponse<Resume> = await response.json();
@@ -24,7 +26,8 @@ export async function createResume(title: string, content: string) {
   });
 
   await throwIfNotOk(response, '이력서를 생성하는 중 오류가 발생했습니다.');
-  return { success: true };
+  const data = await response.json();
+  return data;
 }
 
 export async function updateResume(
@@ -44,5 +47,6 @@ export async function updateResume(
   });
 
   await throwIfNotOk(response, '이력서를 수정하는 중 오류가 발생했습니다.');
-  return { success: true };
+  const data = await response.json();
+  return data;
 }

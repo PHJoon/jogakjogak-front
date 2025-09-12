@@ -61,7 +61,8 @@ export async function deleteTodo(jdId: number, todoId: number) {
     }
   );
   await throwIfNotOk(response, '할 일을 삭제하는 중 오류가 발생했습니다.');
-  return { success: true };
+  const data = await response.json();
+  return data;
 }
 
 // Todo 추가

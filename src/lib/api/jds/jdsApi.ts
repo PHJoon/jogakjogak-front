@@ -13,39 +13,38 @@ export async function getJdsData(
   sort: Sort | '',
   showOnly: ShowOnly | ''
 ) {
-  try {
-    const queryParams = new URLSearchParams();
-    queryParams.append('page', page.toString());
-    if (sort) {
-      queryParams.append('sort', sort);
-    }
-    if (showOnly) {
-      queryParams.append('showOnly', showOnly);
-    }
-    const url = `/api/jds${
-      queryParams.toString() ? `?${queryParams.toString()}` : ''
-    }`;
-
-    const response = await fetchWithAuth(url);
-    const data: JdsResponse = await response.json();
-
-    return {
-      resume: data.data?.resume || null,
-      jds: data.data?.jds || [],
-      pageInfo: {
-        totalElements: data.data?.totalElements || 0,
-        totalPages: data.data?.totalPages || 0,
-        currentPage: data.data?.currentPage || 0,
-        pageSize: data.data?.pageSize || 0,
-        hasNext: data.data?.hasNext || false,
-        hasPrevious: data.data?.hasPrevious || false,
-        isFirst: data.data?.isFirst || false,
-        isLast: data.data?.isLast || false,
-      },
-    };
-  } catch (error) {
-    console.error('Failed to fetch JDs data:', error);
+  const queryParams = new URLSearchParams();
+  queryParams.append('page', page.toString());
+  if (sort) {
+    queryParams.append('sort', sort);
   }
+  if (showOnly) {
+    queryParams.append('showOnly', showOnly);
+  }
+  const url = `/api/jds${
+    queryParams.toString() ? `?${queryParams.toString()}` : ''
+  }`;
+
+  const response = await fetchWithAuth(url, {
+    method: 'GET',
+  });
+
+  await throwIfNotOk(response, '채용공고를 가져오는 중 오류가 발생했습니다.');
+  const data: JdsResponse = await response.json();
+  return {
+    resume: data.data?.resume || null,
+    jds: data.data?.jds || [],
+    pageInfo: {
+      totalElements: data.data?.totalElements || 0,
+      totalPages: data.data?.totalPages || 0,
+      currentPage: data.data?.currentPage || 0,
+      pageSize: data.data?.pageSize || 0,
+      hasNext: data.data?.hasNext || false,
+      hasPrevious: data.data?.hasPrevious || false,
+      isFirst: data.data?.isFirst || false,
+      isLast: data.data?.isLast || false,
+    },
+  };
 }
 
 // 채용공고 삭제
@@ -55,7 +54,8 @@ export async function deleteJd(jobId: number) {
   });
 
   await throwIfNotOk(response, '채용공고 삭제 중 오류가 발생했습니다.');
-  return { success: true };
+  const data = await response.json();
+  return data;
 }
 
 // 채용공고 지원 완료
