@@ -106,18 +106,17 @@ export default function MyPage() {
       event_category: GACategory.AUTH,
     });
 
-    // await logout()
-    //   .catch((error) => {
-    //     console.warn('[logout failed]', (error as Error)?.message);
-    //   })
-    //   .finally(() => {
-    //     setSnackbar({
-    //       type: 'success',
-    //       message: '로그아웃 되었습니다.',
-    //     });
-    //     router.replace('/');
-    //   });
-    window.location.href = '/api/member/logout';
+    await logout()
+      .catch((error) => {
+        console.warn('[logout failed]', (error as Error)?.message);
+      })
+      .finally(() => {
+        setSnackbar({
+          type: 'success',
+          message: '로그아웃 되었습니다.',
+        });
+        router.replace('/');
+      });
   };
 
   // 탈퇴하기
