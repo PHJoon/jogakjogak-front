@@ -23,8 +23,9 @@ export function middleware(request: NextRequest) {
     if (error) {
       return NextResponse.next();
     }
+  }
 
-    // 파라미터 없는 경우 로그인 상태에 따라 리다이렉트
+  if (pathname === '/signup' || pathname === '/login') {
     if (hasAccessToken) {
       return NextResponse.redirect(new URL('/dashboard', request.url));
     }

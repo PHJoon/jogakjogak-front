@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, Suspense, useState } from 'react';
+import { useEffect, Suspense } from 'react';
 
 import section1 from '@/assets/images/section1.png';
 import section2 from '@/assets/images/section2.png';
@@ -11,7 +11,6 @@ import FeatureSection from '@/components/FeatureSection';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
-import LoginModal from '@/components/LoginModal';
 import { ERROR_MESSAGES } from '@/constants/errorCode';
 import useSession from '@/hooks/useSession';
 import { queryClient } from '@/lib/queryClient';
@@ -22,7 +21,6 @@ import styles from './page.module.css';
 function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const setSnackbar = useBoundStore((state) => state.setSnackbar);
   const { isLoggedIn } = useSession();
 
@@ -60,7 +58,7 @@ function HomeContent() {
           if (isLoggedIn) {
             return router.push('/dashboard');
           }
-          setIsLoginModalOpen(true);
+          return router.push('/login');
         }}
       />
 
@@ -123,10 +121,6 @@ function HomeContent() {
       />
 
       <Footer backgroundColor="transparent" />
-      <LoginModal
-        isOpen={isLoginModalOpen}
-        onClose={() => setIsLoginModalOpen(false)}
-      />
     </div>
   );
 }
