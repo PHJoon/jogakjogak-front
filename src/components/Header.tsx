@@ -12,14 +12,12 @@ import useSession from '@/hooks/useSession';
 import trackEvent from '@/utils/trackEventGA';
 
 import styles from './Header.module.css';
-import LoginModal from './LoginModal';
 import SurveyBanner from './SurveyBanner';
 
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const isLandingPage = pathname === '/';
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [headerBackgroundColor, setHeaderBackgroundColor] = useState<
     'transparent' | 'white'
   >('white');
@@ -30,11 +28,7 @@ export default function Header() {
   }, [isLandingPage, refetch]);
 
   const handleLoginClick = () => {
-    setIsLoginModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsLoginModalOpen(false);
+    router.push('/login');
   };
 
   const handleMyPageClick = () => {
@@ -98,7 +92,6 @@ export default function Header() {
 
       {/* 설문조사 배너 */}
       {!isLandingPage && <SurveyBanner />}
-      <LoginModal isOpen={isLoginModalOpen} onClose={handleCloseModal} />
     </>
   );
 }
