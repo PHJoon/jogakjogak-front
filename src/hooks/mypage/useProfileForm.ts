@@ -16,6 +16,7 @@ export default function useProfileForm() {
       nickname: '',
       email: '',
     },
+    mode: 'onChange',
   });
 
   const fields = {

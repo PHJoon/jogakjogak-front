@@ -4,27 +4,42 @@ import { useState } from 'react';
 
 import styles from './Input.module.css';
 
-interface Props {
+type BaseProps = {
   id: string;
   label: string;
-  value?: string;
+  value?: string; // RHF에서는 watch 값 내려줌(표시/스타일용)
   readOnly?: boolean;
   warning?: boolean;
   maxLength?: number;
-  field?: UseFormRegisterReturn<string>;
   style?: React.CSSProperties;
-}
+};
 
-export default function Input({
-  id,
-  label,
-  value,
-  readOnly = false,
-  warning = false,
-  maxLength = 30,
-  field,
-  style,
-}: Props) {
+// RHF 모드
+type RHFProps = BaseProps & {
+  field: UseFormRegisterReturn<string>;
+  // 제어 props는 금지
+  defaultValue?: never;
+  onChange?: never;
+  name?: never;
+};
+
+// 제어(Controlled) 모드
+type ControlledProps = BaseProps & {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  name?: string;
+  defaultValue?: never;
+  field?: never;
+};
+
+type Props = RHFProps | ControlledProps;
+
+export default function Input(props: Props) {
+  const { id, label, readOnly, warning, maxLength, style, value } = props;
+
+  const isRHFMode = 'field' in props && props.field !== undefined;
+  const isControlledMode = 'onChange' in props && props.onChange !== undefined;
+
   const [isFocused, setIsFocused] = useState(false);
 
   return (
@@ -33,7 +48,7 @@ export default function Input({
       data-readonly={readOnly || undefined}
       data-focused={isFocused || undefined}
       data-warning={warning || undefined}
-      data-has-value={!!value || undefined}
+      data-has-value={Boolean(value?.length) || undefined}
       style={style}
     >
       <label htmlFor={id} className={styles.floatingLabel}>
@@ -42,11 +57,13 @@ export default function Input({
 
       <div className={styles.inputWrapper}>
         <input
-          {...field}
+          {...(isRHFMode ? props.field : {})}
+          {...(isControlledMode
+            ? { value: props.value, onChange: props.onChange, name: props.name }
+            : {})}
           id={id}
           className={styles.input}
           type="text"
-          value={value}
           onFocus={() => {
             setIsFocused(true);
           }}
