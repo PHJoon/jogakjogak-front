@@ -13,6 +13,7 @@ interface Props {
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
   isLoading?: boolean;
+  isActive?: boolean;
 }
 
 export default function Button({
@@ -23,10 +24,11 @@ export default function Button({
   type = 'button',
   disabled = false,
   isLoading = false,
+  isActive = false,
 }: Props) {
   return (
     <button
-      className={`${styles.button} ${styles[variant]}`}
+      className={`${styles.button} ${styles[variant]} ${isActive ? styles.active : ''}`}
       style={style}
       type={type}
       disabled={disabled || isLoading}

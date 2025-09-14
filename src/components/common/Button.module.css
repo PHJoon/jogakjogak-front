@@ -27,11 +27,25 @@
   color: var(--n-100);
 }
 
+.button.primary.active {
+  background-color: var(--primarymain-800);
+  color: var(--n-100);
+}
+
 /* secondary */
 .button.secondary {
   background-color: var(--n-0);
   color: var(--primaryjogak-1);
   border: 1px solid var(--primaryjogak-2);
+}
+
+.button.secondary:hover,
+.button.secondary:active {
+  background-color: var(--primarymain-100);
+}
+
+.button.secondary.active {
+  background-color: var(--primarymain-100);
 }
 
 /* tertiary */
@@ -45,6 +59,10 @@
   background-color: var(--n-400);
 }
 
+.button.tertiary.active {
+  background-color: var(--n-400);
+}
+
 /* warning */
 .button.warning {
   background-color: var(--red-2);
@@ -53,6 +71,10 @@
 
 .button.warning:hover,
 .button.warning:active {
+  background-color: var(--red-3);
+}
+
+.button.warning.active {
   background-color: var(--red-3);
 }
 
