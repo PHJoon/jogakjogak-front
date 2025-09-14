@@ -18,6 +18,7 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const isLandingPage = pathname === '/';
+  const isOnboardingPage = pathname === '/onboarding';
   const [headerBackgroundColor, setHeaderBackgroundColor] = useState<
     'transparent' | 'white'
   >('white');
@@ -91,7 +92,7 @@ export default function Header() {
       </header>
 
       {/* 설문조사 배너 */}
-      {!isLandingPage && <SurveyBanner />}
+      {!isLandingPage && !isOnboardingPage && <SurveyBanner />}
     </>
   );
 }
