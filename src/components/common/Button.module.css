@@ -1,11 +1,10 @@
 .button {
   all: unset;
-  display: flex;
+  box-sizing: border-box;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-  min-width: 134px;
-  min-height: 48px;
   font-family: var(--body-1-normal-bold-font-family);
   font-size: var(--body-1-normal-bold-font-size);
   font-style: var(--body-1-normal-bold-font-style);
