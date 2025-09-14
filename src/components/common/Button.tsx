@@ -6,7 +6,7 @@ import loadingSpinnerIcon from '@/assets/images/ic_loading_spinner.svg';
 import styles from './Button.module.css';
 
 interface Props {
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'warning';
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'warning' | 'neutral';
   children: ReactNode;
   onClick?: () => void;
   style?: React.CSSProperties;

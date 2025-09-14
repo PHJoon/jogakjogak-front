@@ -52,6 +52,12 @@
 .button.tertiary {
   background-color: var(--n-300);
   color: var(--n-800);
+  font-family: var(--body-1-normal-medium-font-family);
+  font-size: var(--body-1-normal-medium-font-size);
+  font-style: var(--body-1-normal-medium-font-style);
+  font-weight: var(--body-1-normal-medium-font-weight);
+  letter-spacing: var(--body-1-normal-medium-letter-spacing);
+  line-height: var(--body-1-normal-medium-line-height);
 }
 
 .button.tertiary:hover,
@@ -76,6 +82,30 @@
 
 .button.warning.active {
   background-color: var(--red-3);
+}
+
+/* neutral */
+.button.neutral {
+  background-color: var(--n-0);
+  border: 1px solid var(--n-300);
+  color: var(--n-800);
+  font-family: var(--body-1-normal-medium-font-family);
+  font-size: var(--body-1-normal-medium-font-size);
+  font-style: var(--body-1-normal-medium-font-style);
+  font-weight: var(--body-1-normal-medium-font-weight);
+  letter-spacing: var(--body-1-normal-medium-letter-spacing);
+  line-height: var(--body-1-normal-medium-line-height);
+}
+
+.button.neutral:hover,
+.button.neutral:active {
+  background-color: var(--n-100);
+  border: 1px solid var(--n-400);
+}
+
+.button.neutral.active {
+  background-color: var(--n-100);
+  border: 1px solid var(--n-400);
 }
 
 /* disabled */
