@@ -14,7 +14,7 @@ export interface ResumeFormInput {
     major: string;
   }[];
   skills: {
-    id: number;
+    id: string;
     name: string;
   }[];
   etc: string;

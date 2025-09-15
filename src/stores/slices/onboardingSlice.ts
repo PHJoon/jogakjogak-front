@@ -35,7 +35,10 @@ export interface OnboardingSlice {
     major: string;
   }[];
   setEducationAnswer: Setter<OnboardingSlice['educationAnswer']>;
-  skillsAnswer: string[];
+  skillsAnswer: {
+    id: string;
+    name: string;
+  }[];
   setSkillsAnswer: Setter<OnboardingSlice['skillsAnswer']>;
   etcAnswer: string;
   setEtcAnswer: Setter<OnboardingSlice['etcAnswer']>;
