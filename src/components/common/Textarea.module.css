@@ -1,0 +1,157 @@
+.textareaContainer {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  padding: 36px 24px;
+  cursor: text;
+  background-color: var(--n-50);
+  border: 1px solid transparent;
+}
+
+.floatingLabel {
+  position: absolute;
+  top: 0;
+  left: 24px;
+  transform: translateY(24px);
+  font-family: var(--label-1-reading-regular-font-family);
+  font-size: var(--label-1-reading-regular-font-size);
+  font-style: var(--label-1-reading-regular-font-style);
+  font-weight: var(--label-1-reading-regular-font-weight);
+  letter-spacing: var(--label-1-reading-regular-letter-spacing);
+  color: var(--n-600);
+  transition:
+    transform 0.25s ease-out,
+    color 0.3s ease;
+}
+
+.textareaWrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.textarea {
+  position: relative;
+  all: unset;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  resize: none;
+  box-sizing: border-box;
+  font-family: var(--label-1-reading-regular-font-family);
+  font-size: var(--label-1-reading-regular-font-size);
+  font-style: var(--label-1-reading-regular-font-style);
+  font-weight: var(--label-1-reading-regular-font-weight);
+  letter-spacing: var(--label-1-reading-regular-letter-spacing);
+  color: var(--n-800);
+  background-color: transparent;
+  overflow-wrap: break-word; /* 긴 단어도 줄바꿈 */
+  word-break: break-all; /* 단어가 길 경우 줄바꿈 */
+  overflow-x: hidden; /* 가로 스크롤 숨김 */
+}
+
+.textarea:focus {
+  outline: none;
+}
+
+.textareaCounter {
+  position: absolute;
+  top: 508px;
+  right: 24px;
+  transform: translateX(-100%);
+  width: 33px;
+  height: 22px;
+  font-family: var(--body-2-normal-regular-font-family);
+  font-size: var(--body-2-normal-regular-font-size);
+  font-style: var(--body-2-normal-regular-font-style);
+  font-weight: var(--body-2-normal-regular-font-weight);
+  letter-spacing: var(--body-2-normal-regular-letter-spacing);
+  line-height: var(--body-2-normal-regular-line-height);
+  color: var(--n-600);
+}
+
+.textareaContainer[data-readonly='true'] {
+  pointer-events: none;
+  & .floatingLabel {
+    color: var(--n-600);
+  }
+  & .textarea {
+    color: var(--n-600);
+  }
+}
+
+.textareaContainer[data-warning='true'] {
+  border: 1px solid var(--red-1);
+}
+
+.textareaContainer[data-focused='true'] {
+  border: 1px solid var(--primaryjogak-1);
+  & .floatingLabel {
+    color: var(--n-600);
+    transform: translateY(12px);
+    font-family: var(--caption-1-regular-font-family);
+    font-size: var(--caption-1-regular-font-size);
+    font-style: var(--caption-1-regular-font-style);
+    font-weight: var(--caption-1-regular-font-weight);
+    letter-spacing: var(--caption-1-regular-letter-spacing);
+    line-height: var(--caption-1-regular-line-height);
+    color: var(--n-700);
+  }
+  & .textarea {
+    color: var(--n-800);
+  }
+}
+
+.textareaContainer[data-has-value='true'] {
+  & .floatingLabel {
+    color: var(--n-600);
+    transform: translateY(12px);
+    font-family: var(--caption-1-regular-font-family);
+    font-size: var(--caption-1-regular-font-size);
+    font-style: var(--caption-1-regular-font-style);
+    font-weight: var(--caption-1-regular-font-weight);
+    letter-spacing: var(--caption-1-regular-letter-spacing);
+    line-height: var(--caption-1-regular-line-height);
+    color: var(--n-700);
+  }
+  & .textarea {
+    color: var(--n-800);
+  }
+}
+
+.textareaContainer[data-readonly='true'][data-has-value='true'] {
+  & .textarea {
+    color: var(--n-600);
+  }
+}
+
+/* 반응형 */
+@media screen and (max-width: 768px) {
+  .textareaContainer {
+    padding: 24px 16px;
+  }
+
+  .floatingLabel {
+    transform: translateY(16px);
+  }
+
+  .textareaContainer[data-focused='true'] {
+    & .floatingLabel {
+      transform: translateY(8px);
+    }
+  }
+
+  .textareaContainer[data-has-value='true'] {
+    & .floatingLabel {
+      transform: translateY(8px);
+    }
+  }
+}
