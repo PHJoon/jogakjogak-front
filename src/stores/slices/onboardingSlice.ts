@@ -14,11 +14,13 @@ export interface OnboardingSlice {
   currentTab: (typeof ResumeTabs)[number];
   setCurrentTab: (tab: OnboardingSlice['currentTab']) => void;
   hasResumeAnswer: boolean | null;
-  setHasResumeAnswer: (answer: boolean | null) => void;
+  setHasResumeAnswer: Setter<OnboardingSlice['hasResumeAnswer']>;
   wantsToCreateSimpleResume: boolean | null;
-  setWantsToCreateSimpleResume: (answer: boolean | null) => void;
+  setWantsToCreateSimpleResume: Setter<
+    OnboardingSlice['wantsToCreateSimpleResume']
+  >;
   hasExperienceAnswer: boolean | null;
-  setHasExperienceAnswer: (answer: boolean | null) => void;
+  setHasExperienceAnswer: Setter<OnboardingSlice['hasExperienceAnswer']>;
   experienceAnswer: {
     company: string;
     responsibilities: string;
@@ -50,12 +52,29 @@ export const createOnboardingSlice: StateCreator<
   currentTab: 'experience',
   setCurrentTab: (tab) => set({ currentTab: tab }),
   hasResumeAnswer: null,
-  setHasResumeAnswer: (answer) => set({ hasResumeAnswer: answer }),
+  setHasResumeAnswer: (updater) =>
+    set((state) => ({
+      hasResumeAnswer:
+        typeof updater === 'function'
+          ? updater(state.hasResumeAnswer)
+          : updater,
+    })),
   wantsToCreateSimpleResume: null,
-  setWantsToCreateSimpleResume: (answer) =>
-    set({ wantsToCreateSimpleResume: answer }),
+  setWantsToCreateSimpleResume: (updater) =>
+    set((state) => ({
+      wantsToCreateSimpleResume:
+        typeof updater === 'function'
+          ? updater(state.wantsToCreateSimpleResume)
+          : updater,
+    })),
   hasExperienceAnswer: null,
-  setHasExperienceAnswer: (answer) => set({ hasExperienceAnswer: answer }),
+  setHasExperienceAnswer: (updater) =>
+    set((state) => ({
+      hasExperienceAnswer:
+        typeof updater === 'function'
+          ? updater(state.hasExperienceAnswer)
+          : updater,
+    })),
   experienceAnswer: [],
   setExperienceAnswer: (updater) =>
     set((state) => ({
