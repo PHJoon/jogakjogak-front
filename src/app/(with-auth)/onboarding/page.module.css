@@ -1,0 +1,107 @@
+.main {
+  position: relative;
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: auto;
+}
+
+.onboardingSection {
+  position: relative;
+  top: 64px; /* 헤더 높이만큼 아래로 */
+  width: 50%;
+  /* 헤더 높이 제외 */
+  height: calc(100% - 64px);
+  padding: 32px 0 64px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--n-0);
+}
+
+.progressIndicatorContainer {
+  height: 84px; /* progressNav의 높이와 동일하게 설정 */
+  width: 454px; /* progressNav의 너비와 동일하게 설정 */
+}
+
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.titleSection {
+  height: 56px;
+  width: 454px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 48px;
+}
+
+.title {
+  font-family: var(--title-3-bold-font-family);
+  font-size: var(--title-3-bold-font-size);
+  font-style: var(--title-3-bold-font-style);
+  font-weight: var(--title-3-bold-font-weight);
+  letter-spacing: var(--title-3-bold-letter-spacing);
+  line-height: var(--title-3-bold-line-height);
+  color: var(--n-950);
+}
+
+.subTitle {
+  font-family: var(--body-1-normal-regular-font-family);
+  font-size: var(--body-1-normal-regular-font-size);
+  font-style: var(--body-1-normal-regular-font-style);
+  font-weight: var(--body-1-normal-regular-font-weight);
+  letter-spacing: var(--body-1-normal-regular-letter-spacing);
+  line-height: var(--body-1-normal-regular-line-height);
+  color: var(--n-800);
+}
+
+.inputSection {
+  height: fit-content;
+  width: 454px;
+}
+
+.buttonSection {
+  height: 64px;
+  width: 454px;
+  display: flex;
+  gap: 20px;
+  margin-top: auto;
+}
+
+.optionButton {
+  box-sizing: border-box;
+  height: 104px;
+  width: 454px;
+  padding: 12px 0 12px 32px;
+  background-color: var(--n-0);
+  border-radius: 10px;
+  border: 1px solid var(--primaryjogak-2);
+}
+
+.optionButton .selected {
+  background-color: var(--primarymain-100);
+}
+
+.imageSection {
+  position: relative;
+  top: 64px; /* 헤더 높이만큼 아래로 */
+  width: 50%;
+  /* 헤더 높이 제외 */
+  height: calc(100% - 64px);
+}
+
+/* Responsive Styles */
+@media (max-width: 1023px) {
+  .main {
+    flex-direction: column;
+  }
+
+  .imageSection {
+    display: none;
+  }
+}
