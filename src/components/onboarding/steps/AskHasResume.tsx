@@ -1,26 +1,44 @@
 import Image from 'next/image';
-import { useState } from 'react';
+import { useShallow } from 'zustand/shallow';
 
 import checkbox from '@/assets/images/ic_checkbox.svg';
 import checkboxChecked from '@/assets/images/ic_checkbox_checked.svg';
 import Button from '@/components/common/Button';
+import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './AskHasResume.module.css';
 
-interface Props {
-  onNext: () => void;
-  onPrevious: () => void;
-}
+export default function AskHasResume() {
+  const { setCurrentStep, hasResumeAnswer, setHasResumeAnswer } = useBoundStore(
+    useShallow((state) => ({
+      setCurrentStep: state.setCurrentStep,
+      hasResumeAnswer: state.hasResumeAnswer,
+      setHasResumeAnswer: state.setHasResumeAnswer,
+    }))
+  );
 
-export default function AskHasResume({ onNext, onPrevious }: Props) {
-  const [hasResume, setHasResume] = useState<boolean | null>(null);
+  const handleClickPrevious = () => {
+    setCurrentStep('profile');
+  };
 
-  const handleOptionClick = (option: boolean) => {
-    if (hasResume === null) {
-      setHasResume(option);
+  const handleClickNext = () => {
+    if (hasResumeAnswer === null) return;
+
+    // 이력서 있음 -> 이력서 작성 단계로
+    // 이력서 없음 -> 간단 이력서 작성 여부 확인 단계로
+    if (hasResumeAnswer === true) {
+      setCurrentStep('create_resume');
       return;
     }
-    setHasResume((prev) => (prev === option ? null : option));
+    setCurrentStep('ask_create_simple_resume');
+  };
+
+  const handleOptionClick = (option: boolean) => {
+    if (hasResumeAnswer === null) {
+      setHasResumeAnswer(option);
+      return;
+    }
+    setHasResumeAnswer((prev) => (prev === option ? null : option));
   };
 
   return (
@@ -36,12 +54,12 @@ export default function AskHasResume({ onNext, onPrevious }: Props) {
 
       <div className={styles.inputSection}>
         <button
-          className={`${styles.optionButton} ${hasResume === true ? styles.selected : ''}`}
+          className={`${styles.optionButton} ${hasResumeAnswer === true ? styles.selected : ''}`}
           type="button"
           onClick={() => handleOptionClick(true)}
         >
           <Image
-            src={hasResume === true ? checkboxChecked : checkbox}
+            src={hasResumeAnswer === true ? checkboxChecked : checkbox}
             alt="Checkbox"
             width={24}
             height={24}
@@ -49,12 +67,12 @@ export default function AskHasResume({ onNext, onPrevious }: Props) {
           네, 이력서가 있어요. <span>(이력서 입력하러 가기)</span>
         </button>
         <button
-          className={`${styles.optionButton} ${hasResume === false ? styles.selected : ''}`}
+          className={`${styles.optionButton} ${hasResumeAnswer === false ? styles.selected : ''}`}
           type="button"
           onClick={() => handleOptionClick(false)}
         >
           <Image
-            src={hasResume === false ? checkboxChecked : checkbox}
+            src={hasResumeAnswer === false ? checkboxChecked : checkbox}
             alt="Checkbox"
             width={24}
             height={24}
@@ -68,7 +86,7 @@ export default function AskHasResume({ onNext, onPrevious }: Props) {
           type="button"
           variant={'tertiary'}
           style={{ width: '96px' }}
-          onClick={onPrevious}
+          onClick={handleClickPrevious}
         >
           이전
         </Button>
@@ -76,7 +94,8 @@ export default function AskHasResume({ onNext, onPrevious }: Props) {
           type="button"
           variant={'primary'}
           style={{ width: '338px' }}
-          onClick={onNext}
+          onClick={handleClickNext}
+          disabled={hasResumeAnswer === null}
         >
           다음
         </Button>

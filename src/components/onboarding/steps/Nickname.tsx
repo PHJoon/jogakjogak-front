@@ -1,14 +1,84 @@
+import type { SubmitHandler } from 'react-hook-form';
+
+import { useEffect } from 'react';
+import { useShallow } from 'zustand/shallow';
+
 import Button from '@/components/common/Button';
+import ErrorMessage from '@/components/common/ErrorMessage';
 import Input from '@/components/common/Input';
+import { ERROR_CODES } from '@/constants/errorCode';
+import useProfileMutation from '@/hooks/mutations/mypage/useProfileMutation';
+import useProfileForm from '@/hooks/mypage/useProfileForm';
+import useMyProfileQuery from '@/hooks/queries/useMyProfileQuery';
+import { HttpError } from '@/lib/HttpError';
+import { useBoundStore } from '@/stores/useBoundStore';
+import { ProfileFormInput } from '@/types/profile';
 
 import styles from './Nickname.module.css';
 
-interface Props {
-  onNext: () => void;
-  onPrevious: () => void;
-}
+export default function Nickname() {
+  const { setSnackbar, setCurrentStep } = useBoundStore(
+    useShallow((state) => ({
+      setSnackbar: state.setSnackbar,
+      setCurrentStep: state.setCurrentStep,
+    }))
+  );
 
-export default function Nickname({ onNext, onPrevious }: Props) {
+  const { data: profileData } = useMyProfileQuery();
+  const { fields, nickname, errors, handleSubmit, reset } = useProfileForm();
+  const { updateProfileMutate, isUpdateProfilePending } = useProfileMutation();
+
+  const isNicknameDirty = () => {
+    return nickname !== profileData?.nickname;
+  };
+
+  // 닉네임 세팅
+  useEffect(() => {
+    if (profileData) {
+      reset({
+        nickname: profileData.nickname,
+      });
+    }
+  }, [profileData, reset]);
+
+  const onNextStep = () => {
+    setCurrentStep('ask_has_resume');
+  };
+
+  // 닉네임 설정 폼 제출 핸들러
+  const onSubmit: SubmitHandler<Omit<ProfileFormInput, 'email'>> = (data) => {
+    updateProfileMutate(
+      {
+        nickname: data.nickname,
+      },
+      {
+        onError: (error) => {
+          if (
+            error instanceof HttpError &&
+            error.errorCode === ERROR_CODES.REPLAY_REQUIRED
+          ) {
+            return;
+          }
+        },
+        onSuccess: () => {
+          setSnackbar({
+            message: '닉네임이 업데이트되었습니다.',
+            type: 'success',
+          });
+          onNextStep();
+        },
+      }
+    );
+  };
+
+  const handleNextClick = () => {
+    if (isNicknameDirty()) {
+      handleSubmit(onSubmit)();
+      return;
+    }
+    onNextStep();
+  };
+
   return (
     <div className={styles.mainContent}>
       <div className={styles.titleSection}>
@@ -20,9 +90,14 @@ export default function Nickname({ onNext, onPrevious }: Props) {
         <Input
           id={'nickname'}
           label={'닉네임'}
-          onChange={() => {}}
-          value={''}
+          field={fields.nickname}
+          value={nickname}
+          maxLength={12}
+          warning={!!errors.nickname}
         />
+        {errors.nickname && (
+          <ErrorMessage message={errors.nickname?.message || ''} />
+        )}
       </div>
 
       <div className={styles.buttonSection}>
@@ -30,7 +105,7 @@ export default function Nickname({ onNext, onPrevious }: Props) {
           type="button"
           variant={'tertiary'}
           style={{ width: '96px' }}
-          onClick={onPrevious}
+          disabled={true}
         >
           이전
         </Button>
@@ -38,9 +113,11 @@ export default function Nickname({ onNext, onPrevious }: Props) {
           type="button"
           variant={'primary'}
           style={{ width: '338px' }}
-          onClick={onNext}
+          onClick={handleNextClick}
+          disabled={isUpdateProfilePending}
+          isLoading={isUpdateProfilePending}
         >
-          다음
+          다음 단계
         </Button>
       </div>
     </div>
