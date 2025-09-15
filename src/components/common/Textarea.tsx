@@ -2,7 +2,7 @@ import type { UseFormRegisterReturn } from 'react-hook-form';
 
 import { useState } from 'react';
 
-import styles from './Input.module.css';
+import styles from './Textarea.module.css';
 
 type BaseProps = {
   id: string;
@@ -26,7 +26,7 @@ type RHFProps = BaseProps & {
 // 제어(Controlled) 모드
 type ControlledProps = BaseProps & {
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   name?: string;
   defaultValue?: never;
   field?: never;
@@ -34,7 +34,7 @@ type ControlledProps = BaseProps & {
 
 type Props = RHFProps | ControlledProps;
 
-export default function Input(props: Props) {
+export default function Textarea(props: Props) {
   const { id, label, readOnly, warning, maxLength, style, value } = props;
 
   const isRHFMode = 'field' in props && props.field !== undefined;
@@ -44,7 +44,7 @@ export default function Input(props: Props) {
 
   return (
     <div
-      className={styles.inputContainer}
+      className={styles.textareaContainer}
       data-readonly={readOnly || undefined}
       data-focused={isFocused || undefined}
       data-warning={warning || undefined}
@@ -55,30 +55,29 @@ export default function Input(props: Props) {
         {label}
       </label>
 
-      <div className={styles.inputWrapper}>
-        <input
+      <div className={styles.textareaWrapper}>
+        <textarea
           {...(isRHFMode ? props.field : {})}
           {...(isControlledMode
-            ? { value: props.value, onChange: props.onChange, name: props.name }
+            ? {
+                value: props.value,
+                onChange: props.onChange,
+                name: props.name,
+              }
             : {})}
           id={id}
-          className={styles.input}
-          type="text"
-          onFocus={() => {
-            setIsFocused(true);
-          }}
-          onBlur={() => {
-            setIsFocused(false);
-          }}
+          className={styles.textarea}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           readOnly={readOnly}
+          maxLength={maxLength}
         />
-
-        {value && !readOnly && (
-          <div className={styles.inputCounter}>
-            {value.length}/{maxLength}
-          </div>
-        )}
       </div>
+      {value && !readOnly && (
+        <div className={styles.textareaCounter}>
+          {value.length}/{maxLength}
+        </div>
+      )}
     </div>
   );
 }
