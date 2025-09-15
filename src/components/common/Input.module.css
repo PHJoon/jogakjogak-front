@@ -81,30 +81,30 @@
 }
 
 /* 값이 없으면 아무것도 안보이게 */
-input[type='date']:invalid::-webkit-datetime-edit,
-input[type='date']:invalid::-webkit-datetime-edit-text,
-input[type='date']:invalid::-webkit-datetime-edit-year-field,
-input[type='date']:invalid::-webkit-datetime-edit-month-field,
-input[type='date']:invalid::-webkit-datetime-edit-day-field,
-input[type='date']:disabled::-webkit-datetime-edit,
-input[type='date']:disabled::-webkit-datetime-edit-text,
-input[type='date']:disabled::-webkit-datetime-edit-year-field,
-input[type='date']:disabled::-webkit-datetime-edit-month-field,
-input[type='date']:disabled::-webkit-datetime-edit-day-field,
-input[type='date']:read-only:invalid::-webkit-datetime-edit,
-input[type='date']:read-only:invalid::-webkit-datetime-edit-text,
-input[type='date']:read-only:invalid::-webkit-datetime-edit-year-field,
-input[type='date']:read-only:invalid::-webkit-datetime-edit-month-field,
-input[type='date']:read-only:invalid::-webkit-datetime-edit-day-field {
+.input[type='date']:invalid::-webkit-datetime-edit,
+.input[type='date']:invalid::-webkit-datetime-edit-text,
+.input[type='date']:invalid::-webkit-datetime-edit-year-field,
+.input[type='date']:invalid::-webkit-datetime-edit-month-field,
+.input[type='date']:invalid::-webkit-datetime-edit-day-field,
+.input[type='date']:disabled::-webkit-datetime-edit,
+.input[type='date']:disabled::-webkit-datetime-edit-text,
+.input[type='date']:disabled::-webkit-datetime-edit-year-field,
+.input[type='date']:disabled::-webkit-datetime-edit-month-field,
+.input[type='date']:disabled::-webkit-datetime-edit-day-field,
+.input[type='date']:read-only:invalid::-webkit-datetime-edit,
+.input[type='date']:read-only:invalid::-webkit-datetime-edit-text,
+.input[type='date']:read-only:invalid::-webkit-datetime-edit-year-field,
+.input[type='date']:read-only:invalid::-webkit-datetime-edit-month-field,
+.input[type='date']:read-only:invalid::-webkit-datetime-edit-day-field {
   color: transparent;
 }
 
 /* 값이 들어가면 모두 보이게 */
-input[type='date']:valid::-webkit-datetime-edit,
-input[type='date']:valid::-webkit-datetime-edit-text,
-input[type='date']:valid::-webkit-datetime-edit-year-field,
-input[type='date']:valid::-webkit-datetime-edit-month-field,
-input[type='date']:valid::-webkit-datetime-edit-day-field {
+.input[type='date']:valid::-webkit-datetime-edit,
+.input[type='date']:valid::-webkit-datetime-edit-text,
+.input[type='date']:valid::-webkit-datetime-edit-year-field,
+.input[type='date']:valid::-webkit-datetime-edit-month-field,
+.input[type='date']:valid::-webkit-datetime-edit-day-field {
   color: inherit; /* 또는 initial */
 }
 
