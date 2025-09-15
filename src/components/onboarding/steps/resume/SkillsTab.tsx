@@ -1,19 +1,16 @@
 import Image from 'next/image';
 import { useState } from 'react';
+import { useShallow } from 'zustand/shallow';
 
 import closeIcon from '@/assets/images/ic_close.svg';
 import plusIcon from '@/assets/images/ic_plus.svg';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
+import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './SkillsTab.module.css';
 
-interface Props {
-  onNext: () => void;
-  onPrevious: () => void;
-}
-
-export default function SkillsTab({ onNext, onPrevious }: Props) {
+export default function SkillsTab() {
   const [addedSkills, setAddedSkills] = useState<string[]>([
     'JavaScript',
     'React',
@@ -40,6 +37,22 @@ export default function SkillsTab({ onNext, onPrevious }: Props) {
     'SEO',
     'Google Analytics',
   ]);
+
+  const { setCurrentTab, educationAnswer, setEducationAnswer } = useBoundStore(
+    useShallow((state) => ({
+      setCurrentTab: state.setCurrentTab,
+      educationAnswer: state.educationAnswer,
+      setEducationAnswer: state.setEducationAnswer,
+    }))
+  );
+
+  const handleClickPrevious = () => {
+    setCurrentTab('education');
+  };
+  const handleClickNext = () => {
+    setCurrentTab('etc');
+  };
+
   return (
     <div className={styles.tabContent}>
       <div className={styles.titleSection}>
@@ -101,7 +114,7 @@ export default function SkillsTab({ onNext, onPrevious }: Props) {
           type="button"
           variant={'tertiary'}
           style={{ width: '96px' }}
-          onClick={onPrevious}
+          onClick={handleClickPrevious}
         >
           이전
         </Button>
@@ -109,7 +122,7 @@ export default function SkillsTab({ onNext, onPrevious }: Props) {
           type="button"
           variant={'primary'}
           style={{ width: '338px' }}
-          onClick={onNext}
+          onClick={handleClickNext}
         >
           다음
         </Button>
