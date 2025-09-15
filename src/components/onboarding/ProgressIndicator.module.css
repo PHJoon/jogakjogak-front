@@ -1,0 +1,50 @@
+.progressIndicator {
+  position: relative;
+  box-sizing: border-box;
+  height: 84px;
+  width: 454px;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+
+.progressList {
+  all: unset;
+  box-sizing: border-box;
+  list-style: none;
+  display: flex;
+  gap: 10px;
+}
+
+.progressItem {
+  position: relative;
+  box-sizing: border-box;
+  height: 24px;
+  width: 24px;
+  display: flex;
+}
+
+.progressItem::after {
+  content: '';
+  width: 10px;
+  height: 2px;
+  background: var(--n-300);
+  display: block;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.progressItem:last-child::after {
+  content: none;
+}
+
+.currentStepLabel {
+  font-family: var(--headline-2-medium-font-family);
+  font-size: var(--headline-2-medium-font-size);
+  font-style: var(--headline-2-medium-font-style);
+  font-weight: var(--headline-2-medium-font-weight);
+  letter-spacing: var(--headline-2-medium-letter-spacing);
+  color: var(--n-800);
+}
