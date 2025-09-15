@@ -1,0 +1,89 @@
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  padding-top: 156px;
+}
+
+.titleSection {
+  height: 56px;
+  width: 454px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 48px;
+}
+
+.title {
+  font-family: var(--title-3-bold-font-family);
+  font-size: var(--title-3-bold-font-size);
+  font-style: var(--title-3-bold-font-style);
+  font-weight: var(--title-3-bold-font-weight);
+  letter-spacing: var(--title-3-bold-letter-spacing);
+  line-height: var(--title-3-bold-line-height);
+  color: var(--n-950);
+}
+
+.title span {
+  color: var(--primaryjogak-1);
+}
+
+.subTitle {
+  font-family: var(--body-1-normal-regular-font-family);
+  font-size: var(--body-1-normal-regular-font-size);
+  font-style: var(--body-1-normal-regular-font-style);
+  font-weight: var(--body-1-normal-regular-font-weight);
+  letter-spacing: var(--body-1-normal-regular-letter-spacing);
+  line-height: var(--body-1-normal-regular-line-height);
+  color: var(--n-800);
+}
+
+.inputSection {
+  height: fit-content;
+  width: 454px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.optionButton {
+  box-sizing: border-box;
+  height: 104px;
+  width: 454px;
+  padding: 12px 0 12px 32px;
+  background-color: var(--n-0);
+  border-radius: 10px;
+  border: 1px solid var(--primaryjogak-2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: var(--heading-2-bold-font-family);
+  font-size: var(--heading-2-bold-font-size);
+  font-style: var(--heading-2-bold-font-style);
+  font-weight: var(--heading-2-bold-font-weight);
+  letter-spacing: var(--heading-2-bold-letter-spacing);
+  color: var(--primaryjogak-1);
+}
+
+.optionButton.selected {
+  background-color: var(--primarymain-100);
+}
+
+.optionButton span {
+  font-family: var(--headline-1-regular-font-family);
+  font-size: var(--headline-1-regular-font-size);
+  font-style: var(--headline-1-regular-font-style);
+  font-weight: var(--headline-1-regular-font-weight);
+  letter-spacing: var(--headline-1-regular-letter-spacing);
+}
+
+.buttonSection {
+  height: 64px;
+  width: 454px;
+  display: flex;
+  gap: 20px;
+  margin-top: auto;
+}
