@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { useState } from 'react';
 
 import skillsIcon from '@/assets/images/ic_brush_sharp.svg';
 import skillsActiveIcon from '@/assets/images/ic_brush_sharp_active.svg';
@@ -13,6 +12,7 @@ import EducationTab from '@/components/onboarding/steps/resume/EducationTab';
 import EtcTab from '@/components/onboarding/steps/resume/EtcTab';
 import ExperienceTab from '@/components/onboarding/steps/resume/ExperienceTab';
 import SkillsTab from '@/components/onboarding/steps/resume/SkillsTab';
+import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './CreateResume.module.css';
 
@@ -39,39 +39,8 @@ const tabs = {
   },
 };
 
-interface Props {
-  onNext: () => void;
-  onPrevious: () => void;
-}
-
-export default function CreateResume({ onNext, onPrevious }: Props) {
-  const [currentTab, setCurrentTab] = useState<
-    'experience' | 'education' | 'skills' | 'etc'
-  >('experience');
-
-  const handleClickNext = () => {
-    if (currentTab === 'experience') {
-      setCurrentTab('education');
-    } else if (currentTab === 'education') {
-      setCurrentTab('skills');
-    } else if (currentTab === 'skills') {
-      setCurrentTab('etc');
-    } else {
-      onNext();
-    }
-  };
-
-  const handleClickPrevious = () => {
-    if (currentTab === 'etc') {
-      setCurrentTab('skills');
-    } else if (currentTab === 'skills') {
-      setCurrentTab('education');
-    } else if (currentTab === 'education') {
-      setCurrentTab('experience');
-    } else {
-      onPrevious();
-    }
-  };
+export default function CreateResume() {
+  const currentTab = useBoundStore((state) => state.currentTab);
 
   return (
     <div className={styles.mainContent}>
@@ -100,27 +69,13 @@ export default function CreateResume({ onNext, onPrevious }: Props) {
         ))}
       </div>
 
-      {currentTab === 'experience' && (
-        <ExperienceTab
-          onNext={handleClickNext}
-          onPrevious={handleClickPrevious}
-        />
-      )}
+      {currentTab === 'experience' && <ExperienceTab />}
 
-      {currentTab === 'education' && (
-        <EducationTab
-          onNext={handleClickNext}
-          onPrevious={handleClickPrevious}
-        />
-      )}
+      {currentTab === 'education' && <EducationTab />}
 
-      {currentTab === 'skills' && (
-        <SkillsTab onNext={handleClickNext} onPrevious={handleClickPrevious} />
-      )}
+      {currentTab === 'skills' && <SkillsTab />}
 
-      {currentTab === 'etc' && (
-        <EtcTab onNext={handleClickNext} onPrevious={handleClickPrevious} />
-      )}
+      {currentTab === 'etc' && <EtcTab />}
     </div>
   );
 }

@@ -1,19 +1,33 @@
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useShallow } from 'zustand/shallow';
 
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import Textarea from '@/components/common/Textarea';
+import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './EtcTab.module.css';
 
-interface Props {
-  onNext: () => void;
-  onPrevious: () => void;
-}
-
-export default function EtcTab({ onNext, onPrevious }: Props) {
+export default function EtcTab() {
+  const router = useRouter();
   const [etcContent, setEtcContent] = useState<string>('');
+
+  const { setCurrentTab, educationAnswer, setEducationAnswer } = useBoundStore(
+    useShallow((state) => ({
+      setCurrentTab: state.setCurrentTab,
+      educationAnswer: state.educationAnswer,
+      setEducationAnswer: state.setEducationAnswer,
+    }))
+  );
+  const handleClickPrevious = () => {
+    setCurrentTab('skills');
+  };
+  const handleClickNext = () => {
+    localStorage.removeItem('bound-store');
+    router.push('/dashboard');
+  };
 
   return (
     <div className={styles.tabContent}>
@@ -40,7 +54,7 @@ export default function EtcTab({ onNext, onPrevious }: Props) {
           type="button"
           variant={'tertiary'}
           style={{ width: '96px' }}
-          onClick={onPrevious}
+          onClick={handleClickPrevious}
         >
           이전
         </Button>
@@ -48,7 +62,7 @@ export default function EtcTab({ onNext, onPrevious }: Props) {
           type="button"
           variant={'primary'}
           style={{ width: '338px' }}
-          onClick={onNext}
+          onClick={handleClickNext}
         >
           다음
         </Button>

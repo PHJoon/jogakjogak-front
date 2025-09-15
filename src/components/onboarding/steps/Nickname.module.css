@@ -39,6 +39,9 @@
 .inputSection {
   height: fit-content;
   width: 454px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .buttonSection {

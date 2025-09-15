@@ -1,26 +1,53 @@
 import Image from 'next/image';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useShallow } from 'zustand/shallow';
 
 import checkbox from '@/assets/images/ic_checkbox.svg';
 import checkboxChecked from '@/assets/images/ic_checkbox_checked.svg';
 import Button from '@/components/common/Button';
+import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './AskCreateSimpleResume.module.css';
 
-interface Props {
-  onNext: () => void;
-  onPrevious: () => void;
-}
+export default function AskCreateSimpleResume() {
+  const router = useRouter();
+  const {
+    setCurrentStep,
+    wantsToCreateSimpleResume,
+    setWantsToCreateSimpleResume,
+  } = useBoundStore(
+    useShallow((state) => ({
+      setCurrentStep: state.setCurrentStep,
+      wantsToCreateSimpleResume: state.wantsToCreateSimpleResume,
+      setWantsToCreateSimpleResume: state.setWantsToCreateSimpleResume,
+    }))
+  );
 
-export default function AskCreateSimpleResume({ onNext, onPrevious }: Props) {
-  const [createResume, setCreateResume] = useState<boolean | null>(null);
+  const handleClickPrevious = () => {
+    setCurrentStep('ask_has_resume');
+  };
 
-  const handleOptionClick = (option: boolean) => {
-    if (createResume === null) {
-      setCreateResume(option);
+  const handleClickNext = () => {
+    if (wantsToCreateSimpleResume === null) return;
+
+    // 간단 이력서 작성 원함 -> 이력서 작성 단계로
+    // 간단 이력서 작성 원하지 않음 -> 온보딩 종료 (대시보드로)
+    if (wantsToCreateSimpleResume) {
+      setCurrentStep('create_resume');
       return;
     }
-    setCreateResume((prev) => (prev === option ? null : option));
+    // 온보딩 종료 (대시보드로)
+    localStorage.removeItem('bound-store');
+    router.push('/dashboard');
+  };
+
+  const handleOptionClick = (option: boolean) => {
+    if (wantsToCreateSimpleResume === null) {
+      setWantsToCreateSimpleResume(option);
+      return;
+    }
+    setWantsToCreateSimpleResume((prev) => (prev === option ? null : option));
   };
 
   return (
@@ -36,12 +63,14 @@ export default function AskCreateSimpleResume({ onNext, onPrevious }: Props) {
 
       <div className={styles.inputSection}>
         <button
-          className={`${styles.optionButton} ${createResume === true ? styles.selected : ''}`}
+          className={`${styles.optionButton} ${wantsToCreateSimpleResume === true ? styles.selected : ''}`}
           type="button"
           onClick={() => handleOptionClick(true)}
         >
           <Image
-            src={createResume === true ? checkboxChecked : checkbox}
+            src={
+              wantsToCreateSimpleResume === true ? checkboxChecked : checkbox
+            }
             alt="Checkbox"
             width={24}
             height={24}
@@ -49,12 +78,14 @@ export default function AskCreateSimpleResume({ onNext, onPrevious }: Props) {
           네, 만들래요.
         </button>
         <button
-          className={`${styles.optionButton} ${createResume === false ? styles.selected : ''}`}
+          className={`${styles.optionButton} ${wantsToCreateSimpleResume === false ? styles.selected : ''}`}
           type="button"
           onClick={() => handleOptionClick(false)}
         >
           <Image
-            src={createResume === false ? checkboxChecked : checkbox}
+            src={
+              wantsToCreateSimpleResume === false ? checkboxChecked : checkbox
+            }
             alt="Checkbox"
             width={24}
             height={24}
@@ -68,7 +99,7 @@ export default function AskCreateSimpleResume({ onNext, onPrevious }: Props) {
           type="button"
           variant={'tertiary'}
           style={{ width: '96px' }}
-          onClick={onPrevious}
+          onClick={handleClickPrevious}
         >
           이전
         </Button>
@@ -76,7 +107,7 @@ export default function AskCreateSimpleResume({ onNext, onPrevious }: Props) {
           type="button"
           variant={'primary'}
           style={{ width: '338px' }}
-          onClick={onNext}
+          onClick={handleClickNext}
         >
           다음
         </Button>

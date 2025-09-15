@@ -6,6 +6,8 @@ import stepThreeIcon from '@/assets/images/ic_step_three.svg';
 import stepThreeActiveIcon from '@/assets/images/ic_step_three_active.svg';
 import stepTwoIcon from '@/assets/images/ic_step_two.svg';
 import stepTwoActiveIcon from '@/assets/images/ic_step_two_active.svg';
+import { OnboardingSteps } from '@/constants/onboardingStep';
+import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './ProgressIndicator.module.css';
 
@@ -24,15 +26,9 @@ const stepIcons = {
   },
 };
 
-interface Props {
-  currentStepNumber: number;
-  currentStepLabel: string;
-}
+export default function ProgressIndicator() {
+  const currentStep = useBoundStore((state) => state.currentStep);
 
-export default function ProgressIndicator({
-  currentStepNumber,
-  currentStepLabel,
-}: Props) {
   return (
     <div aria-label="온보딩 진행 단계" className={styles.progressIndicator}>
       <ol className={styles.progressList}>
@@ -40,14 +36,22 @@ export default function ProgressIndicator({
           <li
             key={step}
             className={`${styles.progressItem} ${
-              currentStepNumber === index + 1 ? styles.currentStep : ''
+              OnboardingSteps[currentStep].stepNumber === index + 1
+                ? styles.currentStep
+                : ''
             }`}
-            aria-current={currentStepNumber === index + 1 ? 'step' : undefined}
-            aria-label={currentStepLabel}
+            aria-current={
+              OnboardingSteps[currentStep].stepNumber === index + 1
+                ? 'step'
+                : undefined
+            }
+            aria-label={OnboardingSteps[currentStep].label}
           >
             <Image
               src={
-                currentStepNumber === index + 1 ? icons.active : icons.default
+                OnboardingSteps[currentStep].stepNumber === index + 1
+                  ? icons.active
+                  : icons.default
               }
               alt={`Step ${index + 1} icon`}
               width={24}
@@ -57,7 +61,7 @@ export default function ProgressIndicator({
         ))}
       </ol>
       <p className={styles.currentStepLabel} aria-live="polite">
-        {currentStepLabel}
+        {OnboardingSteps[currentStep].label}
       </p>
     </div>
   );
