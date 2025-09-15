@@ -1,6 +1,6 @@
 import type { UseFormRegisterReturn } from 'react-hook-form';
 
-import { useState } from 'react';
+import { InputHTMLAttributes, useState } from 'react';
 
 import styles from './Input.module.css';
 
@@ -12,6 +12,9 @@ type BaseProps = {
   warning?: boolean;
   maxLength?: number;
   style?: React.CSSProperties;
+  type?: InputHTMLAttributes<HTMLInputElement>['type'];
+  disabled?: boolean;
+  required?: boolean;
 };
 
 // RHF 모드
@@ -35,7 +38,18 @@ type ControlledProps = BaseProps & {
 type Props = RHFProps | ControlledProps;
 
 export default function Input(props: Props) {
-  const { id, label, readOnly, warning, maxLength, style, value } = props;
+  const {
+    id,
+    label,
+    readOnly,
+    warning,
+    maxLength,
+    style,
+    value,
+    type = 'text',
+    disabled,
+    required,
+  } = props;
 
   const isRHFMode = 'field' in props && props.field !== undefined;
   const isControlledMode = 'onChange' in props && props.onChange !== undefined;
@@ -63,7 +77,8 @@ export default function Input(props: Props) {
             : {})}
           id={id}
           className={styles.input}
-          type="text"
+          type={type}
+          maxLength={maxLength}
           onFocus={() => {
             setIsFocused(true);
           }}
@@ -71,9 +86,11 @@ export default function Input(props: Props) {
             setIsFocused(false);
           }}
           readOnly={readOnly}
+          required={required}
+          disabled={disabled}
         />
 
-        {value && !readOnly && (
+        {value && !readOnly && !disabled && maxLength && (
           <div className={styles.inputCounter}>
             {value.length}/{maxLength}
           </div>
