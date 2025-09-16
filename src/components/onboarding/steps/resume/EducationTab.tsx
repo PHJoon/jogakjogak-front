@@ -1,6 +1,11 @@
 import Image from 'next/image';
 import { useEffect } from 'react';
-import { Controller } from 'react-hook-form';
+import {
+  Controller,
+  useFieldArray,
+  useFormContext,
+  useWatch,
+} from 'react-hook-form';
 import { useShallow } from 'zustand/shallow';
 
 import deleteIcon from '@/assets/images/ic_delete.svg';
@@ -8,7 +13,7 @@ import plusIcon from '@/assets/images/ic_plus.svg';
 import Button from '@/components/common/Button';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import Input from '@/components/common/Input';
-import useResumeForm from '@/hooks/useResumeForm';
+import { ResumeFormInput } from '@/hooks/useResumeForm';
 import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './EducationTab.module.css';
@@ -35,13 +40,21 @@ export default function EducationTab() {
   const {
     control,
     watch,
-    setValue,
-    errors,
+    formState: { errors },
     trigger,
-    educationFields,
-    appendEducation,
-    removeEducation,
-  } = useResumeForm();
+    setValue,
+  } = useFormContext<ResumeFormInput>();
+
+  const educationWatch = useWatch({ name: 'education', control });
+
+  const {
+    fields: educationFields,
+    append: appendEducation,
+    remove: removeEducation,
+  } = useFieldArray({
+    control,
+    name: 'education',
+  });
 
   const handleClickPrevious = () => {
     setCurrentTab('experience');
@@ -52,7 +65,7 @@ export default function EducationTab() {
     if (errors.education && errors.education.length) {
       return;
     }
-    setEducationAnswer(watch('education'));
+    setEducationAnswer([...educationWatch]);
     // 다음 탭이 스킬 탭이므로 탭 이동
     setCurrentTab('skills');
   };

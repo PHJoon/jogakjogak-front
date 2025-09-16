@@ -1,29 +1,34 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { useShallow } from 'zustand/shallow';
 
 import Button from '@/components/common/Button';
-import Input from '@/components/common/Input';
 import Textarea from '@/components/common/Textarea';
+import { ResumeFormInput } from '@/hooks/useResumeForm';
 import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './EtcTab.module.css';
 
 export default function EtcTab() {
   const router = useRouter();
-  const [etcContent, setEtcContent] = useState<string>('');
 
-  const { setCurrentTab, educationAnswer, setEducationAnswer } = useBoundStore(
+  const { setCurrentTab, etcAnswer, setEtcAnswer } = useBoundStore(
     useShallow((state) => ({
       setCurrentTab: state.setCurrentTab,
-      educationAnswer: state.educationAnswer,
-      setEducationAnswer: state.setEducationAnswer,
+      etcAnswer: state.etcAnswer,
+      setEtcAnswer: state.setEtcAnswer,
     }))
   );
+
+  const { control, watch, handleSubmit, setValue, register } =
+    useFormContext<ResumeFormInput>();
+
   const handleClickPrevious = () => {
     setCurrentTab('skills');
   };
+
   const handleClickNext = () => {
     localStorage.removeItem('bound-store');
     router.push('/dashboard');
@@ -42,8 +47,8 @@ export default function EtcTab() {
         <Textarea
           id={'etc'}
           label={'갖고 있는 이력서가 있다면 복사 붙여넣기를 추천해요.'}
-          value={etcContent}
-          onChange={(e) => setEtcContent(e.target.value)}
+          field={register('etc')}
+          value={useWatch({ name: 'etc', control })}
           maxLength={4000}
           style={{ width: '454px', height: '540px' }}
         />

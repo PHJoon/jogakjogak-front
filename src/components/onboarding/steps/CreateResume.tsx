@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { FormProvider } from 'react-hook-form';
 
 import skillsIcon from '@/assets/images/ic_brush_sharp.svg';
 import skillsActiveIcon from '@/assets/images/ic_brush_sharp_active.svg';
@@ -12,6 +13,7 @@ import EducationTab from '@/components/onboarding/steps/resume/EducationTab';
 import EtcTab from '@/components/onboarding/steps/resume/EtcTab';
 import ExperienceTab from '@/components/onboarding/steps/resume/ExperienceTab';
 import SkillsTab from '@/components/onboarding/steps/resume/SkillsTab';
+import useResumeForm from '@/hooks/useResumeForm';
 import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './CreateResume.module.css';
@@ -41,6 +43,7 @@ const tabs = {
 
 export default function CreateResume() {
   const currentTab = useBoundStore((state) => state.currentTab);
+  const { methods } = useResumeForm();
 
   return (
     <div className={styles.mainContent}>
@@ -68,14 +71,12 @@ export default function CreateResume() {
           </div>
         ))}
       </div>
-
-      {currentTab === 'experience' && <ExperienceTab />}
-
-      {currentTab === 'education' && <EducationTab />}
-
-      {currentTab === 'skills' && <SkillsTab />}
-
-      {currentTab === 'etc' && <EtcTab />}
+      <FormProvider {...methods}>
+        {currentTab === 'experience' && <ExperienceTab />}
+        {currentTab === 'education' && <EducationTab />}
+        {currentTab === 'skills' && <SkillsTab />}
+        {currentTab === 'etc' && <EtcTab />}
+      </FormProvider>
     </div>
   );
 }

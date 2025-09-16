@@ -1,4 +1,4 @@
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 export interface ResumeFormInput {
   experiences: {
@@ -21,17 +21,7 @@ export interface ResumeFormInput {
 }
 
 export default function useResumeForm() {
-  const {
-    control,
-    handleSubmit,
-    watch,
-    register,
-    reset,
-    getValues,
-    setValue,
-    trigger,
-    formState: { errors },
-  } = useForm<ResumeFormInput>({
+  const methods = useForm<ResumeFormInput>({
     mode: 'onChange',
     defaultValues: {
       experiences: [],
@@ -41,51 +31,5 @@ export default function useResumeForm() {
     },
   });
 
-  const {
-    fields: experienceFields,
-    append: appendExperience,
-    remove: removeExperience,
-  } = useFieldArray({
-    control,
-    name: 'experiences',
-  });
-
-  const {
-    fields: educationFields,
-    append: appendEducation,
-    remove: removeEducation,
-  } = useFieldArray({
-    control,
-    name: 'education',
-  });
-
-  const {
-    fields: skillsFields,
-    append: appendSkills,
-    remove: removeSkills,
-  } = useFieldArray({
-    control,
-    name: 'skills',
-  });
-
-  return {
-    control,
-    handleSubmit,
-    watch,
-    register,
-    reset,
-    getValues,
-    setValue,
-    trigger,
-    errors,
-    experienceFields,
-    appendExperience,
-    removeExperience,
-    educationFields,
-    appendEducation,
-    removeEducation,
-    skillsFields,
-    appendSkills,
-    removeSkills,
-  };
+  return { methods };
 }

@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { useShallow } from 'zustand/shallow';
 
 import closeIcon from '@/assets/images/ic_close.svg';
@@ -7,7 +8,7 @@ import plusIcon from '@/assets/images/ic_plus_no_background.svg';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import useDebouncedCallback from '@/hooks/useDebouncedCallback';
-import useResumeForm from '@/hooks/useResumeForm';
+import useResumeForm, { ResumeFormInput } from '@/hooks/useResumeForm';
 import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './SkillsTab.module.css';
@@ -21,8 +22,18 @@ export default function SkillsTab() {
     }))
   );
 
-  const { control, watch, setValue, skillsFields, appendSkills, removeSkills } =
-    useResumeForm();
+  const { control, setValue } = useFormContext<ResumeFormInput>();
+
+  const skillsWatch = useWatch({ name: 'skills', control });
+
+  const {
+    fields: skillsFields,
+    append: appendSkills,
+    remove: removeSkills,
+  } = useFieldArray({
+    control,
+    name: 'skills',
+  });
 
   const { debounced } = useDebouncedCallback(() => {
     // api 요청
@@ -45,7 +56,7 @@ export default function SkillsTab() {
     setCurrentTab('education');
   };
   const handleClickNext = () => {
-    setSkillsAnswer([...watch('skills')]);
+    setSkillsAnswer([...skillsWatch]);
     setCurrentTab('etc');
   };
 

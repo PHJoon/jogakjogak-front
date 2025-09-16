@@ -1,6 +1,11 @@
 import Image from 'next/image';
 import { useEffect } from 'react';
-import { Controller, set } from 'react-hook-form';
+import {
+  Controller,
+  useFieldArray,
+  useFormContext,
+  useWatch,
+} from 'react-hook-form';
 import { useShallow } from 'zustand/shallow';
 
 import checkBoxIcon from '@/assets/images/ic_checkbox_gray.svg';
@@ -10,7 +15,7 @@ import plusIcon from '@/assets/images/ic_plus.svg';
 import Button from '@/components/common/Button';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import Input from '@/components/common/Input';
-import useResumeForm from '@/hooks/useResumeForm';
+import { ResumeFormInput } from '@/hooks/useResumeForm';
 import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './ExperienceTab.module.css';
@@ -37,15 +42,22 @@ export default function ExperienceTab() {
   );
 
   const {
-    experienceFields,
-    appendExperience,
-    removeExperience,
     control,
-    watch,
+    formState: { errors },
     trigger,
-    errors,
     setValue,
-  } = useResumeForm();
+  } = useFormContext<ResumeFormInput>();
+
+  const experienceWatch = useWatch({ name: 'experiences', control });
+
+  const {
+    fields: experienceFields,
+    append: appendExperience,
+    remove: removeExperience,
+  } = useFieldArray({
+    control,
+    name: 'experiences',
+  });
 
   const handleClickPrevious = () => {
     // 이전 페이지가 간단 이력서 작성 여부 확인이었으면 그 페이지로
@@ -81,7 +93,7 @@ export default function ExperienceTab() {
       setCurrentTab('education');
       return;
     }
-    setExperienceAnswer(watch('experiences'));
+    setExperienceAnswer([...experienceWatch]);
     // 다음 탭이 학력 탭이므로 탭 이동
     setCurrentTab('education');
   };
