@@ -1,57 +1,62 @@
 import Image from 'next/image';
-import { useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
 
 import closeIcon from '@/assets/images/ic_close.svg';
-import plusIcon from '@/assets/images/ic_plus.svg';
+import plusIcon from '@/assets/images/ic_plus_no_background.svg';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
+import useDebouncedCallback from '@/hooks/useDebouncedCallback';
+import useResumeForm from '@/hooks/useResumeForm';
 import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './SkillsTab.module.css';
 
 export default function SkillsTab() {
-  const [addedSkills, setAddedSkills] = useState<string[]>([
-    'JavaScript',
-    'React',
-    'TypeScript',
-    'Node.js',
-    'Next.js',
-    'Python',
-    'Django',
-    'AWS',
-    'Docker',
-    'Kubernetes',
-    'GraphQL',
-    'MongoDB',
-    'PostgreSQL',
-    'Redis',
-    'Git',
-    'CI/CD',
-    'Jest',
-    'Cypress',
-    'Figma',
-    'Adobe XD',
-    'Photoshop',
-    'Illustrator',
-    'SEO',
-    'Google Analytics',
-  ]);
-
-  const { setCurrentTab, educationAnswer, setEducationAnswer } = useBoundStore(
+  const { setCurrentTab, skillsAnswer, setSkillsAnswer } = useBoundStore(
     useShallow((state) => ({
       setCurrentTab: state.setCurrentTab,
-      educationAnswer: state.educationAnswer,
-      setEducationAnswer: state.setEducationAnswer,
+      skillsAnswer: state.skillsAnswer,
+      setSkillsAnswer: state.setSkillsAnswer,
     }))
   );
+
+  const { control, watch, setValue, skillsFields, appendSkills, removeSkills } =
+    useResumeForm();
+
+  const { debounced } = useDebouncedCallback(() => {
+    // api 요청
+    // 결과값으로 setSearchResults([...]);
+  }, 500);
+
+  const [search, setSearch] = useState('');
+  const [searchResults, setSearchResults] = useState<string[]>([]);
+  const ranRef = useRef(false);
+
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearch(value);
+
+    // api 요청
+    // debounced();
+  };
 
   const handleClickPrevious = () => {
     setCurrentTab('education');
   };
   const handleClickNext = () => {
+    setSkillsAnswer([...watch('skills')]);
     setCurrentTab('etc');
   };
+
+  // 첫 렌더링 시 저장된 상태로 초기화
+  useEffect(() => {
+    if (skillsAnswer.length > 0) {
+      if (ranRef.current) return;
+      ranRef.current = true;
+      setValue('skills', [...skillsAnswer]);
+    }
+  }, [setValue, skillsAnswer]);
 
   return (
     <div className={styles.tabContent}>
@@ -66,9 +71,9 @@ export default function SkillsTab() {
 
       <div className={styles.inputSection}>
         <div className={styles.addedSkills}>
-          {addedSkills.map((skill) => (
+          {skillsFields.map((skill, index) => (
             <Button
-              key={skill}
+              key={skill.id}
               variant={'neutral'}
               style={{
                 width: 'fit-content',
@@ -80,13 +85,13 @@ export default function SkillsTab() {
                 cursor: 'default',
               }}
             >
-              {skill}
+              {skill.name}
               <div
                 role="button"
                 className={styles.removeSkillButton}
                 onClick={(e) => {
                   e.stopPropagation();
-                  setAddedSkills(addedSkills.filter((s) => s !== skill));
+                  removeSkills(index);
                 }}
               >
                 <Image
@@ -100,13 +105,77 @@ export default function SkillsTab() {
           ))}
         </div>
 
-        <Input
-          id={'searchSkill'}
-          label={'검색으로 추가하기 (ex. React, Adobe 등)'}
-          style={{ height: '72px', width: '454px' }}
-          onChange={() => {}}
-          value={''}
-        />
+        <div className={styles.searchSection}>
+          <Input
+            id={'searchSkill'}
+            label={'검색으로 추가하기 (ex. React, Adobe 등)'}
+            style={{
+              height: '72px',
+              width: '454px',
+              borderRadius: search ? '12px 12px 0 0' : '12px',
+            }}
+            onChange={(e) => handleSearch(e)}
+            value={search}
+            maxLength={30}
+          />
+
+          {search && searchResults.length === 0 && (
+            <div className={styles.searchResults}>
+              <p className={styles.infoText}>
+                검색결과
+                <span>적합한 키워드가 없어요.</span>
+              </p>
+              <button
+                type={'button'}
+                className={styles.resultItem}
+                onClick={() => {
+                  if (
+                    !Object.values(skillsFields)
+                      .map((skill) => skill.name)
+                      .includes(search)
+                  ) {
+                    appendSkills({ id: crypto.randomUUID(), name: search });
+                  }
+                }}
+              >
+                <span>&apos;{search}&apos;(으)로 직접 추가</span>
+                <Image src={plusIcon} alt="Add skill" width={20} height={20} />
+              </button>
+            </div>
+          )}
+
+          {search && searchResults.length > 0 && (
+            <div className={styles.searchResults}>
+              <p className={styles.infoText}>검색결과</p>
+              <div className={styles.resultsList}>
+                {searchResults.map((result) => (
+                  <button
+                    key={result}
+                    type={'button'}
+                    className={styles.resultItem}
+                    onClick={() => {
+                      if (
+                        !Object.values(skillsFields)
+                          .map((skill) => skill.name)
+                          .includes(search)
+                      ) {
+                        appendSkills({ id: crypto.randomUUID(), name: result });
+                      }
+                    }}
+                  >
+                    <span>{result}</span>
+                    <Image
+                      src={plusIcon}
+                      alt="Add skill"
+                      width={20}
+                      height={20}
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className={styles.buttonSection}>
