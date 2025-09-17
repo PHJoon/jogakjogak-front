@@ -3,6 +3,44 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ERROR_CODES, ERROR_MESSAGES } from '@/constants/errorCode';
 import { API_BASE_URL } from '@/lib/config';
 
+// 이력서 조회
+export async function GET(request: NextRequest) {
+  try {
+    const accessToken = request.cookies.get('access_token')?.value ?? null;
+    if (!accessToken) {
+      return NextResponse.json(
+        {
+          errorCode: ERROR_CODES.NO_ACCESS_TOKEN,
+          message: ERROR_MESSAGES.NO_ACCESS_TOKEN,
+        },
+        { status: 401 }
+      );
+    }
+
+    // 백엔드 서버로 이력서 조회 요청
+    const response = await fetch(`${API_BASE_URL}/v2/resume`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+    return NextResponse.json(data, { status: response.status });
+  } catch (error) {
+    console.error('Next server error [GET /api/resume]: ', error);
+    return NextResponse.json(
+      {
+        errorCode: ERROR_CODES.NEXT_SERVER_ERROR,
+        message: ERROR_MESSAGES.NEXT_SERVER_ERROR,
+      },
+      { status: 500 }
+    );
+  }
+}
+
+// 이력서 생성
 export async function POST(request: NextRequest) {
   try {
     const accessToken = request.cookies.get('access_token')?.value ?? null;
@@ -19,7 +57,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // 백엔드 서버로 이력서 생성 요청
-    const response = await fetch(`${API_BASE_URL}/resume`, {
+    const response = await fetch(`${API_BASE_URL}/v2/resume`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -32,6 +70,46 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
     console.error('Next server error [POST /api/resume]: ', error);
+    return NextResponse.json(
+      {
+        errorCode: ERROR_CODES.NEXT_SERVER_ERROR,
+        message: ERROR_MESSAGES.NEXT_SERVER_ERROR,
+      },
+      { status: 500 }
+    );
+  }
+}
+
+// 이력서 수정
+export async function PATCH(request: NextRequest) {
+  try {
+    const accessToken = request.cookies.get('access_token')?.value ?? null;
+    if (!accessToken) {
+      return NextResponse.json(
+        {
+          errorCode: ERROR_CODES.NO_ACCESS_TOKEN,
+          message: ERROR_MESSAGES.NO_ACCESS_TOKEN,
+        },
+        { status: 401 }
+      );
+    }
+
+    const body = await request.json();
+
+    // 백엔드 서버로 이력서 수정 요청
+    const response = await fetch(`${API_BASE_URL}/v2/resume`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    const data = await response.json();
+    return NextResponse.json(data, { status: response.status });
+  } catch (error) {
+    console.error('Next server error [PATCH /api/resume]: ', error);
     return NextResponse.json(
       {
         errorCode: ERROR_CODES.NEXT_SERVER_ERROR,
