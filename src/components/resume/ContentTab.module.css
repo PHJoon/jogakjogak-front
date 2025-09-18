@@ -1,0 +1,56 @@
+.tabContent {
+  position: relative;
+  box-sizing: border-box;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: fit-content;
+  padding: 0 16px;
+  gap: 28px;
+  max-width: 506px;
+  min-width: 343px;
+  width: 100%;
+}
+
+.titleSection {
+  height: 56px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding-left: 8px;
+}
+
+.title {
+  font-family: var(--title-3-bold-font-family);
+  font-size: var(--title-3-bold-font-size);
+  font-style: var(--title-3-bold-font-style);
+  font-weight: var(--title-3-bold-font-weight);
+  letter-spacing: var(--title-3-bold-letter-spacing);
+  line-height: var(--title-3-bold-line-height);
+  color: var(--n-950);
+}
+
+.title span {
+  color: var(--primaryjogak-1);
+}
+
+.subTitle {
+  font-family: var(--body-1-normal-regular-font-family);
+  font-size: var(--body-1-normal-regular-font-size);
+  font-style: var(--body-1-normal-regular-font-style);
+  font-weight: var(--body-1-normal-regular-font-weight);
+  letter-spacing: var(--body-1-normal-regular-letter-spacing);
+  line-height: var(--body-1-normal-regular-line-height);
+  color: var(--n-800);
+}
+
+.inputSection {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: fit-content;
+}
