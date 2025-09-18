@@ -37,7 +37,6 @@ function LoadingSkeleton() {
 
 function DashboardContent() {
   const router = useRouter();
-  const [jds, setJds] = useState<JobDescription[]>([]);
   const [showNoResumeModal, setShowNoResumeModal] = useState(false);
 
   const {
@@ -52,17 +51,6 @@ function DashboardContent() {
   } = useQueryParams();
 
   const { data, isLoading } = useJdsQuery();
-
-  const [pageInfo, setPageInfo] = useState({
-    totalPages: 0,
-    totalElements: 0,
-    currentPage: 0,
-    pageSize: 0,
-    hasNext: false,
-    hasPrevious: false,
-    isFirst: false,
-    isLast: false,
-  });
 
   const setResume = useBoundStore((state) => state.setResume);
 
@@ -79,8 +67,6 @@ function DashboardContent() {
         return;
       }
       setResume(data.resume);
-      setJds(data.jds);
-      setPageInfo(data.pageInfo);
     }
   }, [data, setResume]);
 
@@ -98,6 +84,10 @@ function DashboardContent() {
     return <LoadingSkeleton />;
   }
 
+  if (!data) {
+    return null;
+  }
+
   return (
     <>
       <main className={styles.main}>
@@ -111,19 +101,19 @@ function DashboardContent() {
 
           {/* job list */}
           <div className={styles.jobSection}>
-            {pageInfo.currentPage === 0 && <JobItemAdd />}
-            {jds.length > 0 &&
-              jds.map((jd) => <JobItem key={jd.jd_id} jd={jd} />)}
+            {data.pageInfo.currentPage === 0 && <JobItemAdd />}
+            {data.jds.length > 0 &&
+              data.jds.map((jd) => <JobItem key={jd.jd_id} jd={jd} />)}
           </div>
 
           {/* pagination */}
           <div className={styles.pagination}>
-            {pageInfo.hasPrevious && (
+            {data.pageInfo.hasPrevious && (
               <button className={styles.paginationButton} onClick={prevPage}>
                 이전
               </button>
             )}
-            {pageInfo.hasNext && (
+            {data.pageInfo.hasNext && (
               <button
                 className={`${styles.paginationButton} ${styles.nextButton}`}
                 onClick={nextPage}
