@@ -9,11 +9,11 @@ import experienceIcon from '@/assets/images/ic_id_card.svg';
 import experienceActiveIcon from '@/assets/images/ic_id_card_active.svg';
 import educationIcon from '@/assets/images/ic_school.svg';
 import educationActiveIcon from '@/assets/images/ic_school_active.svg';
-import EducationTab from '@/components/onboarding/steps/resume/EducationTab';
-import EtcTab from '@/components/onboarding/steps/resume/EtcTab';
-import ExperienceTab from '@/components/onboarding/steps/resume/ExperienceTab';
-import SkillsTab from '@/components/onboarding/steps/resume/SkillsTab';
-import useResumeForm from '@/hooks/useResumeForm';
+// import EducationTab from '@/components/onboarding/steps/resume/EducationTab';
+// import EtcTab from '@/components/onboarding/steps/resume/EtcTab';
+// import ExperienceTab from '@/components/onboarding/steps/resume/ExperienceTab';
+// import SkillsTab from '@/components/onboarding/steps/resume/SkillsTab';
+import useResumeForm from '@/hooks/resume/useResumeForm';
 import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './CreateResume.module.css';
@@ -71,12 +71,12 @@ export default function CreateResume() {
           </div>
         ))}
       </div>
-      <FormProvider {...methods}>
+      {/* <FormProvider {...methods}>
         {currentTab === 'experience' && <ExperienceTab />}
         {currentTab === 'education' && <EducationTab />}
         {currentTab === 'skills' && <SkillsTab />}
         {currentTab === 'etc' && <EtcTab />}
-      </FormProvider>
+      </FormProvider> */}
     </div>
   );
 }
