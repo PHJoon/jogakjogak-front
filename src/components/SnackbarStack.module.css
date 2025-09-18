@@ -12,7 +12,8 @@
 .snackbar {
   min-width: 335px;
   width: auto;
-  height: 52px;
+  min-height: 52px;
+  height: auto;
   padding: 15px 16px 15px 18px;
   border-radius: 10px;
   border: 1px solid;

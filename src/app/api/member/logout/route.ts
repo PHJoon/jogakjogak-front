@@ -140,6 +140,15 @@ export async function POST(request: NextRequest) {
     sameSite: 'none',
   });
 
+  nextResponse.cookies.set('refresh', '', {
+    path: '/',
+    maxAge: 0,
+    domain: 'www.jogakjogak.com',
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: 'lax',
+  });
+
   if (process.env.NODE_ENV === 'development') {
     nextResponse.cookies.delete('refresh');
   }

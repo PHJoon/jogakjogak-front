@@ -24,7 +24,7 @@ export default function ResumeRegistration() {
       event_category: GACategory.RESUME,
     });
     if (hasResume) {
-      router.push(`/resume/create?id=${resume.resumeId}`);
+      router.push(`/resume/update`);
     } else {
       router.push('/resume/create');
     }
@@ -54,11 +54,9 @@ export default function ResumeRegistration() {
 
   return (
     <div className={styles.resumeDesktop}>
-      {resume ? (
+      {hasResume ? (
         <div className={styles.resumeInfo}>
-          <div className={styles.resumeTitle}>
-            {resume.title || '나의 이력서'}
-          </div>
+          <div className={styles.resumeTitle}>{'나의 이력서'}</div>
           <div className={styles.resumeUpdated}>
             {formatTimeAgo(resume.updatedAt)}
           </div>
@@ -77,7 +75,7 @@ export default function ResumeRegistration() {
       )}
       <div className={styles.btnInstance}>
         <Button variant="primary" onClick={handleResumeClick}>
-          {resume ? '이력서 수정' : '이력서 등록'}
+          {hasResume ? '이력서 수정' : '이력서 등록'}
         </Button>
       </div>
     </div>
