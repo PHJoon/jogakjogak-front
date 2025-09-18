@@ -64,7 +64,7 @@
 
 .textareaCounter {
   position: absolute;
-  top: 508px;
+  top: 85%;
   right: 24px;
   transform: translateX(-100%);
   width: 33px;
