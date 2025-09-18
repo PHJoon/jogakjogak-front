@@ -245,7 +245,7 @@ export default function UpdateResumePage() {
           isLoading={isResumeUpdating}
           disabled={isResumeUpdating || isResumeLoading}
         >
-          등록하기
+          수정하기
         </Button>
       </div>
     </main>
