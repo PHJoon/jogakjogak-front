@@ -6,58 +6,59 @@ export function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
 
   const accessTokenFromCookie = request.cookies.get('access_token')?.value;
-  const refreshTokenFromCookie = request.cookies.get('refresh')?.value;
   const hasAccessToken = !!accessTokenFromCookie;
-  const hasRefreshToken = !!refreshTokenFromCookie;
 
   // 루트 경로('/') 에서만 실행
   if (pathname === '/') {
-    // intro 파라미터가 있으면 소개 페이지 표시
+    // intro or error 파라미터가 있으면 소개 페이지 표시
     const showIntro = searchParams.get('intro') === 'true';
-    if (showIntro) {
+    const error = searchParams.get('error');
+    if (showIntro || error) {
       return NextResponse.next();
     }
 
-    // error 파라미터 있어도 그대로 진행
-    const error = searchParams.get('error');
-    if (error) {
-      return NextResponse.next();
+    // 토큰이 있으면 대시보드로 리다이렉트
+    if (hasAccessToken) {
+      const res = NextResponse.redirect(new URL('/dashboard', request.url));
+      res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+      res.headers.set('Pragma', 'no-cache');
+      res.headers.set('Expires', '0');
+      return res;
     }
   }
 
+  // 로그인 페이지에 접근하는 경우
   if (pathname === '/login') {
     if (hasAccessToken) {
-      return NextResponse.redirect(new URL('/dashboard', request.url));
+      const res = NextResponse.redirect(new URL('/dashboard', request.url));
+      res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+      res.headers.set('Pragma', 'no-cache');
+      res.headers.set('Expires', '0');
+      return res;
     }
-    // if (hasRefreshToken) {
-    //   return NextResponse.redirect(
-    //     new URL('/api/auth/bootstrap?redirect=/dashboard', request.url)
-    //   );
-    // }
+    return NextResponse.next();
   }
 
+  // 인증이 필요한 경로에 접근하는 경우
   if (WITH_AUTH.some((path) => pathname.startsWith(path))) {
-    if (hasAccessToken) {
-      return NextResponse.next();
+    if (!hasAccessToken) {
+      const redirectUrl = new URL(
+        `/api/auth/bootstrap?redirect=${encodeURIComponent(request.url)}`,
+        request.url
+      );
+      const res = NextResponse.redirect(redirectUrl);
+      res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+      res.headers.set('Pragma', 'no-cache');
+      res.headers.set('Expires', '0');
+      return res;
     }
 
-    // const nextResponse = NextResponse.redirect(
-    //   new URL(
-    //     `/api/auth/bootstrap?redirect=${encodeURIComponent(request.url)}`,
-    //     request.url
-    //   )
-    // );
-
-    // nextResponse.headers.append(
-    //   'Cache-Control',
-    //   'no-store, no-cache, must-revalidate'
-    // );
-    // nextResponse.headers.append('Pragma', 'no-cache');
-    // nextResponse.headers.append('Expires', '0');
-
-    // if (!hasAccessToken) {
-    //   return nextResponse;
-    // }
+    // 토큰 있으면 통과 + 캐시 금지
+    const res = NextResponse.next();
+    res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+    res.headers.set('Pragma', 'no-cache');
+    res.headers.set('Expires', '0');
+    return res;
   }
 
   return NextResponse.next();
