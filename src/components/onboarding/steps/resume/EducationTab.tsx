@@ -1,222 +1,225 @@
-// import Image from 'next/image';
-// import { useEffect } from 'react';
-// import {
-//   Controller,
-//   useFieldArray,
-//   useFormContext,
-//   useWatch,
-// } from 'react-hook-form';
-// import { useShallow } from 'zustand/shallow';
+import Image from 'next/image';
+import { useEffect, useRef } from 'react';
+import {
+  Controller,
+  useFieldArray,
+  useFormContext,
+  useWatch,
+} from 'react-hook-form';
+import { useShallow } from 'zustand/shallow';
 
-// import deleteIcon from '@/assets/images/ic_delete.svg';
-// import plusIcon from '@/assets/images/ic_plus.svg';
-// import Button from '@/components/common/Button';
-// import ErrorMessage from '@/components/common/ErrorMessage';
-// import Input from '@/components/common/Input';
-// import { ResumeFormInput } from '@/hooks/resume/useResumeForm';
-// import { useBoundStore } from '@/stores/useBoundStore';
+import deleteIcon from '@/assets/images/ic_delete.svg';
+import plusIcon from '@/assets/images/ic_plus.svg';
+import Button from '@/components/common/Button';
+import ErrorMessage from '@/components/common/ErrorMessage';
+import Input from '@/components/common/Input';
+import { useBoundStore } from '@/stores/useBoundStore';
+import { ResumeFormInput } from '@/types/resume';
 
-// import styles from './EducationTab.module.css';
+import styles from './EducationTab.module.css';
 
-// export default function EducationTab() {
-//   const educationLevels = ['학사', '전문학사', '고등학교', '석사', '박사'];
-//   const educationStatuses = [
-//     '졸업',
-//     '졸업예정',
-//     '재학',
-//     '휴학',
-//     '중퇴',
-//     '수료',
-//   ];
+export default function EducationTab() {
+  const educationLevels = ['학사', '전문학사', '고등학교', '석사', '박사'];
+  const educationStatuses = [
+    '졸업',
+    '졸업예정',
+    '재학',
+    '휴학',
+    '중퇴',
+    '수료',
+  ];
+  const ranRef = useRef(false);
 
-//   const { setCurrentTab, educationAnswer, setEducationAnswer } = useBoundStore(
-//     useShallow((state) => ({
-//       setCurrentTab: state.setCurrentTab,
-//       educationAnswer: state.educationAnswer,
-//       setEducationAnswer: state.setEducationAnswer,
-//     }))
-//   );
+  const { setCurrentTab, educationListAnswer, setEducationListAnswer } =
+    useBoundStore(
+      useShallow((state) => ({
+        setCurrentTab: state.setCurrentTab,
+        educationListAnswer: state.educationListAnswer,
+        setEducationListAnswer: state.setEducationListAnswer,
+      }))
+    );
 
-//   const {
-//     control,
-//     watch,
-//     formState: { errors },
-//     trigger,
-//     setValue,
-//   } = useFormContext<ResumeFormInput>();
+  const {
+    control,
+    watch,
+    formState: { errors },
+    trigger,
+    setValue,
+  } = useFormContext<ResumeFormInput>();
 
-//   const educationWatch = useWatch({ name: 'education', control });
+  const educationListWatch = useWatch({ name: 'educationList', control });
 
-//   const {
-//     fields: educationFields,
-//     append: appendEducation,
-//     remove: removeEducation,
-//   } = useFieldArray({
-//     control,
-//     name: 'education',
-//   });
+  const {
+    fields: educationFields,
+    append: appendEducation,
+    remove: removeEducation,
+  } = useFieldArray({
+    control,
+    name: 'educationList',
+  });
 
-//   const handleClickPrevious = () => {
-//     setCurrentTab('experience');
-//   };
+  const handleClickPrevious = () => {
+    setCurrentTab('career');
+  };
 
-//   const handleClickNext = async () => {
-//     await trigger('education');
-//     if (errors.education && errors.education.length) {
-//       return;
-//     }
-//     setEducationAnswer([...educationWatch]);
-//     // 다음 탭이 스킬 탭이므로 탭 이동
-//     setCurrentTab('skills');
-//   };
+  const handleClickNext = async () => {
+    await trigger('educationList');
+    if (errors.educationList && errors.educationList.length) {
+      return;
+    }
+    setEducationListAnswer([...educationListWatch]);
+    // 다음 탭이 스킬 탭이므로 탭 이동
+    setCurrentTab('skill');
+  };
 
-//   const checkIfEducationExists = () => {
-//     if (educationFields.length === 0) return false;
-//     return true;
-//   };
+  // 학력 정보가 이미 있다면 폼에 초기값으로 설정
+  useEffect(() => {
+    if (educationListAnswer.length > 0) {
+      if (ranRef.current) return;
+      ranRef.current = true;
+      setValue('educationList', [...educationListAnswer]);
+    }
+  }, [educationListAnswer, setValue]);
 
-//   useEffect(() => {
-//     if (educationAnswer.length > 0) {
-//       setValue('education', [...educationAnswer]);
-//     }
-//   }, [educationAnswer, setValue]);
+  return (
+    <div className={styles.tabContent}>
+      <div className={styles.titleSection}>
+        <h1 className={styles.title}>
+          최종 <span>학력</span>을 입력해주세요.
+        </h1>
+        <p className={styles.subTitle}>채용공고의 최소 요건 확인에 필요해요.</p>
+      </div>
 
-//   return (
-//     <div className={styles.tabContent}>
-//       <div className={styles.titleSection}>
-//         <h1 className={styles.title}>
-//           최종 <span>학력</span>을 입력해주세요.
-//         </h1>
-//         <p className={styles.subTitle}>채용공고의 최소 요건 확인에 필요해요.</p>
-//       </div>
+      <div className={styles.inputSection}>
+        <div className={styles.scrollWrapper}>
+          <div className={styles.educationList}>
+            {educationFields.map((field, index) => (
+              <Controller
+                key={field.id}
+                name={`educationList.${index}`}
+                control={control}
+                rules={{
+                  validate: (edu) => {
+                    if (!edu.level || !edu.majorField || !edu.status) {
+                      return '학력 정보를 모두 입력해주세요.';
+                    }
+                    return true;
+                  },
+                }}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <div className={styles.educationEntry}>
+                    <div className={styles.educationLevelSelect}>
+                      {educationLevels.map((level) => (
+                        <Button
+                          key={level}
+                          variant={'secondary'}
+                          style={{
+                            width: 'fit-content',
+                            height: '44px',
+                            padding: '10px 16px',
+                          }}
+                          onClick={() => onChange({ ...value, level })}
+                          isActive={value.level === level}
+                        >
+                          {level}
+                        </Button>
+                      ))}
+                    </div>
 
-//       <div className={styles.inputSection}>
-//         <div className={styles.scrollWrapper}>
-//           <div className={styles.educationList}>
-//             {educationFields.map((field, index) => (
-//               <Controller
-//                 key={field.id}
-//                 name={`education.${index}`}
-//                 control={control}
-//                 rules={{
-//                   validate: (edu) => {
-//                     if (!edu.level || !edu.major || !edu.status) {
-//                       return '학력 정보를 모두 입력해주세요.';
-//                     }
-//                     return true;
-//                   },
-//                 }}
-//                 render={({
-//                   field: { onChange, value },
-//                   fieldState: { error },
-//                 }) => (
-//                   <div className={styles.educationEntry}>
-//                     <div className={styles.educationLevelSelect}>
-//                       {educationLevels.map((level) => (
-//                         <Button
-//                           key={level}
-//                           variant={'secondary'}
-//                           style={{
-//                             width: 'fit-content',
-//                             height: '44px',
-//                             padding: '10px 16px',
-//                           }}
-//                           onClick={() => onChange({ ...value, level })}
-//                           isActive={value.level === level}
-//                         >
-//                           {level}
-//                         </Button>
-//                       ))}
-//                     </div>
+                    <Input
+                      id={`educationList${index}.major`}
+                      label={'학과명 혹은 계열'}
+                      style={{ width: '100%' }}
+                      onChange={(e) =>
+                        onChange({ ...value, majorField: e.target.value })
+                      }
+                      value={value.majorField}
+                    />
 
-//                     <Input
-//                       id={`educationMajor${index}.major`}
-//                       label={'학과명 혹은 계열'}
-//                       style={{ height: '72px', width: '454px' }}
-//                       onChange={(e) =>
-//                         onChange({ ...value, major: e.target.value })
-//                       }
-//                       value={value.major}
-//                     />
+                    <div className={styles.educationStatusSelect}>
+                      {educationStatuses.map((status) => (
+                        <Button
+                          key={status}
+                          variant={'neutral'}
+                          style={{
+                            width: 'fit-content',
+                            height: '44px',
+                            padding: '10px 16px',
+                          }}
+                          onClick={() => onChange({ ...value, status })}
+                          isActive={value.status === status}
+                        >
+                          {status}
+                        </Button>
+                      ))}
+                    </div>
+                    {/* 에러 메세지 */}
+                    {error && (
+                      <ErrorMessage
+                        message={
+                          error.message ?? '학력 정보를 모두 입력해주세요.'
+                        }
+                      />
+                    )}
+                    {/* 삭제 버튼 */}
+                    <button
+                      className={styles.deleteButton}
+                      onClick={() => removeEducation(index)}
+                    >
+                      <Image
+                        src={deleteIcon}
+                        alt="삭제 아이콘"
+                        width={24}
+                        height={24}
+                      />
+                      <span>삭제</span>
+                    </button>
+                  </div>
+                )}
+              />
+            ))}
+          </div>
+        </div>
 
-//                     <div className={styles.educationStatusSelect}>
-//                       {educationStatuses.map((status) => (
-//                         <Button
-//                           key={status}
-//                           variant={'neutral'}
-//                           style={{
-//                             width: 'fit-content',
-//                             height: '44px',
-//                             padding: '10px 16px',
-//                           }}
-//                           onClick={() => onChange({ ...value, status })}
-//                           isActive={value.status === status}
-//                         >
-//                           {status}
-//                         </Button>
-//                       ))}
-//                     </div>
-//                     {/* 에러 메세지 */}
-//                     {error && (
-//                       <ErrorMessage
-//                         message={
-//                           error.message ?? '학력 정보를 모두 입력해주세요.'
-//                         }
-//                       />
-//                     )}
-//                     {/* 삭제 버튼 */}
-//                     <button
-//                       className={styles.deleteButton}
-//                       onClick={() => removeEducation(index)}
-//                     >
-//                       <Image
-//                         src={deleteIcon}
-//                         alt="삭제 아이콘"
-//                         width={24}
-//                         height={24}
-//                       />
-//                       <span>삭제</span>
-//                     </button>
-//                   </div>
-//                 )}
-//               />
-//             ))}
-//           </div>
-//         </div>
-
-//         <button
-//           className={styles.addEducationButton}
-//           onClick={() =>
-//             appendEducation({
-//               level: '',
-//               major: '',
-//               status: '',
-//             })
-//           }
-//         >
-//           <Image src={plusIcon} alt="추가 아이콘" />
-//           학력 추가하기
-//         </button>
-//       </div>
-
-//       <div className={styles.buttonSection}>
-//         <Button
-//           type="button"
-//           variant={'tertiary'}
-//           style={{ width: '96px' }}
-//           onClick={handleClickPrevious}
-//         >
-//           이전
-//         </Button>
-//         <Button
-//           type="button"
-//           variant={'primary'}
-//           style={{ width: '338px' }}
-//           onClick={handleClickNext}
-//         >
-//           {educationFields.length > 0 ? '다음' : '건너뛰기'}
-//         </Button>
-//       </div>
-//     </div>
-//   );
-// }
+        <button
+          className={styles.addEducationButton}
+          onClick={() =>
+            appendEducation({
+              level: '',
+              majorField: '',
+              status: '',
+            })
+          }
+        >
+          <Image src={plusIcon} alt="추가 아이콘" />
+          학력 추가하기
+        </button>
+      </div>
+      <div className={styles.stepNavigationButtonGroup}>
+        <div className={styles.previousButtonWrapper}>
+          <Button
+            type="button"
+            variant={'tertiary'}
+            style={{ width: '100%', height: '100%' }}
+            onClick={handleClickPrevious}
+          >
+            이전
+          </Button>
+        </div>
+        <div className={styles.nextButtonWrapper}>
+          <Button
+            type="button"
+            variant={'primary'}
+            style={{ width: '100%', height: '100%' }}
+            onClick={handleClickNext}
+          >
+            다음
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
