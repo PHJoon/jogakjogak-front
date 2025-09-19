@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
 
 import checkbox from '@/assets/images/ic_checkbox.svg';
@@ -14,13 +13,13 @@ export default function AskCreateSimpleResume() {
   const router = useRouter();
   const {
     setCurrentStep,
-    wantsToCreateSimpleResume,
-    setWantsToCreateSimpleResume,
+    createSimpleResumeAnswer,
+    setCreateSimpleResumeAnswer,
   } = useBoundStore(
     useShallow((state) => ({
       setCurrentStep: state.setCurrentStep,
-      wantsToCreateSimpleResume: state.wantsToCreateSimpleResume,
-      setWantsToCreateSimpleResume: state.setWantsToCreateSimpleResume,
+      createSimpleResumeAnswer: state.createSimpleResumeAnswer,
+      setCreateSimpleResumeAnswer: state.setCreateSimpleResumeAnswer,
     }))
   );
 
@@ -29,11 +28,11 @@ export default function AskCreateSimpleResume() {
   };
 
   const handleClickNext = () => {
-    if (wantsToCreateSimpleResume === null) return;
+    if (createSimpleResumeAnswer === null) return;
 
     // 간단 이력서 작성 원함 -> 이력서 작성 단계로
     // 간단 이력서 작성 원하지 않음 -> 온보딩 종료 (대시보드로)
-    if (wantsToCreateSimpleResume) {
+    if (createSimpleResumeAnswer) {
       setCurrentStep('create_resume');
       return;
     }
@@ -43,11 +42,11 @@ export default function AskCreateSimpleResume() {
   };
 
   const handleOptionClick = (option: boolean) => {
-    if (wantsToCreateSimpleResume === null) {
-      setWantsToCreateSimpleResume(option);
+    if (createSimpleResumeAnswer === null) {
+      setCreateSimpleResumeAnswer(option);
       return;
     }
-    setWantsToCreateSimpleResume((prev) => (prev === option ? null : option));
+    setCreateSimpleResumeAnswer((prev) => (prev === option ? null : option));
   };
 
   return (
@@ -63,54 +62,58 @@ export default function AskCreateSimpleResume() {
 
       <div className={styles.inputSection}>
         <button
-          className={`${styles.optionButton} ${wantsToCreateSimpleResume === true ? styles.selected : ''}`}
+          className={`${styles.optionButton} ${createSimpleResumeAnswer === true ? styles.selected : ''}`}
           type="button"
           onClick={() => handleOptionClick(true)}
         >
           <Image
-            src={
-              wantsToCreateSimpleResume === true ? checkboxChecked : checkbox
-            }
+            src={createSimpleResumeAnswer === true ? checkboxChecked : checkbox}
             alt="Checkbox"
             width={24}
             height={24}
           />
-          네, 만들래요.
+          <p className={styles.optionButtonText}>네, 만들래요.</p>
         </button>
         <button
-          className={`${styles.optionButton} ${wantsToCreateSimpleResume === false ? styles.selected : ''}`}
+          className={`${styles.optionButton} ${createSimpleResumeAnswer === false ? styles.selected : ''}`}
           type="button"
           onClick={() => handleOptionClick(false)}
         >
           <Image
             src={
-              wantsToCreateSimpleResume === false ? checkboxChecked : checkbox
+              createSimpleResumeAnswer === false ? checkboxChecked : checkbox
             }
             alt="Checkbox"
             width={24}
             height={24}
           />
-          아니요. 다음에 만들게요. (건너뛰기)
+          <p className={styles.optionButtonText}>
+            아니요. 다음에 만들게요. <span>(건너뛰기)</span>
+          </p>
         </button>
       </div>
 
-      <div className={styles.buttonSection}>
-        <Button
-          type="button"
-          variant={'tertiary'}
-          style={{ width: '96px' }}
-          onClick={handleClickPrevious}
-        >
-          이전
-        </Button>
-        <Button
-          type="button"
-          variant={'primary'}
-          style={{ width: '338px' }}
-          onClick={handleClickNext}
-        >
-          다음
-        </Button>
+      <div className={styles.stepNavigationButtonGroup}>
+        <div className={styles.previousButtonWrapper}>
+          <Button
+            type="button"
+            variant={'tertiary'}
+            style={{ width: '100%', height: '100%' }}
+            onClick={handleClickPrevious}
+          >
+            이전
+          </Button>
+        </div>
+        <div className={styles.nextButtonWrapper}>
+          <Button
+            type="button"
+            variant={'primary'}
+            style={{ width: '100%', height: '100%' }}
+            onClick={handleClickNext}
+          >
+            다음
+          </Button>
+        </div>
       </div>
     </div>
   );
