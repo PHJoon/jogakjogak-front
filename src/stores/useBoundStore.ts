@@ -31,12 +31,12 @@ export const useBoundStore = create<BoundStore>()(
         currentStep: state.currentStep,
         currentTab: state.currentTab,
         hasResumeAnswer: state.hasResumeAnswer,
-        wantsToCreateSimpleResume: state.wantsToCreateSimpleResume,
-        hasExperienceAnswer: state.hasExperienceAnswer,
-        experienceAnswer: state.experienceAnswer,
-        educationAnswer: state.educationAnswer,
-        skillsAnswer: state.skillsAnswer,
-        etcAnswer: state.etcAnswer,
+        createSimpleResumeAnswer: state.createSimpleResumeAnswer,
+        isNewcomerAnswer: state.isNewcomerAnswer,
+        careerListAnswer: state.careerListAnswer,
+        educationListAnswer: state.educationListAnswer,
+        skillListAnswer: state.skillListAnswer,
+        contentAnswer: state.contentAnswer,
       }),
     }
   )
