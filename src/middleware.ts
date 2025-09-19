@@ -25,35 +25,39 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  if (pathname === '/signup' || pathname === '/login') {
+  if (pathname === '/login') {
     if (hasAccessToken) {
       return NextResponse.redirect(new URL('/dashboard', request.url));
     }
-    if (hasRefreshToken) {
-      return NextResponse.redirect(
-        new URL('/api/auth/bootstrap?redirect=/dashboard', request.url)
-      );
-    }
+    // if (hasRefreshToken) {
+    //   return NextResponse.redirect(
+    //     new URL('/api/auth/bootstrap?redirect=/dashboard', request.url)
+    //   );
+    // }
   }
 
   if (WITH_AUTH.some((path) => pathname.startsWith(path))) {
-    const nextResponse = NextResponse.redirect(
-      new URL(
-        `/api/auth/bootstrap?redirect=${encodeURIComponent(request.url)}`,
-        request.url
-      )
-    );
-
-    nextResponse.headers.append(
-      'Cache-Control',
-      'no-store, no-cache, must-revalidate'
-    );
-    nextResponse.headers.append('Pragma', 'no-cache');
-    nextResponse.headers.append('Expires', '0');
-
-    if (!hasAccessToken) {
-      return nextResponse;
+    if (hasAccessToken) {
+      return NextResponse.next();
     }
+
+    // const nextResponse = NextResponse.redirect(
+    //   new URL(
+    //     `/api/auth/bootstrap?redirect=${encodeURIComponent(request.url)}`,
+    //     request.url
+    //   )
+    // );
+
+    // nextResponse.headers.append(
+    //   'Cache-Control',
+    //   'no-store, no-cache, must-revalidate'
+    // );
+    // nextResponse.headers.append('Pragma', 'no-cache');
+    // nextResponse.headers.append('Expires', '0');
+
+    // if (!hasAccessToken) {
+    //   return nextResponse;
+    // }
   }
 
   return NextResponse.next();
