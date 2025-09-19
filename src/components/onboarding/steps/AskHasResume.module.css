@@ -5,14 +5,18 @@
   align-items: center;
   box-sizing: border-box;
   padding-top: 156px;
+  max-width: 454px;
+  min-width: 343px;
+  width: 100%;
 }
 
 .titleSection {
   height: 56px;
-  width: 454px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding-left: 8px;
   margin-bottom: 48px;
 }
 
@@ -42,7 +46,7 @@
 
 .inputSection {
   height: fit-content;
-  width: 454px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -52,7 +56,7 @@
   all: unset;
   box-sizing: border-box;
   height: 104px;
-  width: 454px;
+  width: 100%;
   padding: 12px 0 12px 32px;
   background-color: var(--n-0);
   border-radius: 10px;
@@ -61,6 +65,14 @@
   align-items: center;
   gap: 8px;
   cursor: pointer;
+}
+
+.optionButton.selected {
+  background-color: var(--primarymain-100);
+}
+
+.optionButtonText {
+  display: flex;
   font-family: var(--heading-2-bold-font-family);
   font-size: var(--heading-2-bold-font-size);
   font-style: var(--heading-2-bold-font-style);
@@ -69,11 +81,7 @@
   color: var(--primaryjogak-1);
 }
 
-.optionButton.selected {
-  background-color: var(--primarymain-100);
-}
-
-.optionButton span {
+.optionButtonText span {
   font-family: var(--headline-1-regular-font-family);
   font-size: var(--headline-1-regular-font-size);
   font-style: var(--headline-1-regular-font-style);
@@ -81,10 +89,29 @@
   letter-spacing: var(--headline-1-regular-letter-spacing);
 }
 
-.buttonSection {
-  height: 64px;
-  width: 454px;
+.stepNavigationButtonGroup {
+  position: relative;
+  height: 56px;
+  width: 100%;
   display: flex;
-  gap: 20px;
+  gap: 8px;
   margin-top: auto;
+}
+
+.previousButtonWrapper {
+  width: 96px;
+  height: 100%;
+}
+
+.nextButtonWrapper {
+  flex: 1;
+  height: 100%;
+}
+
+@media screen and (max-width: 575px) {
+  .optionButtonText {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
 }

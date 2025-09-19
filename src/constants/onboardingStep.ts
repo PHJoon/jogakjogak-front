@@ -17,4 +17,4 @@ export const OnboardingSteps = {
   },
 } as const;
 
-export const ResumeTabs = ['experience', 'education', 'skills', 'etc'] as const;
+export const ResumeTabs = ['career', 'education', 'skill', 'content'] as const;

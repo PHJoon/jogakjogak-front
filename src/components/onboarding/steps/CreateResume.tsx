@@ -1,48 +1,54 @@
 import Image from 'next/image';
 import { FormProvider } from 'react-hook-form';
+import { useShallow } from 'zustand/shallow';
 
-import skillsIcon from '@/assets/images/ic_brush_sharp.svg';
-import skillsActiveIcon from '@/assets/images/ic_brush_sharp_active.svg';
-import etcIcon from '@/assets/images/ic_chat_bubble.svg';
-import etcActiveIcon from '@/assets/images/ic_chat_bubble_active.svg';
-import experienceIcon from '@/assets/images/ic_id_card.svg';
-import experienceActiveIcon from '@/assets/images/ic_id_card_active.svg';
+import skillIcon from '@/assets/images/ic_brush_sharp.svg';
+import skillActiveIcon from '@/assets/images/ic_brush_sharp_active.svg';
+import contentIcon from '@/assets/images/ic_chat_bubble.svg';
+import contentActiveIcon from '@/assets/images/ic_chat_bubble_active.svg';
+import careerIcon from '@/assets/images/ic_id_card.svg';
+import careerActiveIcon from '@/assets/images/ic_id_card_active.svg';
 import educationIcon from '@/assets/images/ic_school.svg';
 import educationActiveIcon from '@/assets/images/ic_school_active.svg';
-// import EducationTab from '@/components/onboarding/steps/resume/EducationTab';
-// import EtcTab from '@/components/onboarding/steps/resume/EtcTab';
-// import ExperienceTab from '@/components/onboarding/steps/resume/ExperienceTab';
-// import SkillsTab from '@/components/onboarding/steps/resume/SkillsTab';
+import CareerTab from '@/components/onboarding/steps/resume/CareerTab';
+import ContentTab from '@/components/onboarding/steps/resume/ContentTab';
+import EducationTab from '@/components/onboarding/steps/resume/EducationTab';
+import SkillTab from '@/components/onboarding/steps/resume/SkillTab';
 import useResumeForm from '@/hooks/resume/useResumeForm';
 import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './CreateResume.module.css';
 
 const tabs = {
-  experience: {
+  career: {
     label: '경력',
-    icon: experienceIcon,
-    activeIcon: experienceActiveIcon,
+    icon: careerIcon,
+    activeIcon: careerActiveIcon,
   },
   education: {
     label: '학력',
     icon: educationIcon,
     activeIcon: educationActiveIcon,
   },
-  skills: {
+  skill: {
     label: '스킬',
-    icon: skillsIcon,
-    activeIcon: skillsActiveIcon,
+    icon: skillIcon,
+    activeIcon: skillActiveIcon,
   },
-  etc: {
+  content: {
     label: '자유',
-    icon: etcIcon,
-    activeIcon: etcActiveIcon,
+    icon: contentIcon,
+    activeIcon: contentActiveIcon,
   },
 };
 
 export default function CreateResume() {
-  const currentTab = useBoundStore((state) => state.currentTab);
+  const { currentTab } = useBoundStore(
+    useShallow((state) => ({
+      currentTab: state.currentTab,
+    }))
+  );
+
   const { methods } = useResumeForm();
 
   return (
@@ -71,12 +77,12 @@ export default function CreateResume() {
           </div>
         ))}
       </div>
-      {/* <FormProvider {...methods}>
-        {currentTab === 'experience' && <ExperienceTab />}
+      <FormProvider {...methods}>
+        {currentTab === 'career' && <CareerTab />}
         {currentTab === 'education' && <EducationTab />}
-        {currentTab === 'skills' && <SkillsTab />}
-        {currentTab === 'etc' && <EtcTab />}
-      </FormProvider> */}
+        {currentTab === 'skill' && <SkillTab />}
+        {currentTab === 'content' && <ContentTab />}
+      </FormProvider>
     </div>
   );
 }

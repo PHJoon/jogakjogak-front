@@ -1,15 +1,18 @@
 .tabContent {
   position: relative;
-  flex: 1;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-sizing: border-box;
+  max-width: 454px;
+  min-width: 343px;
+  width: 100%;
+  height: 100%;
 }
 
 .titleSection {
   height: 56px;
-  width: 454px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -45,20 +48,25 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 454px;
+  width: 100%;
   height: fit-content;
 }
 
-.textarea {
-  width: 454px;
-  height: 540px;
-  padding: 24px;
-}
-
-.buttonSection {
+.stepNavigationButtonGroup {
+  position: relative;
   height: 64px;
-  width: 454px;
+  width: 100%;
   display: flex;
   gap: 20px;
   margin-top: auto;
+}
+
+.previousButtonWrapper {
+  width: 96px;
+  height: 100%;
+}
+
+.nextButtonWrapper {
+  width: 338px;
+  height: 100%;
 }

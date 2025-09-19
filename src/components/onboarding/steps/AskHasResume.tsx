@@ -64,7 +64,9 @@ export default function AskHasResume() {
             width={24}
             height={24}
           />
-          네, 이력서가 있어요. <span>(이력서 입력하러 가기)</span>
+          <p className={styles.optionButtonText}>
+            네, 이력서가 있어요. <span>(이력서 입력하러 가기)</span>
+          </p>
         </button>
         <button
           className={`${styles.optionButton} ${hasResumeAnswer === false ? styles.selected : ''}`}
@@ -77,28 +79,32 @@ export default function AskHasResume() {
             width={24}
             height={24}
           />
-          아니요, 없어요
+          <p className={styles.optionButtonText}>아니요, 없어요</p>
         </button>
       </div>
 
-      <div className={styles.buttonSection}>
-        <Button
-          type="button"
-          variant={'tertiary'}
-          style={{ width: '96px' }}
-          onClick={handleClickPrevious}
-        >
-          이전
-        </Button>
-        <Button
-          type="button"
-          variant={'primary'}
-          style={{ width: '338px' }}
-          onClick={handleClickNext}
-          disabled={hasResumeAnswer === null}
-        >
-          다음
-        </Button>
+      <div className={styles.stepNavigationButtonGroup}>
+        <div className={styles.previousButtonWrapper}>
+          <Button
+            type="button"
+            variant={'tertiary'}
+            style={{ width: '100%', height: '100%' }}
+            onClick={handleClickPrevious}
+          >
+            이전
+          </Button>
+        </div>
+        <div className={styles.nextButtonWrapper}>
+          <Button
+            type="button"
+            variant={'primary'}
+            style={{ width: '100%', height: '100%' }}
+            onClick={handleClickNext}
+            disabled={hasResumeAnswer === null}
+          >
+            다음
+          </Button>
+        </div>
       </div>
     </div>
   );

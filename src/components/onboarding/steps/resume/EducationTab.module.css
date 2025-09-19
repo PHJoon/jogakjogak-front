@@ -1,15 +1,18 @@
 .tabContent {
   position: relative;
-  flex: 1;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-sizing: border-box;
+  max-width: 454px;
+  min-width: 343px;
+  width: 100%;
+  height: 100%;
 }
 
 .titleSection {
   height: 56px;
-  width: 454px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -45,14 +48,14 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 454px;
+  width: 100%;
   height: fit-content;
 }
 
 .scrollWrapper {
   overflow-y: auto;
   scrollbar-width: thin;
-  width: 500px;
+  width: calc(100% + 20px);
   scrollbar-color: var(--n-300) transparent;
   margin-bottom: 16px;
 }
@@ -65,7 +68,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  max-height: 500px;
+  max-height: 540px;
   overflow: visible;
 }
 
@@ -73,7 +76,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  width: 454px;
+  width: 100%;
 }
 
 .educationEntry::after {
@@ -123,7 +126,7 @@
   all: unset;
   box-sizing: border-box;
   height: 48px;
-  width: 454px;
+  width: 100%;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -139,10 +142,21 @@
   color: var(--n-800);
 }
 
-.buttonSection {
+.stepNavigationButtonGroup {
+  position: relative;
   height: 64px;
-  width: 454px;
+  width: 100%;
   display: flex;
   gap: 20px;
   margin-top: auto;
+}
+
+.previousButtonWrapper {
+  width: 96px;
+  height: 100%;
+}
+
+.nextButtonWrapper {
+  width: 338px;
+  height: 100%;
 }

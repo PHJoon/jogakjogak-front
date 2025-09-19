@@ -100,25 +100,29 @@ export default function Nickname() {
         )}
       </div>
 
-      <div className={styles.buttonSection}>
-        <Button
-          type="button"
-          variant={'tertiary'}
-          style={{ width: '96px' }}
-          disabled={true}
-        >
-          이전
-        </Button>
-        <Button
-          type="button"
-          variant={'primary'}
-          style={{ width: '338px' }}
-          onClick={handleNextClick}
-          disabled={isUpdateProfilePending}
-          isLoading={isUpdateProfilePending}
-        >
-          다음 단계
-        </Button>
+      <div className={styles.stepNavigationButtonGroup}>
+        <div className={styles.previousButtonWrapper}>
+          <Button
+            type="button"
+            variant={'tertiary'}
+            style={{ width: '100%', height: '100%' }}
+            disabled={true}
+          >
+            이전
+          </Button>
+        </div>
+        <div className={styles.nextButtonWrapper}>
+          <Button
+            type="button"
+            variant={'primary'}
+            style={{ width: '100%', height: '100%' }}
+            onClick={handleNextClick}
+            disabled={isUpdateProfilePending}
+            isLoading={isUpdateProfilePending}
+          >
+            다음 단계
+          </Button>
+        </div>
       </div>
     </div>
   );

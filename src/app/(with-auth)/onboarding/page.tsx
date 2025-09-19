@@ -1,10 +1,6 @@
 'use client';
 
-import type { SubmitHandler } from 'react-hook-form';
-
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
 import introImage from '@/assets/images/intro.png';
 import ProgressIndicator from '@/components/onboarding/ProgressIndicator';
@@ -42,8 +38,17 @@ export default function Onboarding() {
           {/* 이력서 작성 단계 */}
           {currentStep === 'create_resume' && <CreateResume />}
         </section>
+
         <aside className={styles.imageSection}>
-          <Image src={introImage} alt="Intro image" fill priority />
+          <div className={styles.imageWrapper}>
+            <Image
+              src={introImage}
+              alt="Intro image"
+              priority
+              fill
+              style={{ objectFit: 'cover', objectPosition: 'left' }}
+            />
+          </div>
         </aside>
       </main>
     </>

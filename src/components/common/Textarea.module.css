@@ -64,9 +64,9 @@
 
 .textareaCounter {
   position: absolute;
-  top: 85%;
-  right: 24px;
-  transform: translateX(-100%);
+  top: calc(100% - 12px);
+  right: 32px;
+  transform: translate(-100%, -100%);
   width: 33px;
   height: 22px;
   font-family: var(--body-2-normal-regular-font-family);

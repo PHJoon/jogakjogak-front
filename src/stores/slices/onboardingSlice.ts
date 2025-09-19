@@ -1,5 +1,7 @@
 import { StateCreator } from 'zustand';
 
+import { Career, Education } from '@/types/resume';
+
 import { ResumeTabs } from './../../constants/onboardingStep';
 
 type Setter<T> = (value: T | ((prev: T) => T)) => void;
@@ -15,33 +17,23 @@ export interface OnboardingSlice {
   setCurrentTab: (tab: OnboardingSlice['currentTab']) => void;
   hasResumeAnswer: boolean | null;
   setHasResumeAnswer: Setter<OnboardingSlice['hasResumeAnswer']>;
-  wantsToCreateSimpleResume: boolean | null;
-  setWantsToCreateSimpleResume: Setter<
-    OnboardingSlice['wantsToCreateSimpleResume']
+  createSimpleResumeAnswer: boolean | null;
+  setCreateSimpleResumeAnswer: Setter<
+    OnboardingSlice['createSimpleResumeAnswer']
   >;
-  hasExperienceAnswer: boolean | null;
-  setHasExperienceAnswer: Setter<OnboardingSlice['hasExperienceAnswer']>;
-  experienceAnswer: {
-    company: string;
-    responsibilities: string;
-    startDate: string;
-    endDate: string;
-    isCurrentlyWorking: boolean;
-  }[];
-  setExperienceAnswer: Setter<OnboardingSlice['experienceAnswer']>;
-  educationAnswer: {
-    level: string;
-    status: string;
-    major: string;
-  }[];
-  setEducationAnswer: Setter<OnboardingSlice['educationAnswer']>;
-  skillsAnswer: {
+  isNewcomerAnswer: boolean | null;
+  setIsNewcomerAnswer: Setter<OnboardingSlice['isNewcomerAnswer']>;
+  careerListAnswer: Career[];
+  setCareerListAnswer: Setter<OnboardingSlice['careerListAnswer']>;
+  educationListAnswer: Education[];
+  setEducationListAnswer: Setter<OnboardingSlice['educationListAnswer']>;
+  skillListAnswer: {
     id: string;
     name: string;
   }[];
-  setSkillsAnswer: Setter<OnboardingSlice['skillsAnswer']>;
-  etcAnswer: string;
-  setEtcAnswer: Setter<OnboardingSlice['etcAnswer']>;
+  setSkillListAnswer: Setter<OnboardingSlice['skillListAnswer']>;
+  contentAnswer: string;
+  setContentAnswer: Setter<OnboardingSlice['contentAnswer']>;
 }
 
 export const createOnboardingSlice: StateCreator<
@@ -52,7 +44,7 @@ export const createOnboardingSlice: StateCreator<
 > = (set) => ({
   currentStep: 'profile',
   setCurrentStep: (step) => set({ currentStep: step }),
-  currentTab: 'experience',
+  currentTab: 'career',
   setCurrentTab: (tab) => set({ currentTab: tab }),
   hasResumeAnswer: null,
   setHasResumeAnswer: (updater) =>
@@ -62,48 +54,50 @@ export const createOnboardingSlice: StateCreator<
           ? updater(state.hasResumeAnswer)
           : updater,
     })),
-  wantsToCreateSimpleResume: null,
-  setWantsToCreateSimpleResume: (updater) =>
+  createSimpleResumeAnswer: null,
+  setCreateSimpleResumeAnswer: (updater) =>
     set((state) => ({
-      wantsToCreateSimpleResume:
+      createSimpleResumeAnswer:
         typeof updater === 'function'
-          ? updater(state.wantsToCreateSimpleResume)
+          ? updater(state.createSimpleResumeAnswer)
           : updater,
     })),
-  hasExperienceAnswer: null,
-  setHasExperienceAnswer: (updater) =>
+  isNewcomerAnswer: null,
+  setIsNewcomerAnswer: (updater) =>
     set((state) => ({
-      hasExperienceAnswer:
+      isNewcomerAnswer:
         typeof updater === 'function'
-          ? updater(state.hasExperienceAnswer)
+          ? updater(state.isNewcomerAnswer)
           : updater,
     })),
-  experienceAnswer: [],
-  setExperienceAnswer: (updater) =>
+  careerListAnswer: [],
+  setCareerListAnswer: (updater) =>
     set((state) => ({
-      experienceAnswer:
+      careerListAnswer:
         typeof updater === 'function'
-          ? updater(state.experienceAnswer)
+          ? updater(state.careerListAnswer)
           : updater,
     })),
-  educationAnswer: [],
-  setEducationAnswer: (updater) =>
+  educationListAnswer: [],
+  setEducationListAnswer: (updater) =>
     set((state) => ({
-      educationAnswer:
+      educationListAnswer:
         typeof updater === 'function'
-          ? updater(state.educationAnswer)
+          ? updater(state.educationListAnswer)
           : updater,
     })),
-  skillsAnswer: [],
-  setSkillsAnswer: (updater) =>
+  skillListAnswer: [],
+  setSkillListAnswer: (updater) =>
     set((state) => ({
-      skillsAnswer:
-        typeof updater === 'function' ? updater(state.skillsAnswer) : updater,
+      skillListAnswer:
+        typeof updater === 'function'
+          ? updater(state.skillListAnswer)
+          : updater,
     })),
-  etcAnswer: '',
-  setEtcAnswer: (updater) =>
+  contentAnswer: '',
+  setContentAnswer: (updater) =>
     set((state) => ({
-      etcAnswer:
-        typeof updater === 'function' ? updater(state.etcAnswer) : updater,
+      contentAnswer:
+        typeof updater === 'function' ? updater(state.contentAnswer) : updater,
     })),
 });
