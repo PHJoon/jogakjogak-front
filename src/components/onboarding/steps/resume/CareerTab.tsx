@@ -24,12 +24,14 @@ export default function CareerTab() {
     setCurrentStep,
     createSimpleResumeAnswer,
     setCurrentTab,
+    setIsNewcomerAnswer,
     setCareerListAnswer,
   } = useBoundStore(
     useShallow((state) => ({
       setCurrentStep: state.setCurrentStep,
       createSimpleResumeAnswer: state.createSimpleResumeAnswer,
       setCurrentTab: state.setCurrentTab,
+      setIsNewcomerAnswer: state.setIsNewcomerAnswer,
       setCareerListAnswer: state.setCareerListAnswer,
     }))
   );
@@ -74,14 +76,14 @@ export default function CareerTab() {
   const handleClickNext = async () => {
     const canGoToNext = await checkGoToNext();
     if (!canGoToNext) return;
-    // 이력서 없음(신입) 선택 시 경험 정보 초기화
+    setIsNewcomerAnswer(isNewcomerWatch);
+
+    // 이력서 없음(신입) 선택 시 careerListAnswer 초기화
     if (isNewcomerWatch === false) {
       setCareerListAnswer([]);
-      // 다음 탭이 학력 탭이므로 탭 이동
-      setCurrentTab('education');
-      return;
+    } else {
+      setCareerListAnswer([...careerListWatch]);
     }
-    setCareerListAnswer([...careerListWatch]);
     // 다음 탭이 학력 탭이므로 탭 이동
     setCurrentTab('education');
   };
