@@ -51,7 +51,7 @@ export default function CreateResume() {
   );
   const [active, setActive] = useState(0);
 
-  const { methods } = useResumeForm();
+  const { methods } = useResumeForm({ isOnboarding: true });
 
   // 인디케이트 위치 이동
   useEffect(() => {
