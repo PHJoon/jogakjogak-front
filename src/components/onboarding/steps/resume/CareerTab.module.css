@@ -81,11 +81,15 @@
 }
 
 .careerList {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 24px;
   margin-bottom: 12px;
   max-height: 540px;
+  max-width: 454px;
+  min-width: 343px;
+  width: 100%;
   overflow: visible;
 }
 
@@ -210,6 +214,7 @@
   .scrollWrapper {
     width: 100%;
     margin-bottom: 12px;
+    overflow-y: hidden;
   }
 
   .careerList {
