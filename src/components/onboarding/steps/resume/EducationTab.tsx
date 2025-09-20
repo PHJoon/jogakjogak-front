@@ -12,36 +12,19 @@ import plusIcon from '@/assets/images/ic_plus.svg';
 import Button from '@/components/common/Button';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import Input from '@/components/common/Input';
+import { EDUCATION_LEVELS, EDUCATION_STATUSES } from '@/constants/resume';
 import { useBoundStore } from '@/stores/useBoundStore';
 import { ResumeFormInput } from '@/types/resume';
 
 import styles from './EducationTab.module.css';
 
 export default function EducationTab() {
-  const educationLevels = [
-    { label: '학사', value: 'BACHELOR' },
-    { label: '전문학사', value: 'ASSOCIATE' },
-    { label: '고등학교', value: 'HIGH_SCHOOL' },
-    { label: '석사', value: 'MASTER' },
-    { label: '박사', value: 'DOCTORATE' },
-  ];
-  const educationStatuses = [
-    { label: '졸업', value: 'GRADUATED' },
-    { label: '졸업예정', value: 'EXPECTED_TO_GRADUATE' },
-    { label: '재학', value: 'ENROLLED' },
-    { label: '휴학', value: 'ON_LEAVE' },
-    { label: '중퇴', value: 'DROPOUT' },
-    { label: '수료', value: 'COMPLETED' },
-  ];
-
-  const { setCurrentTab, educationListAnswer, setEducationListAnswer } =
-    useBoundStore(
-      useShallow((state) => ({
-        setCurrentTab: state.setCurrentTab,
-        educationListAnswer: state.educationListAnswer,
-        setEducationListAnswer: state.setEducationListAnswer,
-      }))
-    );
+  const { setCurrentTab, setEducationListAnswer } = useBoundStore(
+    useShallow((state) => ({
+      setCurrentTab: state.setCurrentTab,
+      setEducationListAnswer: state.setEducationListAnswer,
+    }))
+  );
 
   const {
     control,
@@ -63,8 +46,8 @@ export default function EducationTab() {
   };
 
   const handleClickNext = async () => {
-    await trigger('educationList');
-    if (errors.educationList && errors.educationList.length) {
+    const ok = await trigger('educationList');
+    if (!ok) {
       return;
     }
     setEducationListAnswer([...educationListWatch]);
@@ -103,7 +86,7 @@ export default function EducationTab() {
                 }) => (
                   <div className={styles.educationItem}>
                     <div className={styles.educationLevelSelect}>
-                      {educationLevels.map(({ label, value: levelValue }) => (
+                      {EDUCATION_LEVELS.map(({ label, value: levelValue }) => (
                         <Button
                           key={levelValue}
                           variant={'secondary'}
@@ -133,7 +116,7 @@ export default function EducationTab() {
                     />
 
                     <div className={styles.educationStatusSelect}>
-                      {educationStatuses.map(
+                      {EDUCATION_STATUSES.map(
                         ({ label, value: statusValue }) => (
                           <Button
                             key={statusValue}

@@ -36,11 +36,7 @@ export default function CareerTab() {
     }))
   );
 
-  const {
-    control,
-    formState: { errors },
-    trigger,
-  } = useFormContext<ResumeFormInput>();
+  const { control, trigger } = useFormContext<ResumeFormInput>();
   const {
     fields: careerFields,
     append: appendCareer,
@@ -61,21 +57,10 @@ export default function CareerTab() {
     setCurrentStep('ask_has_resume');
   };
 
-  // 다음 버튼 활성화 체크 함수
-  const checkGoToNext = async () => {
-    if (isNewcomerWatch === null) {
-      return false;
-    }
-    await trigger('careerList');
-    if (errors.careerList && errors.careerList.length) {
-      return false;
-    }
-    return true;
-  };
-
   const handleClickNext = async () => {
-    const canGoToNext = await checkGoToNext();
-    if (!canGoToNext) return;
+    const ok = await trigger(['isNewcomer', 'careerList']);
+    if (!ok) return;
+
     setIsNewcomerAnswer(isNewcomerWatch);
 
     // 이력서 없음(신입) 선택 시 careerListAnswer 초기화

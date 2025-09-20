@@ -1,11 +1,6 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
-import {
-  set,
-  type SubmitHandler,
-  useFormContext,
-  useWatch,
-} from 'react-hook-form';
+import { type SubmitHandler, useFormContext, useWatch } from 'react-hook-form';
 import { useShallow } from 'zustand/shallow';
 
 import Button from '@/components/common/Button';
@@ -21,15 +16,13 @@ export default function ContentTab() {
   const router = useRouter();
   const ranRef = useRef(false);
 
-  const { setCurrentTab, contentAnswer, setContentAnswer, setSnackbar } =
-    useBoundStore(
-      useShallow((state) => ({
-        setCurrentTab: state.setCurrentTab,
-        contentAnswer: state.contentAnswer,
-        setContentAnswer: state.setContentAnswer,
-        setSnackbar: state.setSnackbar,
-      }))
-    );
+  const { setCurrentTab, setContentAnswer, setSnackbar } = useBoundStore(
+    useShallow((state) => ({
+      setCurrentTab: state.setCurrentTab,
+      setContentAnswer: state.setContentAnswer,
+      setSnackbar: state.setSnackbar,
+    }))
+  );
 
   const { control, handleSubmit, register } = useFormContext<ResumeFormInput>();
   const contentWatch = useWatch({ name: 'content', control });
@@ -40,10 +33,10 @@ export default function ContentTab() {
     setCurrentTab('skill');
   };
 
-  const handleClickNext = () => {
+  const handleClickNext = async () => {
     localStorage.removeItem('bound-store');
-    // handleSubmit(onSubmit);
-    router.push('/dashboard');
+    await handleSubmit(onSubmit)();
+    router.replace('/dashboard');
   };
 
   // 폼 제출
