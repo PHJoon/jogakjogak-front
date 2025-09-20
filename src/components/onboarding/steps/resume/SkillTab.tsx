@@ -81,7 +81,7 @@ export default function SkillTab() {
       </div>
 
       <div className={styles.inputSection}>
-        <div className={styles.addedSkills}>
+        <div className={styles.addedSkillList}>
           {skillsFields.map((skill, index) => (
             <Button
               key={skill.id}
@@ -130,7 +130,7 @@ export default function SkillTab() {
           />
 
           {search && searchResults.length === 0 && (
-            <div className={styles.searchResults}>
+            <div className={styles.searchResultListContainer}>
               <p className={styles.infoText}>
                 검색결과
                 <span>적합한 키워드가 없어요.</span>
@@ -155,9 +155,9 @@ export default function SkillTab() {
           )}
 
           {search && searchResults.length > 0 && (
-            <div className={styles.searchResults}>
+            <div className={styles.searchResultListContainer}>
               <p className={styles.infoText}>검색결과</p>
-              <div className={styles.resultsList}>
+              <div className={styles.resultList}>
                 {searchResults.map((result) => (
                   <button
                     key={result}
