@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useShallow } from 'zustand/shallow';
 
@@ -48,8 +49,15 @@ export default function CreateResume() {
       currentTab: state.currentTab,
     }))
   );
+  const [active, setActive] = useState(0);
 
   const { methods } = useResumeForm();
+
+  // 인디케이트 위치 이동
+  useEffect(() => {
+    const index = Object.keys(tabs).indexOf(currentTab);
+    setActive(index);
+  }, [currentTab]);
 
   return (
     <div className={styles.mainContent}>
@@ -64,8 +72,8 @@ export default function CreateResume() {
             <Image
               src={tab === currentTab ? activeIcon : icon}
               alt={`${label} 아이콘`}
-              width={20}
-              height={20}
+              width={24}
+              height={24}
             />
             <span
               className={`${styles.tabLabel} ${
@@ -76,6 +84,11 @@ export default function CreateResume() {
             </span>
           </div>
         ))}
+        <span
+          className={styles.indicator}
+          style={{ transform: `translateX(${active * 100}%)` }}
+          aria-hidden
+        />
       </div>
       <FormProvider {...methods}>
         {currentTab === 'career' && <CareerTab />}
