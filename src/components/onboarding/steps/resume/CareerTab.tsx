@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useState } from 'react';
 import {
   Controller,
   useFieldArray,
@@ -14,12 +15,14 @@ import plusIcon from '@/assets/images/ic_plus.svg';
 import Button from '@/components/common/Button';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import Input from '@/components/common/Input';
+import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
 import { useBoundStore } from '@/stores/useBoundStore';
 import { ResumeFormInput } from '@/types/resume';
 
 import styles from './CareerTab.module.css';
 
 export default function CareerTab() {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const {
     setCurrentStep,
     createSimpleResumeAnswer,
@@ -264,7 +267,7 @@ export default function CareerTab() {
                         {careerFields.length > 1 && (
                           <button
                             className={styles.deleteButton}
-                            onClick={() => removeCareer(index)}
+                            onClick={() => setIsDeleteModalOpen(true)}
                           >
                             <Image
                               src={deleteIcon}
@@ -275,6 +278,19 @@ export default function CareerTab() {
                             <span>삭제</span>
                           </button>
                         )}
+                        <DeleteConfirmModal
+                          title="정말 삭제하시겠습니까?"
+                          highlightedText="삭제"
+                          message="기록한 내용이 모두 삭제돼요."
+                          cancelText="아니요"
+                          confirmText="확인"
+                          isOpen={isDeleteModalOpen}
+                          onClose={() => setIsDeleteModalOpen(false)}
+                          onConfirm={() => {
+                            removeCareer(index);
+                            setIsDeleteModalOpen(false);
+                          }}
+                        />
                       </div>
                     )}
                   />
