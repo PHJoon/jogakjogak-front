@@ -16,13 +16,15 @@ export default function ContentTab() {
   const router = useRouter();
   const ranRef = useRef(false);
 
-  const { setCurrentTab, setContentAnswer, setSnackbar } = useBoundStore(
-    useShallow((state) => ({
-      setCurrentTab: state.setCurrentTab,
-      setContentAnswer: state.setContentAnswer,
-      setSnackbar: state.setSnackbar,
-    }))
-  );
+  const { setCurrentTab, setContentAnswer, resetOnboardingStore, setSnackbar } =
+    useBoundStore(
+      useShallow((state) => ({
+        setCurrentTab: state.setCurrentTab,
+        setContentAnswer: state.setContentAnswer,
+        resetOnboardingStore: state.reset,
+        setSnackbar: state.setSnackbar,
+      }))
+    );
 
   const { control, handleSubmit, register } = useFormContext<ResumeFormInput>();
   const contentWatch = useWatch({ name: 'content', control });
@@ -36,12 +38,13 @@ export default function ContentTab() {
   const handleClickNext = async () => {
     localStorage.removeItem('bound-store');
     await handleSubmit(onSubmit)();
-    router.replace('/dashboard');
   };
 
   // 폼 제출
   const onSubmit: SubmitHandler<ResumeFormInput> = (data) => {
     console.log(data);
+    resetOnboardingStore();
+    router.replace('/dashboard');
     // if (data.isNewcomer === null) return;
 
     // const formData: ResumeRequestBody = {
@@ -55,7 +58,7 @@ export default function ContentTab() {
     // createResumeMutate(formData, {
     //   onSuccess: () => {
     //     setSnackbar({ message: '이력서가 등록되었어요.', type: 'success' });
-    //     router.push('/dashboard');
+    //     router.replace('/dashboard');
     //   },
     //   onError: (error) => {
     //     if (error instanceof HttpError) {

@@ -5,6 +5,9 @@ import { useShallow } from 'zustand/shallow';
 import checkbox from '@/assets/images/ic_checkbox.svg';
 import checkboxChecked from '@/assets/images/ic_checkbox_checked.svg';
 import Button from '@/components/common/Button';
+import { ERROR_CODES, ERROR_MESSAGES } from '@/constants/errorCode';
+import { updateIsOnboarded } from '@/lib/api/mypage/profile';
+import { HttpError } from '@/lib/HttpError';
 import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './AskCreateSimpleResume.module.css';
@@ -15,11 +18,15 @@ export default function AskCreateSimpleResume() {
     setCurrentStep,
     createSimpleResumeAnswer,
     setCreateSimpleResumeAnswer,
+    resetOnboardingStore,
+    setSnackbar,
   } = useBoundStore(
     useShallow((state) => ({
       setCurrentStep: state.setCurrentStep,
       createSimpleResumeAnswer: state.createSimpleResumeAnswer,
       setCreateSimpleResumeAnswer: state.setCreateSimpleResumeAnswer,
+      resetOnboardingStore: state.reset,
+      setSnackbar: state.setSnackbar,
     }))
   );
 
@@ -27,7 +34,7 @@ export default function AskCreateSimpleResume() {
     setCurrentStep('ask_has_resume');
   };
 
-  const handleClickNext = () => {
+  const handleClickNext = async () => {
     if (createSimpleResumeAnswer === null) return;
 
     // 간단 이력서 작성 원함 -> 이력서 작성 단계로
@@ -36,9 +43,30 @@ export default function AskCreateSimpleResume() {
       setCurrentStep('create_resume');
       return;
     }
-    // 온보딩 종료 (대시보드로)
-    localStorage.removeItem('bound-store');
-    router.push('/dashboard');
+
+    resetOnboardingStore();
+    router.replace('/dashboard');
+    // try {
+    //   await updateIsOnboarded(true);
+    //   // 온보딩 종료 (대시보드로)
+    //   resetOnboardingStore();
+    //   router.replace('/dashboard');
+    // } catch (error) {
+    //   if (error instanceof HttpError) {
+    //     setSnackbar({
+    //       type: 'error',
+    //       message:
+    //         ERROR_MESSAGES[error.errorCode as keyof typeof ERROR_CODES] ||
+    //         '오류가 발생했어요. 다시 시도해주세요.',
+    //     });
+    //     return;
+    //   }
+
+    //   setSnackbar({
+    //     type: 'error',
+    //     message: '오류가 발생했어요. 다시 시도해주세요.',
+    //   });
+    // }
   };
 
   const handleOptionClick = (option: boolean) => {
