@@ -53,6 +53,8 @@
   letter-spacing: var(--label-1-reading-regular-letter-spacing);
   color: var(--n-800);
   background-color: transparent;
+  scrollbar-color: var(--n-300) transparent;
+  scrollbar-width: thin;
   overflow-wrap: break-word; /* 긴 단어도 줄바꿈 */
   word-break: break-all; /* 단어가 길 경우 줄바꿈 */
   overflow-x: hidden; /* 가로 스크롤 숨김 */
@@ -153,5 +155,9 @@
     & .floatingLabel {
       transform: translateY(8px);
     }
+  }
+
+  .textareaCounter {
+    top: calc(100% - 2px);
   }
 }

@@ -2,7 +2,7 @@
   position: relative;
   box-sizing: border-box;
   height: 84px;
-  width: 454px;
+  width: 100%;
   padding: 12px 8px;
   display: flex;
   flex-direction: column;

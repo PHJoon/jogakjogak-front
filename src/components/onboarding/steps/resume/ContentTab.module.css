@@ -54,10 +54,10 @@
 
 .stepNavigationButtonGroup {
   position: relative;
-  height: 64px;
+  height: 56px;
   width: 100%;
   display: flex;
-  gap: 20px;
+  gap: 8px;
   margin-top: auto;
 }
 
@@ -67,6 +67,6 @@
 }
 
 .nextButtonWrapper {
-  width: 338px;
+  flex: 1;
   height: 100%;
 }

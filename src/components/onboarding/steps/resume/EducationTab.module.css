@@ -69,17 +69,20 @@
   flex-direction: column;
   gap: 24px;
   max-height: 540px;
+  max-width: 454px;
+  min-width: 343px;
+  width: 100%;
   overflow: visible;
 }
 
-.educationEntry {
+.educationItem {
   display: flex;
   flex-direction: column;
   gap: 16px;
   width: 100%;
 }
 
-.educationEntry::after {
+.educationItem::after {
   content: '';
   display: block;
   width: 100%;
@@ -89,18 +92,20 @@
   align-items: center;
 }
 
-.educationEntry:last-child::after {
+.educationItem:last-child::after {
   content: none;
 }
 
 .educationLevelSelect {
   display: flex;
   gap: 6px;
+  flex-wrap: wrap;
 }
 
 .educationStatusSelect {
   display: flex;
   gap: 7px;
+  flex-wrap: wrap;
 }
 
 .deleteButton {
@@ -140,14 +145,15 @@
   letter-spacing: var(--body-1-normal-regular-letter-spacing);
   background-color: var(--n-50);
   color: var(--n-800);
+  margin-bottom: 24px;
 }
 
 .stepNavigationButtonGroup {
   position: relative;
-  height: 64px;
+  height: 56px;
   width: 100%;
   display: flex;
-  gap: 20px;
+  gap: 8px;
   margin-top: auto;
 }
 
@@ -157,6 +163,20 @@
 }
 
 .nextButtonWrapper {
-  width: 338px;
+  flex: 1;
   height: 100%;
+}
+
+@media screen and (max-width: 575px) {
+  .scrollWrapper {
+    width: 100%;
+    margin-bottom: 12px;
+    overflow-y: hidden;
+  }
+
+  .educationList {
+    max-height: 100%;
+    height: auto;
+    overflow: auto;
+  }
 }

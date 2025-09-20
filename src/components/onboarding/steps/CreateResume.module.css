@@ -11,13 +11,18 @@
 }
 
 .resumeTabs {
-  position: relative;
+  max-width: 506px;
+  min-width: 343px;
   width: 100%;
   height: 44px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
   border-bottom: 1px solid var(--n-400);
   margin-bottom: 40px;
+  background-color: var(--n-0);
+
+  --count: 4;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--count), 1fr);
 }
 
 .tab {
@@ -25,6 +30,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 44px;
   gap: 6px;
   padding: 10px 16px;
 }
@@ -38,10 +44,6 @@
   color: var(--n-500);
 }
 
-.tab.activeTab {
-  border-bottom: 2px solid var(--primaryjogak-1);
-}
-
 .tabLabel.activeTabLabel {
   font-family: var(--body-1-normal-bold-font-family);
   font-size: var(--body-1-normal-bold-font-size);
@@ -51,8 +53,19 @@
   color: var(--primaryjogak-1);
 }
 
-.resumeContent {
-  position: relative;
-  flex: 1;
-  box-sizing: border-box;
+.indicator {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: calc(100% / var(--count));
+  height: 2px;
+  background: #3b82f6; /* primary */
+  transition: transform 240ms ease;
+  will-change: transform;
+}
+
+@media screen and (max-width: 575px) {
+  .tab {
+    padding: 10px 13px;
+  }
 }

@@ -72,8 +72,17 @@ export default function LoginPage() {
             </button>
           </div>
         </section>
+
         <aside className={styles.imageSection}>
-          <Image src={introImage} alt="Intro image" fill priority />
+          <div className={styles.imageWrapper}>
+            <Image
+              src={introImage}
+              alt="Intro image"
+              priority
+              fill
+              style={{ objectFit: 'cover', objectPosition: 'left' }}
+            />
+          </div>
         </aside>
       </main>
     </>
