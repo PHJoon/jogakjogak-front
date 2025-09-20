@@ -2,7 +2,7 @@ import { PageInfo } from '.';
 
 export interface Resume {
   resumeId: number;
-  title: string;
+  title: string | null;
   content: string;
   createdAt: string;
   updatedAt: string;
@@ -20,6 +20,25 @@ export interface JobDescription {
   endedAt: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface JdsResponse {
+  resume: Resume | null;
+  isOnboarded: boolean;
+  jds: JobDescription[];
+  totalPages: number;
+  totalElements: number;
+  currentPage: number;
+  pageSize: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
+  postedJdCount: number;
+  last: true;
+  first: true;
+  applyJdCount: number;
+  completedPiecesCount: number;
+  totalPiecesCount: number;
+  perfectJdCount: number;
 }
 
 export interface TodoItem {
