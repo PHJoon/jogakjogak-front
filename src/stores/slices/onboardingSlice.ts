@@ -1,19 +1,15 @@
 import { StateCreator } from 'zustand';
 
-import { Career, Education } from '@/types/resume';
+import { Career, Education, ResumeTab } from '@/types/resume';
 
-import { ResumeTabs } from './../../constants/onboardingStep';
+import { ONBOARDING_STEPS } from '../../constants/onboarding';
 
 type Setter<T> = (value: T | ((prev: T) => T)) => void;
 
 export interface OnboardingSlice {
-  currentStep:
-    | 'profile'
-    | 'ask_has_resume'
-    | 'ask_create_simple_resume'
-    | 'create_resume';
+  currentStep: keyof typeof ONBOARDING_STEPS;
   setCurrentStep: (step: OnboardingSlice['currentStep']) => void;
-  currentTab: (typeof ResumeTabs)[number];
+  currentTab: ResumeTab;
   setCurrentTab: (tab: OnboardingSlice['currentTab']) => void;
   hasResumeAnswer: boolean | null;
   setHasResumeAnswer: Setter<OnboardingSlice['hasResumeAnswer']>;
@@ -34,6 +30,7 @@ export interface OnboardingSlice {
   setSkillListAnswer: Setter<OnboardingSlice['skillListAnswer']>;
   contentAnswer: string;
   setContentAnswer: Setter<OnboardingSlice['contentAnswer']>;
+  reset: () => void;
 }
 
 export const createOnboardingSlice: StateCreator<
@@ -41,7 +38,7 @@ export const createOnboardingSlice: StateCreator<
   [],
   [],
   OnboardingSlice
-> = (set) => ({
+> = (set, get, store) => ({
   currentStep: 'profile',
   setCurrentStep: (step) => set({ currentStep: step }),
   currentTab: 'career',
@@ -100,4 +97,7 @@ export const createOnboardingSlice: StateCreator<
       contentAnswer:
         typeof updater === 'function' ? updater(state.contentAnswer) : updater,
     })),
+  reset: () => {
+    set(store.getInitialState());
+  },
 });

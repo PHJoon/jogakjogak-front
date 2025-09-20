@@ -1,11 +1,13 @@
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
 import { ApiResponse, PaginatedData } from '@/types';
-import { JobDescription, Resume, ShowOnly, Sort } from '@/types/jds';
+import {
+  JdsResponse,
+  JobDescription,
+  Resume,
+  ShowOnly,
+  Sort,
+} from '@/types/jds';
 import throwIfNotOk from '@/utils/throwIfNotOk';
-
-type JdsResponse = ApiResponse<
-  PaginatedData<'jds', JobDescription, { resume: Resume | null }>
->;
 
 // 채용공고 전체 데이터 가져오기
 export async function getJdsData(
@@ -30,9 +32,17 @@ export async function getJdsData(
   });
 
   await throwIfNotOk(response, '채용공고를 가져오는 중 오류가 발생했습니다.');
-  const data: JdsResponse = await response.json();
+  const data: ApiResponse<JdsResponse> = await response.json();
   return {
     resume: data.data?.resume || null,
+    isOnborded: data.data?.isOnboarded || false,
+    jdSummary: {
+      postedJdCount: data.data?.postedJdCount || 0,
+      applyJdCount: data.data?.applyJdCount || 0,
+      completedPiecesCount: data.data?.completedPiecesCount || 0,
+      totalPiecesCount: data.data?.totalPiecesCount || 0,
+      perfectJdCount: data.data?.perfectJdCount || 0,
+    },
     jds: data.data?.jds || [],
     pageInfo: {
       totalElements: data.data?.totalElements || 0,
@@ -41,8 +51,8 @@ export async function getJdsData(
       pageSize: data.data?.pageSize || 0,
       hasNext: data.data?.hasNext || false,
       hasPrevious: data.data?.hasPrevious || false,
-      isFirst: data.data?.isFirst || false,
-      isLast: data.data?.isLast || false,
+      isFirst: data.data?.first || false,
+      isLast: data.data?.last || false,
     },
   };
 }

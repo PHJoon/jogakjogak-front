@@ -6,7 +6,7 @@ import stepThreeIcon from '@/assets/images/ic_step_three.svg';
 import stepThreeActiveIcon from '@/assets/images/ic_step_three_active.svg';
 import stepTwoIcon from '@/assets/images/ic_step_two.svg';
 import stepTwoActiveIcon from '@/assets/images/ic_step_two_active.svg';
-import { OnboardingSteps } from '@/constants/onboardingStep';
+import { ONBOARDING_STEPS } from '@/constants/onboarding';
 import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './ProgressIndicator.module.css';
@@ -36,20 +36,20 @@ export default function ProgressIndicator() {
           <li
             key={step}
             className={`${styles.progressItem} ${
-              OnboardingSteps[currentStep].stepNumber === index + 1
+              ONBOARDING_STEPS[currentStep].stepNumber === index + 1
                 ? styles.currentStep
                 : ''
             }`}
             aria-current={
-              OnboardingSteps[currentStep].stepNumber === index + 1
+              ONBOARDING_STEPS[currentStep].stepNumber === index + 1
                 ? 'step'
                 : undefined
             }
-            aria-label={OnboardingSteps[currentStep].label}
+            aria-label={ONBOARDING_STEPS[currentStep].label}
           >
             <Image
               src={
-                OnboardingSteps[currentStep].stepNumber === index + 1
+                ONBOARDING_STEPS[currentStep].stepNumber === index + 1
                   ? icons.active
                   : icons.default
               }
@@ -61,7 +61,7 @@ export default function ProgressIndicator() {
         ))}
       </ol>
       <p className={styles.currentStepLabel} aria-live="polite">
-        {OnboardingSteps[currentStep].label}
+        {ONBOARDING_STEPS[currentStep].label}
       </p>
     </div>
   );

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import {
   Controller,
   useFieldArray,
@@ -15,42 +15,31 @@ import plusIcon from '@/assets/images/ic_plus.svg';
 import Button from '@/components/common/Button';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import Input from '@/components/common/Input';
+import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
 import { useBoundStore } from '@/stores/useBoundStore';
 import { ResumeFormInput } from '@/types/resume';
 
 import styles from './CareerTab.module.css';
 
 export default function CareerTab() {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const {
     setCurrentStep,
     createSimpleResumeAnswer,
     setCurrentTab,
-    isNewcomerAnswer,
     setIsNewcomerAnswer,
-    careerListAnswer,
     setCareerListAnswer,
   } = useBoundStore(
     useShallow((state) => ({
       setCurrentStep: state.setCurrentStep,
       createSimpleResumeAnswer: state.createSimpleResumeAnswer,
       setCurrentTab: state.setCurrentTab,
-      isNewcomerAnswer: state.isNewcomerAnswer,
       setIsNewcomerAnswer: state.setIsNewcomerAnswer,
-      careerListAnswer: state.careerListAnswer,
       setCareerListAnswer: state.setCareerListAnswer,
     }))
   );
 
-  const {
-    control,
-    formState: { errors },
-    trigger,
-    setValue,
-  } = useFormContext<ResumeFormInput>();
-
-  const isNewcomerWatch = useWatch({ name: 'isNewcomer', control });
-  const careerListWatch = useWatch({ name: 'careerList', control });
-
+  const { control, trigger } = useFormContext<ResumeFormInput>();
   const {
     fields: careerFields,
     append: appendCareer,
@@ -59,6 +48,8 @@ export default function CareerTab() {
     control,
     name: 'careerList',
   });
+  const isNewcomerWatch = useWatch({ name: 'isNewcomer', control });
+  const careerListWatch = useWatch({ name: 'careerList', control });
 
   const handleClickPrevious = () => {
     // 이전 페이지가 간단 이력서 작성 여부 확인이었으면 그 페이지로
@@ -69,38 +60,21 @@ export default function CareerTab() {
     setCurrentStep('ask_has_resume');
   };
 
-  // 다음 버튼 활성화 체크 함수
-  const checkGoToNext = async () => {
-    if (isNewcomerWatch === null) {
-      return false;
-    }
-    await trigger('careerList');
-    if (errors.careerList && errors.careerList.length) {
-      return false;
-    }
-    return true;
-  };
-
   const handleClickNext = async () => {
-    const canGoToNext = await checkGoToNext();
-    if (!canGoToNext) return;
-    // 이력서 없음(신입) 선택 시 경험 정보 초기화
+    const ok = await trigger(['isNewcomer', 'careerList']);
+    if (!ok) return;
+
+    setIsNewcomerAnswer(isNewcomerWatch);
+
+    // 이력서 없음(신입) 선택 시 careerListAnswer 초기화
     if (isNewcomerWatch === false) {
       setCareerListAnswer([]);
-      // 다음 탭이 학력 탭이므로 탭 이동
-      setCurrentTab('education');
-      return;
+    } else {
+      setCareerListAnswer([...careerListWatch]);
     }
-    setCareerListAnswer([...careerListWatch]);
     // 다음 탭이 학력 탭이므로 탭 이동
     setCurrentTab('education');
   };
-
-  useEffect(() => {
-    if (careerListAnswer.length > 0) {
-      setValue('careerList', [...careerListAnswer]);
-    }
-  }, [careerListAnswer, setValue]);
 
   return (
     <div className={styles.tabContent}>
@@ -293,7 +267,7 @@ export default function CareerTab() {
                         {careerFields.length > 1 && (
                           <button
                             className={styles.deleteButton}
-                            onClick={() => removeCareer(index)}
+                            onClick={() => setIsDeleteModalOpen(true)}
                           >
                             <Image
                               src={deleteIcon}
@@ -304,6 +278,19 @@ export default function CareerTab() {
                             <span>삭제</span>
                           </button>
                         )}
+                        <DeleteConfirmModal
+                          title="정말 삭제하시겠습니까?"
+                          highlightedText="삭제"
+                          message="기록한 내용이 모두 삭제돼요."
+                          cancelText="아니요"
+                          confirmText="확인"
+                          isOpen={isDeleteModalOpen}
+                          onClose={() => setIsDeleteModalOpen(false)}
+                          onConfirm={() => {
+                            removeCareer(index);
+                            setIsDeleteModalOpen(false);
+                          }}
+                        />
                       </div>
                     )}
                   />
@@ -345,8 +332,9 @@ export default function CareerTab() {
             variant={'primary'}
             style={{ width: '100%', height: '100%' }}
             onClick={handleClickNext}
+            disabled={isNewcomerWatch === null} // 신입/경력 선택 안했거나, 경력 선택했는데 경력사항이 하나도 없으면 비활성화
           >
-            다음
+            다음 단계
           </Button>
         </div>
       </div>

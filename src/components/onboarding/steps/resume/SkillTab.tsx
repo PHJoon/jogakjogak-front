@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { useShallow } from 'zustand/shallow';
 
@@ -7,25 +7,27 @@ import closeIcon from '@/assets/images/ic_close.svg';
 import plusIcon from '@/assets/images/ic_plus_no_background.svg';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
+import { ERROR_CODES, ERROR_MESSAGES } from '@/constants/errorCode';
 import useDebouncedCallback from '@/hooks/useDebouncedCallback';
+import { searchSkillWords } from '@/lib/api/resume/resumeApi';
+import { HttpError } from '@/lib/HttpError';
 import { useBoundStore } from '@/stores/useBoundStore';
 import { ResumeFormInput } from '@/types/resume';
 
 import styles from './SkillTab.module.css';
 
 export default function SkillTab() {
-  const { setCurrentTab, skillListAnswer, setSkillListAnswer } = useBoundStore(
+  const { setCurrentTab, setSkillListAnswer, setSnackbar } = useBoundStore(
     useShallow((state) => ({
       setCurrentTab: state.setCurrentTab,
-      skillListAnswer: state.skillListAnswer,
       setSkillListAnswer: state.setSkillListAnswer,
+      setSnackbar: state.setSnackbar,
     }))
   );
+  const [search, setSearch] = useState('');
+  const [searchResults, setSearchResults] = useState<string[]>([]);
 
-  const { control, setValue } = useFormContext<ResumeFormInput>();
-
-  const skillListWatch = useWatch({ name: 'skillList', control });
-
+  const { control } = useFormContext<ResumeFormInput>();
   const {
     fields: skillsFields,
     append: appendSkills,
@@ -34,22 +36,41 @@ export default function SkillTab() {
     control,
     name: 'skillList',
   });
+  const skillListWatch = useWatch({ name: 'skillList', control });
 
-  const { debounced } = useDebouncedCallback(() => {
-    // api 요청
-    // 결과값으로 setSearchResults([...]);
-  }, 500);
-
-  const [search, setSearch] = useState('');
-  const [searchResults, setSearchResults] = useState<string[]>([]);
-  const ranRef = useRef(false);
+  const { debounced } = useDebouncedCallback(async (q: string) => {
+    if (q.length === 0) {
+      setSearchResults([]);
+      return;
+    }
+    if (q.length < 3) {
+      setSnackbar({
+        type: 'info',
+        message: '3글자 이상 입력해야 검색이 가능합니다.',
+      });
+      setSearchResults([]);
+      return;
+    }
+    try {
+      const response = await searchSkillWords(q);
+      setSearchResults(response);
+    } catch (error) {
+      setSearchResults([]);
+      if (error instanceof HttpError) {
+        setSnackbar({
+          type: 'error',
+          message:
+            ERROR_MESSAGES[error.code as keyof typeof ERROR_CODES] ||
+            '알 수 없는 오류가 발생했습니다.',
+        });
+      }
+    }
+  }, 400);
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearch(value);
-
-    // api 요청
-    // debounced();
+    debounced(value);
   };
 
   const handleClickPrevious = () => {
@@ -59,15 +80,6 @@ export default function SkillTab() {
     setSkillListAnswer([...skillListWatch]);
     setCurrentTab('content');
   };
-
-  // 첫 렌더링 시 저장된 상태로 초기화
-  useEffect(() => {
-    if (skillListAnswer.length > 0) {
-      if (ranRef.current) return;
-      ranRef.current = true;
-      setValue('skillList', [...skillListAnswer]);
-    }
-  }, [setValue, skillListAnswer]);
 
   return (
     <div className={styles.tabContent}>
@@ -205,7 +217,7 @@ export default function SkillTab() {
             style={{ width: '100%', height: '100%' }}
             onClick={handleClickNext}
           >
-            다음
+            다음 단계
           </Button>
         </div>
       </div>

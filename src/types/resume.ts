@@ -65,3 +65,5 @@ export interface ResumeResponse {
   createdAt: string;
   updatedAt: string;
 }
+
+export type ResumeTab = 'career' | 'education' | 'skill' | 'content';

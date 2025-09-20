@@ -29,6 +29,10 @@ export default function SkillTab() {
   });
 
   const { debounced } = useDebouncedCallback(async (q: string) => {
+    if (q.length === 0) {
+      setSearchResults([]);
+      return;
+    }
     if (q.length < 3) {
       setSnackbar({
         type: 'info',

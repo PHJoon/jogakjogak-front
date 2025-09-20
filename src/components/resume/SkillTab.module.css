@@ -115,7 +115,8 @@
   all: unset;
   box-sizing: border-box;
   width: fit-content;
-  height: 40px;
+  min-height: 40px;
+  height: auto;
   border: 1px solid var(--primaryjogak-2);
   border-radius: 10px;
   padding: 8px 12px;
@@ -133,6 +134,10 @@
   font-weight: var(--body-1-normal-medium-font-weight);
   letter-spacing: var(--body-1-normal-medium-letter-spacing);
   color: var(--primarymain-800);
+
+  display: block; /* 줄바꿈 나도 버튼 패딩 유지 */
+  word-break: break-word; /* 긴 단어 줄바꿈 */
+  white-space: normal; /* nowrap 제거 */
 }
 
 .resultsList {

@@ -102,7 +102,7 @@ export default function AskHasResume() {
             onClick={handleClickNext}
             disabled={hasResumeAnswer === null}
           >
-            다음
+            다음 단계
           </Button>
         </div>
       </div>

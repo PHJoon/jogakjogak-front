@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
 import {
   Controller,
   useFieldArray,
@@ -13,49 +12,25 @@ import plusIcon from '@/assets/images/ic_plus.svg';
 import Button from '@/components/common/Button';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import Input from '@/components/common/Input';
+import { EDUCATION_LEVELS, EDUCATION_STATUSES } from '@/constants/resume';
 import { useBoundStore } from '@/stores/useBoundStore';
 import { ResumeFormInput } from '@/types/resume';
 
 import styles from './EducationTab.module.css';
 
 export default function EducationTab() {
-  const educationLevels = [
-    { label: '학사', value: 'BACHELOR' },
-    { label: '전문학사', value: 'ASSOCIATE' },
-    { label: '고등학교', value: 'HIGH_SCHOOL' },
-    { label: '석사', value: 'MASTER' },
-    { label: '박사', value: 'DOCTORATE' },
-  ];
-  const educationStatuses = [
-    { label: '졸업', value: 'GRADUATED' },
-    { label: '졸업예정', value: 'EXPECTED_TO_GRADUATE' },
-    { label: '재학', value: 'ENROLLED' },
-    { label: '휴학', value: 'ON_LEAVE' },
-    { label: '중퇴', value: 'DROPOUT' },
-    { label: '수료', value: 'COMPLETED' },
-  ];
-
-  const ranRef = useRef(false);
-
-  const { setCurrentTab, educationListAnswer, setEducationListAnswer } =
-    useBoundStore(
-      useShallow((state) => ({
-        setCurrentTab: state.setCurrentTab,
-        educationListAnswer: state.educationListAnswer,
-        setEducationListAnswer: state.setEducationListAnswer,
-      }))
-    );
+  const { setCurrentTab, setEducationListAnswer } = useBoundStore(
+    useShallow((state) => ({
+      setCurrentTab: state.setCurrentTab,
+      setEducationListAnswer: state.setEducationListAnswer,
+    }))
+  );
 
   const {
     control,
-    watch,
     formState: { errors },
     trigger,
-    setValue,
   } = useFormContext<ResumeFormInput>();
-
-  const educationListWatch = useWatch({ name: 'educationList', control });
-
   const {
     fields: educationFields,
     append: appendEducation,
@@ -64,29 +39,21 @@ export default function EducationTab() {
     control,
     name: 'educationList',
   });
+  const educationListWatch = useWatch({ name: 'educationList', control });
 
   const handleClickPrevious = () => {
     setCurrentTab('career');
   };
 
   const handleClickNext = async () => {
-    await trigger('educationList');
-    if (errors.educationList && errors.educationList.length) {
+    const ok = await trigger('educationList');
+    if (!ok) {
       return;
     }
     setEducationListAnswer([...educationListWatch]);
     // 다음 탭이 스킬 탭이므로 탭 이동
     setCurrentTab('skill');
   };
-
-  // 학력 정보가 이미 있다면 폼에 초기값으로 설정
-  useEffect(() => {
-    if (educationListAnswer.length > 0) {
-      if (ranRef.current) return;
-      ranRef.current = true;
-      setValue('educationList', [...educationListAnswer]);
-    }
-  }, [educationListAnswer, setValue]);
 
   return (
     <div className={styles.tabContent}>
@@ -119,7 +86,7 @@ export default function EducationTab() {
                 }) => (
                   <div className={styles.educationItem}>
                     <div className={styles.educationLevelSelect}>
-                      {educationLevels.map(({ label, value: levelValue }) => (
+                      {EDUCATION_LEVELS.map(({ label, value: levelValue }) => (
                         <Button
                           key={levelValue}
                           variant={'secondary'}
@@ -149,7 +116,7 @@ export default function EducationTab() {
                     />
 
                     <div className={styles.educationStatusSelect}>
-                      {educationStatuses.map(
+                      {EDUCATION_STATUSES.map(
                         ({ label, value: statusValue }) => (
                           <Button
                             key={statusValue}
@@ -229,7 +196,7 @@ export default function EducationTab() {
             style={{ width: '100%', height: '100%' }}
             onClick={handleClickNext}
           >
-            다음
+            다음 단계
           </Button>
         </div>
       </div>

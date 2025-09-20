@@ -1,32 +1,33 @@
 import { useRouter } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 import { type SubmitHandler, useFormContext, useWatch } from 'react-hook-form';
 import { useShallow } from 'zustand/shallow';
 
 import Button from '@/components/common/Button';
 import Textarea from '@/components/common/Textarea';
-import { ERROR_CODES } from '@/constants/errorCode';
 import useCreateResumeMutation from '@/hooks/mutations/resume/useCreateResumeMutation';
-import { HttpError } from '@/lib/HttpError';
+import useDebouncedCallback from '@/hooks/useDebouncedCallback';
 import { useBoundStore } from '@/stores/useBoundStore';
-import { ResumeFormInput, ResumeRequestBody } from '@/types/resume';
+import { ResumeFormInput } from '@/types/resume';
 
 import styles from './ContentTab.module.css';
 
 export default function ContentTab() {
   const router = useRouter();
+  const ranRef = useRef(false);
 
-  const { setCurrentTab, contentAnswer, setContentAnswer, setSnackbar } =
+  const { setCurrentTab, setContentAnswer, resetOnboardingStore, setSnackbar } =
     useBoundStore(
       useShallow((state) => ({
         setCurrentTab: state.setCurrentTab,
-        contentAnswer: state.contentAnswer,
         setContentAnswer: state.setContentAnswer,
+        resetOnboardingStore: state.reset,
         setSnackbar: state.setSnackbar,
       }))
     );
 
-  const { control, watch, handleSubmit, setValue, register } =
-    useFormContext<ResumeFormInput>();
+  const { control, handleSubmit, register } = useFormContext<ResumeFormInput>();
+  const contentWatch = useWatch({ name: 'content', control });
 
   const { createResumeMutate, isResumeCreating } = useCreateResumeMutation();
 
@@ -34,17 +35,16 @@ export default function ContentTab() {
     setCurrentTab('skill');
   };
 
-  const handleClickNext = () => {
-    // localStorage.removeItem('bound-store');
-    // router.push('/dashboard');
-    console.log(11);
-    console.log(watch());
-    handleSubmit(onSubmit);
+  const handleClickNext = async () => {
+    localStorage.removeItem('bound-store');
+    await handleSubmit(onSubmit)();
   };
 
   // 폼 제출
   const onSubmit: SubmitHandler<ResumeFormInput> = (data) => {
     console.log(data);
+    resetOnboardingStore();
+    router.replace('/dashboard');
     // if (data.isNewcomer === null) return;
 
     // const formData: ResumeRequestBody = {
@@ -58,7 +58,7 @@ export default function ContentTab() {
     // createResumeMutate(formData, {
     //   onSuccess: () => {
     //     setSnackbar({ message: '이력서가 등록되었어요.', type: 'success' });
-    //     router.push('/dashboard');
+    //     router.replace('/dashboard');
     //   },
     //   onError: (error) => {
     //     if (error instanceof HttpError) {
@@ -69,6 +69,20 @@ export default function ContentTab() {
     //   },
     // });
   };
+
+  const { debounced, cancel } = useDebouncedCallback((value: string) => {
+    setContentAnswer(value);
+  }, 300);
+
+  useEffect(() => {
+    // 첫 랜더링일 때는 실행하지 않음 (기존 답변이 있을 때 덮어쓰는 것을 방지)
+    if (!ranRef.current) {
+      ranRef.current = true;
+      return;
+    }
+    debounced(contentWatch);
+    return cancel;
+  }, [contentWatch, debounced, cancel]);
 
   return (
     <div className={styles.tabContent}>
@@ -84,7 +98,7 @@ export default function ContentTab() {
           id={'content'}
           label={'갖고 있는 이력서가 있다면 복사 붙여넣기를 추천해요.'}
           field={register('content')}
-          value={useWatch({ name: 'content', control })}
+          value={contentWatch}
           maxLength={5000}
           style={{ width: '100%', height: '540px' }}
         />
@@ -109,7 +123,7 @@ export default function ContentTab() {
             disabled={isResumeCreating}
             isLoading={isResumeCreating}
           >
-            다음
+            이력서 완성하기
           </Button>
         </div>
       </div>
