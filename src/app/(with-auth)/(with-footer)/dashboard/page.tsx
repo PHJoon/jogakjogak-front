@@ -40,9 +40,6 @@ function DashboardContent() {
   const [showNoResumeModal, setShowNoResumeModal] = useState(false);
 
   const {
-    page,
-    sort,
-    showOnly,
     setSort,
     setShowOnly,
     nextPage,
@@ -66,9 +63,14 @@ function DashboardContent() {
         setShowNoResumeModal(true);
         return;
       }
+      // // 온보딩이 완료되지 않은 경우 온보딩 페이지로 이동
+      // if (data.isOnborded === false) {
+      //   router.replace('/onboarding');
+      //   return;
+      // }
       setResume(data.resume);
     }
-  }, [data, setResume]);
+  }, [data, setResume, router]);
 
   const handleResumeRegisterClick = () => {
     trackEvent({
