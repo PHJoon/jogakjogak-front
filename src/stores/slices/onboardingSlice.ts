@@ -30,6 +30,7 @@ export interface OnboardingSlice {
   setSkillListAnswer: Setter<OnboardingSlice['skillListAnswer']>;
   contentAnswer: string;
   setContentAnswer: Setter<OnboardingSlice['contentAnswer']>;
+  reset: () => void;
 }
 
 export const createOnboardingSlice: StateCreator<
@@ -37,7 +38,7 @@ export const createOnboardingSlice: StateCreator<
   [],
   [],
   OnboardingSlice
-> = (set) => ({
+> = (set, get, store) => ({
   currentStep: 'profile',
   setCurrentStep: (step) => set({ currentStep: step }),
   currentTab: 'career',
@@ -96,4 +97,7 @@ export const createOnboardingSlice: StateCreator<
       contentAnswer:
         typeof updater === 'function' ? updater(state.contentAnswer) : updater,
     })),
+  reset: () => {
+    set(store.getInitialState());
+  },
 });
