@@ -52,3 +52,25 @@ export async function toggleUserNotification() {
   const data: ApiResponse<string> = await response.json();
   return data.data;
 }
+
+// 온보딩 완료 처리
+export async function updateIsOnboarded(onboarded: boolean) {
+  const response = await fetchWithAuth(
+    '/api/member/my_page/update-is-onboarded',
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        onboarded,
+      }),
+    }
+  );
+  await throwIfNotOk(
+    response,
+    '온보딩 상태를 업데이트하는 중 문제가 발생했습니다.'
+  );
+  const data: ApiResponse<{ onboarded: boolean }> = await response.json();
+  return data.data;
+}
