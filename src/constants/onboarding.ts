@@ -1,4 +1,4 @@
-export const OnboardingSteps = {
+export const ONBOARDING_STEPS = {
   profile: {
     label: '개인정보 입력하기',
     stepNumber: 1,
@@ -16,5 +16,3 @@ export const OnboardingSteps = {
     stepNumber: 3,
   },
 } as const;
-
-export const ResumeTabs = ['career', 'education', 'skill', 'content'] as const;
