@@ -19,15 +19,22 @@ import { ResumeFormInput } from '@/types/resume';
 import styles from './EducationTab.module.css';
 
 export default function EducationTab() {
-  const educationLevels = ['학사', '전문학사', '고등학교', '석사', '박사'];
-  const educationStatuses = [
-    '졸업',
-    '졸업예정',
-    '재학',
-    '휴학',
-    '중퇴',
-    '수료',
+  const educationLevels = [
+    { label: '학사', value: 'BACHELOR' },
+    { label: '전문학사', value: 'ASSOCIATE' },
+    { label: '고등학교', value: 'HIGH_SCHOOL' },
+    { label: '석사', value: 'MASTER' },
+    { label: '박사', value: 'DOCTORATE' },
   ];
+  const educationStatuses = [
+    { label: '졸업', value: 'GRADUATED' },
+    { label: '졸업예정', value: 'EXPECTED_TO_GRADUATE' },
+    { label: '재학', value: 'ENROLLED' },
+    { label: '휴학', value: 'ON_LEAVE' },
+    { label: '중퇴', value: 'DROPOUT' },
+    { label: '수료', value: 'COMPLETED' },
+  ];
+
   const ranRef = useRef(false);
 
   const { setCurrentTab, educationListAnswer, setEducationListAnswer } =
@@ -110,21 +117,23 @@ export default function EducationTab() {
                   field: { onChange, value },
                   fieldState: { error },
                 }) => (
-                  <div className={styles.educationEntry}>
+                  <div className={styles.educationItem}>
                     <div className={styles.educationLevelSelect}>
-                      {educationLevels.map((level) => (
+                      {educationLevels.map(({ label, value: levelValue }) => (
                         <Button
-                          key={level}
+                          key={levelValue}
                           variant={'secondary'}
                           style={{
                             width: 'fit-content',
                             height: '44px',
                             padding: '10px 16px',
                           }}
-                          onClick={() => onChange({ ...value, level })}
-                          isActive={value.level === level}
+                          onClick={() =>
+                            onChange({ ...value, level: levelValue })
+                          }
+                          isActive={value.level === levelValue}
                         >
-                          {level}
+                          {label}
                         </Button>
                       ))}
                     </div>
@@ -140,21 +149,25 @@ export default function EducationTab() {
                     />
 
                     <div className={styles.educationStatusSelect}>
-                      {educationStatuses.map((status) => (
-                        <Button
-                          key={status}
-                          variant={'neutral'}
-                          style={{
-                            width: 'fit-content',
-                            height: '44px',
-                            padding: '10px 16px',
-                          }}
-                          onClick={() => onChange({ ...value, status })}
-                          isActive={value.status === status}
-                        >
-                          {status}
-                        </Button>
-                      ))}
+                      {educationStatuses.map(
+                        ({ label, value: statusValue }) => (
+                          <Button
+                            key={statusValue}
+                            variant={'neutral'}
+                            style={{
+                              width: 'fit-content',
+                              height: '44px',
+                              padding: '10px 16px',
+                            }}
+                            onClick={() =>
+                              onChange({ ...value, status: statusValue })
+                            }
+                            isActive={value.status === statusValue}
+                          >
+                            {label}
+                          </Button>
+                        )
+                      )}
                     </div>
                     {/* 에러 메세지 */}
                     {error && (
