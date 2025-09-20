@@ -138,8 +138,9 @@ export default function AskCreateSimpleResume() {
             variant={'primary'}
             style={{ width: '100%', height: '100%' }}
             onClick={handleClickNext}
+            disabled={createSimpleResumeAnswer === null}
           >
-            다음
+            {createSimpleResumeAnswer === false ? '가입 완료' : '다음 단계'}
           </Button>
         </div>
       </div>

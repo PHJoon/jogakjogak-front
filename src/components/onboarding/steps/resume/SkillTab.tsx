@@ -217,7 +217,7 @@ export default function SkillTab() {
             style={{ width: '100%', height: '100%' }}
             onClick={handleClickNext}
           >
-            다음
+            다음 단계
           </Button>
         </div>
       </div>

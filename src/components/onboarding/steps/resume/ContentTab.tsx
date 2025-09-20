@@ -123,7 +123,7 @@ export default function ContentTab() {
             disabled={isResumeCreating}
             isLoading={isResumeCreating}
           >
-            다음
+            이력서 완성하기
           </Button>
         </div>
       </div>

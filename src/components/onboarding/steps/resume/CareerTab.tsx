@@ -316,8 +316,9 @@ export default function CareerTab() {
             variant={'primary'}
             style={{ width: '100%', height: '100%' }}
             onClick={handleClickNext}
+            disabled={isNewcomerWatch === null} // 신입/경력 선택 안했거나, 경력 선택했는데 경력사항이 하나도 없으면 비활성화
           >
-            다음
+            다음 단계
           </Button>
         </div>
       </div>
