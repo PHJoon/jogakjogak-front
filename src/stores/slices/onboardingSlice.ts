@@ -1,19 +1,15 @@
 import { StateCreator } from 'zustand';
 
-import { Career, Education } from '@/types/resume';
+import { Career, Education, ResumeTab } from '@/types/resume';
 
-import { ResumeTabs } from './../../constants/onboardingStep';
+import { ONBOARDING_STEPS } from '../../constants/onboarding';
 
 type Setter<T> = (value: T | ((prev: T) => T)) => void;
 
 export interface OnboardingSlice {
-  currentStep:
-    | 'profile'
-    | 'ask_has_resume'
-    | 'ask_create_simple_resume'
-    | 'create_resume';
+  currentStep: keyof typeof ONBOARDING_STEPS;
   setCurrentStep: (step: OnboardingSlice['currentStep']) => void;
-  currentTab: (typeof ResumeTabs)[number];
+  currentTab: ResumeTab;
   setCurrentTab: (tab: OnboardingSlice['currentTab']) => void;
   hasResumeAnswer: boolean | null;
   setHasResumeAnswer: Setter<OnboardingSlice['hasResumeAnswer']>;
