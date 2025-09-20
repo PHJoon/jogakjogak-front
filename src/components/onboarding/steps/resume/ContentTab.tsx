@@ -1,19 +1,25 @@
 import { useRouter } from 'next/navigation';
-import { type SubmitHandler, useFormContext, useWatch } from 'react-hook-form';
+import { useEffect, useRef } from 'react';
+import {
+  set,
+  type SubmitHandler,
+  useFormContext,
+  useWatch,
+} from 'react-hook-form';
 import { useShallow } from 'zustand/shallow';
 
 import Button from '@/components/common/Button';
 import Textarea from '@/components/common/Textarea';
-import { ERROR_CODES } from '@/constants/errorCode';
 import useCreateResumeMutation from '@/hooks/mutations/resume/useCreateResumeMutation';
-import { HttpError } from '@/lib/HttpError';
+import useDebouncedCallback from '@/hooks/useDebouncedCallback';
 import { useBoundStore } from '@/stores/useBoundStore';
-import { ResumeFormInput, ResumeRequestBody } from '@/types/resume';
+import { ResumeFormInput } from '@/types/resume';
 
 import styles from './ContentTab.module.css';
 
 export default function ContentTab() {
   const router = useRouter();
+  const ranRef = useRef(false);
 
   const { setCurrentTab, contentAnswer, setContentAnswer, setSnackbar } =
     useBoundStore(
@@ -25,8 +31,8 @@ export default function ContentTab() {
       }))
     );
 
-  const { control, watch, handleSubmit, setValue, register } =
-    useFormContext<ResumeFormInput>();
+  const { control, handleSubmit, register } = useFormContext<ResumeFormInput>();
+  const contentWatch = useWatch({ name: 'content', control });
 
   const { createResumeMutate, isResumeCreating } = useCreateResumeMutation();
 
@@ -35,11 +41,9 @@ export default function ContentTab() {
   };
 
   const handleClickNext = () => {
-    // localStorage.removeItem('bound-store');
-    // router.push('/dashboard');
-    console.log(11);
-    console.log(watch());
-    handleSubmit(onSubmit);
+    localStorage.removeItem('bound-store');
+    // handleSubmit(onSubmit);
+    router.push('/dashboard');
   };
 
   // 폼 제출
@@ -70,6 +74,20 @@ export default function ContentTab() {
     // });
   };
 
+  const { debounced, cancel } = useDebouncedCallback((value: string) => {
+    setContentAnswer(value);
+  }, 300);
+
+  useEffect(() => {
+    // 첫 랜더링일 때는 실행하지 않음 (기존 답변이 있을 때 덮어쓰는 것을 방지)
+    if (!ranRef.current) {
+      ranRef.current = true;
+      return;
+    }
+    debounced(contentWatch);
+    return cancel;
+  }, [contentWatch, debounced, cancel]);
+
   return (
     <div className={styles.tabContent}>
       <div className={styles.titleSection}>
@@ -84,7 +102,7 @@ export default function ContentTab() {
           id={'content'}
           label={'갖고 있는 이력서가 있다면 복사 붙여넣기를 추천해요.'}
           field={register('content')}
-          value={useWatch({ name: 'content', control })}
+          value={contentWatch}
           maxLength={5000}
           style={{ width: '100%', height: '540px' }}
         />

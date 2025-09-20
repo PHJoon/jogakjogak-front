@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
 import {
   Controller,
   useFieldArray,
@@ -35,8 +34,6 @@ export default function EducationTab() {
     { label: '수료', value: 'COMPLETED' },
   ];
 
-  const ranRef = useRef(false);
-
   const { setCurrentTab, educationListAnswer, setEducationListAnswer } =
     useBoundStore(
       useShallow((state) => ({
@@ -48,14 +45,9 @@ export default function EducationTab() {
 
   const {
     control,
-    watch,
     formState: { errors },
     trigger,
-    setValue,
   } = useFormContext<ResumeFormInput>();
-
-  const educationListWatch = useWatch({ name: 'educationList', control });
-
   const {
     fields: educationFields,
     append: appendEducation,
@@ -64,6 +56,7 @@ export default function EducationTab() {
     control,
     name: 'educationList',
   });
+  const educationListWatch = useWatch({ name: 'educationList', control });
 
   const handleClickPrevious = () => {
     setCurrentTab('career');
@@ -78,15 +71,6 @@ export default function EducationTab() {
     // 다음 탭이 스킬 탭이므로 탭 이동
     setCurrentTab('skill');
   };
-
-  // 학력 정보가 이미 있다면 폼에 초기값으로 설정
-  useEffect(() => {
-    if (educationListAnswer.length > 0) {
-      if (ranRef.current) return;
-      ranRef.current = true;
-      setValue('educationList', [...educationListAnswer]);
-    }
-  }, [educationListAnswer, setValue]);
 
   return (
     <div className={styles.tabContent}>

@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { useEffect } from 'react';
 import {
   Controller,
   useFieldArray,
@@ -25,18 +24,12 @@ export default function CareerTab() {
     setCurrentStep,
     createSimpleResumeAnswer,
     setCurrentTab,
-    isNewcomerAnswer,
-    setIsNewcomerAnswer,
-    careerListAnswer,
     setCareerListAnswer,
   } = useBoundStore(
     useShallow((state) => ({
       setCurrentStep: state.setCurrentStep,
       createSimpleResumeAnswer: state.createSimpleResumeAnswer,
       setCurrentTab: state.setCurrentTab,
-      isNewcomerAnswer: state.isNewcomerAnswer,
-      setIsNewcomerAnswer: state.setIsNewcomerAnswer,
-      careerListAnswer: state.careerListAnswer,
       setCareerListAnswer: state.setCareerListAnswer,
     }))
   );
@@ -45,12 +38,7 @@ export default function CareerTab() {
     control,
     formState: { errors },
     trigger,
-    setValue,
   } = useFormContext<ResumeFormInput>();
-
-  const isNewcomerWatch = useWatch({ name: 'isNewcomer', control });
-  const careerListWatch = useWatch({ name: 'careerList', control });
-
   const {
     fields: careerFields,
     append: appendCareer,
@@ -59,6 +47,8 @@ export default function CareerTab() {
     control,
     name: 'careerList',
   });
+  const isNewcomerWatch = useWatch({ name: 'isNewcomer', control });
+  const careerListWatch = useWatch({ name: 'careerList', control });
 
   const handleClickPrevious = () => {
     // 이전 페이지가 간단 이력서 작성 여부 확인이었으면 그 페이지로
@@ -95,12 +85,6 @@ export default function CareerTab() {
     // 다음 탭이 학력 탭이므로 탭 이동
     setCurrentTab('education');
   };
-
-  useEffect(() => {
-    if (careerListAnswer.length > 0) {
-      setValue('careerList', [...careerListAnswer]);
-    }
-  }, [careerListAnswer, setValue]);
 
   return (
     <div className={styles.tabContent}>
