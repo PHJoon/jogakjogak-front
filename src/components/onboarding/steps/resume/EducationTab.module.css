@@ -150,7 +150,7 @@
 
 .stepNavigationButtonGroup {
   position: relative;
-  height: 64px;
+  height: 56px;
   width: 100%;
   display: flex;
   gap: 8px;
