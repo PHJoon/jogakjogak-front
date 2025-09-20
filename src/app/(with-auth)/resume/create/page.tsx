@@ -6,18 +6,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { FormProvider, type SubmitHandler } from 'react-hook-form';
 
 import arrowBackIcon from '@/assets/images/ic_back.svg';
-import skillIcon from '@/assets/images/ic_brush_sharp.svg';
-import skillActiveIcon from '@/assets/images/ic_brush_sharp_active.svg';
-import contentIcon from '@/assets/images/ic_chat_bubble.svg';
-import contentActiveIcon from '@/assets/images/ic_chat_bubble_active.svg';
-import careerIcon from '@/assets/images/ic_id_card.svg';
-import careerActiveIcon from '@/assets/images/ic_id_card_active.svg';
-import educationIcon from '@/assets/images/ic_school.svg';
-import educationActiveIcon from '@/assets/images/ic_school_active.svg';
 import Button from '@/components/common/Button';
 import CareerTab from '@/components/resume/CareerTab';
 import ContentTab from '@/components/resume/ContentTab';
 import EducationTab from '@/components/resume/EducationTab';
+import ResumeTabs from '@/components/resume/ResumeTabs';
 import SkillTab from '@/components/resume/SkillTab';
 import { ERROR_CODES } from '@/constants/errorCode';
 import useCreateResumeMutation from '@/hooks/mutations/resume/useCreateResumeMutation';
@@ -25,44 +18,18 @@ import useResumeForm from '@/hooks/resume/useResumeForm';
 import useScrollDirection from '@/hooks/useScrollDirection';
 import { HttpError } from '@/lib/HttpError';
 import { useBoundStore } from '@/stores/useBoundStore';
-import { ResumeFormInput, ResumeRequestBody } from '@/types/resume';
+import { ResumeFormInput, ResumeRequestBody, ResumeTab } from '@/types/resume';
 import getDistanceFromCenter from '@/utils/getDistanceFromCenter';
 
 import styles from './page.module.css';
 
-const tabs = {
-  career: {
-    label: '경력',
-    icon: careerIcon,
-    activeIcon: careerActiveIcon,
-  },
-  education: {
-    label: '학력',
-    icon: educationIcon,
-    activeIcon: educationActiveIcon,
-  },
-  skill: {
-    label: '스킬',
-    icon: skillIcon,
-    activeIcon: skillActiveIcon,
-  },
-  content: {
-    label: '자유',
-    icon: contentIcon,
-    activeIcon: contentActiveIcon,
-  },
-};
-
 export default function CreateResumePage() {
   const router = useRouter();
-
-  const [currentTab, setCurrentTab] = useState('career');
-  const [active, setActive] = useState(0);
+  const [currentTab, setCurrentTab] = useState<ResumeTab>('career');
   const setSnackbar = useBoundStore((state) => state.setSnackbar);
+  const observedSet = useRef<HTMLElement[]>([]);
 
   const isVisible = useScrollDirection();
-
-  const observedSet = useRef<HTMLElement[]>([]);
 
   const { methods } = useResumeForm();
   const { createResumeMutate, isResumeCreating } = useCreateResumeMutation();
@@ -73,7 +40,7 @@ export default function CreateResumePage() {
     }
   }, []);
 
-  const handleClickTab = (tab: string) => {
+  const handleClickTab = (tab: ResumeTab) => {
     setCurrentTab(tab);
     const element = document.getElementById(tab);
     if (element) {
@@ -123,7 +90,7 @@ export default function CreateResumePage() {
             : curr;
         });
 
-        setCurrentTab(closest.target.id);
+        setCurrentTab(closest.target.id as ResumeTab);
       },
       {
         root: null,
@@ -139,12 +106,6 @@ export default function CreateResumePage() {
       observedSet.current = [];
     };
   }, []);
-
-  // 인디케이트 위치 이동
-  useEffect(() => {
-    const index = Object.keys(tabs).indexOf(currentTab);
-    setActive(index);
-  }, [currentTab]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -170,41 +131,8 @@ export default function CreateResumePage() {
         className={`${styles.tabBar} ${isVisible ? '' : styles.hidden}`}
         aria-label={'이력서 탭'}
       >
-        <div className={styles.resumeTabs}>
-          {Object.entries(tabs).map(([tab, { label, icon, activeIcon }]) => (
-            <button
-              key={tab}
-              className={`${styles.tab} ${
-                tab === currentTab ? styles.activeTab : ''
-              }`}
-              onClick={() => {
-                handleClickTab(tab);
-              }}
-            >
-              <Image
-                src={tab === currentTab ? activeIcon : icon}
-                alt={`${label} 아이콘`}
-                width={24}
-                height={24}
-              />
-              <span
-                className={`${styles.tabLabel} ${
-                  tab === currentTab ? styles.activeTabLabel : ''
-                }`}
-              >
-                {label}
-              </span>
-            </button>
-          ))}
-          <span
-            className={styles.indicator}
-            style={{ transform: `translateX(${active * 100}%)` }}
-            aria-hidden
-          />
-        </div>
+        <ResumeTabs currentTab={currentTab} onClickTab={handleClickTab} />
       </div>
-
-      {/* Add your form components here */}
 
       <div className={styles.formContainer}>
         <FormProvider {...methods}>
