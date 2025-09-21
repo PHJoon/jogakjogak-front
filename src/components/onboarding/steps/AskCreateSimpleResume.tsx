@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
 
 import checkbox from '@/assets/images/ic_checkbox.svg';
@@ -8,12 +9,13 @@ import Button from '@/components/common/Button';
 import { ERROR_CODES, ERROR_MESSAGES } from '@/constants/errorCode';
 import { updateIsOnboarded } from '@/lib/api/mypage/profile';
 import { HttpError } from '@/lib/HttpError';
-import { useBoundStore } from '@/stores/useBoundStore';
+import { isValidBooleanNull, useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './AskCreateSimpleResume.module.css';
 
 export default function AskCreateSimpleResume() {
   const router = useRouter();
+  const [isUpdateOnboarding, setIsUpdateOnboarding] = useState(false);
   const {
     setCurrentStep,
     createSimpleResumeAnswer,
@@ -44,11 +46,14 @@ export default function AskCreateSimpleResume() {
       return;
     }
 
+    useBoundStore.persist.clearStorage();
     resetOnboardingStore();
     router.replace('/dashboard');
     // try {
+    //   setIsUpdateOnboarding(true);
     //   await updateIsOnboarded(true);
     //   // 온보딩 종료 (대시보드로)
+    //   useBoundStore.persist.clearStorage();
     //   resetOnboardingStore();
     //   router.replace('/dashboard');
     // } catch (error) {
@@ -66,6 +71,8 @@ export default function AskCreateSimpleResume() {
     //     type: 'error',
     //     message: '오류가 발생했어요. 다시 시도해주세요.',
     //   });
+    // } finally {
+    //   setIsUpdateOnboarding(false);
     // }
   };
 
@@ -76,6 +83,13 @@ export default function AskCreateSimpleResume() {
     }
     setCreateSimpleResumeAnswer((prev) => (prev === option ? null : option));
   };
+
+  // 마운트 시에만 초기값이 이상할 경우 null로 초기화
+  useEffect(() => {
+    if (!isValidBooleanNull(createSimpleResumeAnswer)) {
+      setCreateSimpleResumeAnswer(null);
+    }
+  }, []);
 
   return (
     <div className={styles.mainContent}>
@@ -138,7 +152,8 @@ export default function AskCreateSimpleResume() {
             variant={'primary'}
             style={{ width: '100%', height: '100%' }}
             onClick={handleClickNext}
-            disabled={createSimpleResumeAnswer === null}
+            disabled={createSimpleResumeAnswer === null || isUpdateOnboarding}
+            isLoading={isUpdateOnboarding}
           >
             {createSimpleResumeAnswer === false ? '가입 완료' : '다음 단계'}
           </Button>

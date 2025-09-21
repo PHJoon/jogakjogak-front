@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, Suspense } from 'react';
+import { useShallow } from 'zustand/shallow';
 
 import section1 from '@/assets/images/section1.png';
 import section2 from '@/assets/images/section2.png';
@@ -21,7 +22,12 @@ import styles from './page.module.css';
 function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const setSnackbar = useBoundStore((state) => state.setSnackbar);
+  const { setSnackbar, resetOnboardingStore } = useBoundStore(
+    useShallow((state) => ({
+      setSnackbar: state.setSnackbar,
+      resetOnboardingStore: state.reset,
+    }))
+  );
   const { isLoggedIn } = useSession();
 
   useEffect(() => {
@@ -45,6 +51,8 @@ function HomeContent() {
 
     if (hasCleanupCookie) {
       queryClient.clear();
+      useBoundStore.persist.clearStorage();
+      resetOnboardingStore();
       document.cookie = 'clear_cache=; Max-Age=0; path=/; SameSite=Lax; Secure';
     }
   }, []);
