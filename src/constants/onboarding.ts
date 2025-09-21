@@ -16,3 +16,12 @@ export const ONBOARDING_STEPS = {
     stepNumber: 3,
   },
 } as const;
+
+export const ONBOARDING_STEP_LIST = [
+  'profile',
+  'ask_has_resume',
+  'ask_create_simple_resume',
+  'create_resume',
+];
+
+export const ONBOARDING_TAB_LIST = ['career', 'education', 'skill', 'content'];

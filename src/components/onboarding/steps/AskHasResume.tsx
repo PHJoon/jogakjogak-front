@@ -1,10 +1,11 @@
 import Image from 'next/image';
+import { useEffect } from 'react';
 import { useShallow } from 'zustand/shallow';
 
 import checkbox from '@/assets/images/ic_checkbox.svg';
 import checkboxChecked from '@/assets/images/ic_checkbox_checked.svg';
 import Button from '@/components/common/Button';
-import { useBoundStore } from '@/stores/useBoundStore';
+import { isValidBooleanNull, useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './AskHasResume.module.css';
 
@@ -40,6 +41,13 @@ export default function AskHasResume() {
     }
     setHasResumeAnswer((prev) => (prev === option ? null : option));
   };
+
+  // 마운트 시에만 초기값이 이상할 경우 null로 초기화
+  useEffect(() => {
+    if (!isValidBooleanNull(hasResumeAnswer)) {
+      setHasResumeAnswer(null);
+    }
+  }, []);
 
   return (
     <div className={styles.mainContent}>

@@ -43,6 +43,7 @@ export default function ContentTab() {
   // 폼 제출
   const onSubmit: SubmitHandler<ResumeFormInput> = (data) => {
     console.log(data);
+    useBoundStore.persist.clearStorage();
     resetOnboardingStore();
     router.replace('/dashboard');
     // if (data.isNewcomer === null) return;
