@@ -1,37 +1,13 @@
-import { useRouter } from 'next/navigation';
-import { useEffect, useRef } from 'react';
-
 import styles from './JobActionMenu.module.css';
 
 interface Props {
   applyStatus: boolean;
-  onClose: () => void;
   onSelect: (action: 'edit' | 'apply' | 'delete') => void;
 }
 
-export default function JobActionMenu({
-  applyStatus,
-  onClose,
-  onSelect,
-}: Props) {
-  const router = useRouter();
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        onClose();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [menuRef, onClose]);
-
+export default function JobActionMenu({ applyStatus, onSelect }: Props) {
   return (
-    <div className={styles.moreMenu} ref={menuRef}>
+    <div className={styles.moreMenu}>
       <button
         className={`${styles.moreMenuItem} ${styles.edit}`}
         onClick={(e) => {
