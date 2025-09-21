@@ -27,7 +27,7 @@ export function formatDate(
     case 'time':
       return `${hours}:${minutes}`;
     case 'dateWithDay':
-      return `${year}년 ${month}월 ${day}일 (${weekDay})`;
+      return `${year}년 ${month}월 ${day}일 ${weekDay}요일`;
     case 'date':
     default:
       return `${year}년 ${month}월 ${day}일`;
