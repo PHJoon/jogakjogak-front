@@ -1,0 +1,190 @@
+.jobSummaryBarContainer {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 92px;
+  border-radius: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  background-color: #ffffff;
+}
+
+/* Left Section */
+.leftSection {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 24px 13px 24px;
+}
+
+.dayInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dayInfoText {
+  font-family: var(--caption-1-medium-font-family);
+  font-size: var(--caption-1-medium-font-size);
+  font-style: var(--caption-1-medium-font-style);
+  font-weight: var(--caption-1-medium-font-weight);
+  letter-spacing: var(--caption-1-medium-letter-spacing);
+  color: var(--n-700);
+}
+
+.jobInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.jobTitle {
+  font-family: var(--heading-2-bold-font-family);
+  font-size: var(--heading-2-bold-font-size);
+  font-style: var(--heading-2-bold-font-style);
+  font-weight: var(--heading-2-bold-font-weight);
+  letter-spacing: var(--heading-2-bold-letter-spacing);
+  color: var(--n-950);
+}
+
+.companyName {
+  font-family: var(--body-2-normal-medium-font-family);
+  font-size: var(--body-2-normal-medium-font-size);
+  font-style: var(--body-2-normal-medium-font-style);
+  font-weight: var(--body-2-normal-medium-font-weight);
+  letter-spacing: var(--body-2-normal-medium-letter-spacing);
+  color: var(--n-800);
+}
+
+/* Right Section */
+.rightSection {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 20px;
+}
+
+.progressContent {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 50px;
+  position: relative;
+  flex: 1;
+}
+
+.progressContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.progressHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progressCounter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--body-1-normal-bold-font-family);
+  font-size: var(--body-1-normal-bold-font-size);
+  font-style: var(--body-1-normal-bold-font-style);
+  font-weight: var(--body-1-normal-bold-font-weight);
+  letter-spacing: var(--body-1-normal-bold-letter-spacing);
+}
+
+.progressCounterText {
+  color: var(--n-900);
+}
+
+.progressCount {
+  color: var(--n-600);
+}
+
+.completedCount {
+  color: var(--primaryjogak-1);
+}
+
+.lastUpdatedText {
+  font-family: var(--caption-1-medium-font-family);
+  font-size: var(--caption-1-medium-font-size);
+  font-style: var(--caption-1-medium-font-style);
+  font-weight: var(--caption-1-medium-font-weight);
+  letter-spacing: var(--caption-1-medium-letter-spacing);
+  color: var(--n-700);
+}
+
+.notificationBtn {
+  all: unset;
+  box-sizing: border-box;
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 132px;
+  height: 48px;
+  border-radius: 10px;
+  justify-content: center;
+  overflow: hidden;
+  padding: 12px 22.5px;
+  cursor: pointer;
+  background-color: var(--primarymain-200);
+  transition: background-color 0.2s;
+}
+
+.notificationBtn:hover {
+  background-color: var(--primarymain-300);
+}
+
+.notificationBtnText {
+  font-family: var(--headline-2-bold-font-family);
+  font-size: var(--headline-2-bold-font-size);
+  font-style: var(--headline-2-bold-font-style);
+  font-weight: var(--headline-2-bold-font-weight);
+  letter-spacing: var(--headline-2-bold-letter-spacing);
+  color: var(--primaryjogak-1);
+}
+
+/* Alarm button styles */
+.notificationBtn.alarmOn {
+  background-color: var(--primaryjogak-1);
+  border-color: var(--primaryjogak-1);
+}
+
+.notificationBtn.alarmOn:hover {
+  background-color: var(--primaryjogak-2);
+}
+
+.notificationBtn.alarmOn .notificationBtnText {
+  color: #ffffff;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .progressNotificationSection {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .progressContent {
+    width: 100%;
+    height: auto;
+  }
+
+  .notificationBtn {
+    width: 100%;
+  }
+}
