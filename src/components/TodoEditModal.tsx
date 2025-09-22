@@ -64,20 +64,20 @@ export function TodoEditModal({
     }));
   };
 
-  // 저장하지 않은 상태에서 모달 닫기
-  const handleCloseUnsavedAlertModal = () => {
-    setIsUnsavedAlertModalOpen(false);
-    onClose();
-  };
+  // // 저장하지 않은 상태에서 모달 닫기
+  // const handleCloseUnsavedAlertModal = () => {
+  //   setIsUnsavedAlertModalOpen(false);
+  //   onClose();
+  // };
 
-  // TodoEditModal 닫기 핸들러
-  const handleTodoEditModalClose = () => {
-    if (hasFormChanged) {
-      setIsUnsavedAlertModalOpen(true);
-      return;
-    }
-    handleCloseUnsavedAlertModal();
-  };
+  // // TodoEditModal 닫기 핸들러
+  // const handleTodoEditModalClose = () => {
+  //   if (hasFormChanged) {
+  //     setIsUnsavedAlertModalOpen(true);
+  //     return;
+  //   }
+  //   handleCloseUnsavedAlertModal();
+  // };
 
   if (!isOpen) return null;
 
@@ -93,10 +93,7 @@ export function TodoEditModal({
             <h3 className={styles.modalTitle}>
               {initialData ? '조각 수정' : '조각 추가'}
             </h3>
-            <button
-              className={styles.closeButton}
-              onClick={handleTodoEditModalClose}
-            >
+            <button className={styles.closeButton} onClick={onClose}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path
                   d="M18 6L6 18M6 6L18 18"
@@ -158,11 +155,7 @@ export function TodoEditModal({
             </div>
 
             <div className={styles.modalFooter}>
-              <Button
-                variant="tertiary"
-                onClick={handleTodoEditModalClose}
-                type="button"
-              >
+              <Button variant="tertiary" onClick={onClose} type="button">
                 취소
               </Button>
               <Button
@@ -181,7 +174,7 @@ export function TodoEditModal({
         </div>
       </div>
 
-      <ConfirmModal
+      {/* <ConfirmModal
         isOpen={isUnsavedAlertModalOpen}
         onConfirm={() => setIsUnsavedAlertModalOpen(false)}
         onClose={handleCloseUnsavedAlertModal}
@@ -189,7 +182,7 @@ export function TodoEditModal({
         message="작성한 내용이 모두 지워져요."
         cancelText="확인"
         confirmText="계속 작성"
-      />
+      /> */}
     </>
   );
 }
