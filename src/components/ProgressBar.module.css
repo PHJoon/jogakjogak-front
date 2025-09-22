@@ -1,12 +1,12 @@
 .progressBar {
-  align-items: center;
-  border-radius: 2px;
-  display: flex;
-  gap: 2px;
-  height: 18px;
-  overflow: hidden;
   position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 3px;
+  gap: 4px;
+  height: 24px;
   width: 100%;
+  padding: 8px 0;
 }
 
 .segmentInstance {
@@ -14,4 +14,31 @@
   flex: 1 !important;
   height: unset !important;
   width: unset !important;
+}
+
+.segment {
+  align-self: stretch;
+  flex: 1;
+  position: relative;
+  transition: background-color 0.2s ease;
+  border-radius: 3px;
+}
+
+.active {
+  background-color: var(--primarymain-600);
+}
+
+.default {
+  background-color: var(--primarymain-200);
+}
+
+.active.dayover {
+  background-color: var(--n-500);
+}
+
+.activeLast {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  transform: translateY(-25%);
 }
