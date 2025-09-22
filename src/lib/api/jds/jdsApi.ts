@@ -39,8 +39,8 @@ export async function getJdsData(
     jdSummary: {
       postedJdCount: data.data?.postedJdCount || 0,
       applyJdCount: data.data?.applyJdCount || 0,
-      completedPiecesCount: data.data?.completedPiecesCount || 0,
-      totalPiecesCount: data.data?.totalPiecesCount || 0,
+      completedPieces: data.data?.completedPieces || 0,
+      totalPieces: data.data?.totalPieces || 0,
       perfectJdCount: data.data?.perfectJdCount || 0,
     },
     jds: data.data?.jds || [],

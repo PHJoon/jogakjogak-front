@@ -14,8 +14,8 @@ export interface JobDescription {
   bookmark: boolean;
   alarmOn: boolean;
   companyName: string;
-  total_pieces: number;
-  completed_pieces: number;
+  totalPieces: number;
+  completedPieces: number;
   applyAt: string | null;
   endedAt: string;
   createdAt: string;
@@ -36,9 +36,11 @@ export interface JdsResponse {
   last: true;
   first: true;
   applyJdCount: number;
-  completedPiecesCount: number;
-  totalPiecesCount: number;
+  completedPieces: number;
+  totalPieces: number;
   perfectJdCount: number;
+  allCompletedPieces: number;
+  allTotalPieces: number;
 }
 
 export interface TodoItem {
@@ -69,6 +71,8 @@ export interface JDDetail {
   createdAt: string;
   updatedAt: string;
   toDoLists: TodoItem[];
+  completedPieces: number;
+  totalPieces: number;
 }
 
 export type Sort = 'createdAt,desc' | 'createdAt,asc' | 'endedAt,asc';
