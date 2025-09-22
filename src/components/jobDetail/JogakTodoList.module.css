@@ -1,0 +1,41 @@
+.todoList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  gap: 8px;
+}
+
+.todoCategory {
+  width: 100%;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 12px;
+  padding: 0 16px 0 12px;
+  background-color: var(--n-200);
+}
+
+.todoCategoryLabel {
+  font-family: var(--body-1-normal-bold-font-family);
+  font-size: var(--body-1-normal-bold-font-size);
+  font-style: var(--body-1-normal-bold-font-style);
+  font-weight: var(--body-1-normal-bold-font-weight);
+  letter-spacing: var(--body-1-normal-bold-letter-spacing);
+  color: var(--n-900);
+}
+
+.addTodoItemButton {
+  all: unset;
+  box-sizing: border-box;
+  margin-left: auto;
+  width: 24;
+  height: 24;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background-color: var(--n-0);
+  cursor: pointer;
+}
