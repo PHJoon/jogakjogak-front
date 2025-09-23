@@ -11,7 +11,11 @@ import trackEvent from '@/utils/trackEventGA';
 
 import styles from './JobItemAdd.module.css';
 
-export default function JobItemAdd() {
+interface Props {
+  jdsCount: number;
+}
+
+export default function JobItemAdd({ jdsCount }: Props) {
   const router = useRouter();
   const resume = useBoundStore((state) => state.resume);
   const hasResume = !!resume;
@@ -22,7 +26,7 @@ export default function JobItemAdd() {
       event: GAEvent.JobPosting.CREATE_PAGE_VIEW,
       event_category: GACategory.JOB_POSTING,
     });
-    if (!hasResume) {
+    if (!hasResume && jdsCount === 1) {
       setSnackbar({
         message: '채용공고를 추가하기 전에 먼저 이력서를 등록해주세요.',
         type: 'info',

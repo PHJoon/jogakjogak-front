@@ -57,7 +57,8 @@ export default function Input(props: Props) {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <div
+    <label
+      htmlFor={id}
       className={styles.inputContainer}
       data-readonly={readOnly || undefined}
       data-focused={isFocused || undefined}
@@ -65,9 +66,7 @@ export default function Input(props: Props) {
       data-has-value={Boolean(value?.length) || undefined}
       style={style}
     >
-      <label htmlFor={id} className={styles.floatingLabel}>
-        {label}
-      </label>
+      <div className={styles.floatingLabel}>{label}</div>
 
       <div className={styles.inputWrapper}>
         <input
@@ -96,6 +95,6 @@ export default function Input(props: Props) {
           </div>
         )}
       </div>
-    </div>
+    </label>
   );
 }

@@ -56,7 +56,7 @@ export async function toggleUserNotification() {
 // 온보딩 완료 처리
 export async function updateIsOnboarded(onboarded: boolean) {
   const response = await fetchWithAuth(
-    '/api/member/my_page/update-is-onboarded',
+    '/api/member/my_page/update_is_onboarded',
     {
       method: 'PATCH',
       headers: {

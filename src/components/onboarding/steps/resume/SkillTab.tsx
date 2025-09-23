@@ -39,18 +39,7 @@ export default function SkillTab() {
   const skillListWatch = useWatch({ name: 'skillList', control });
 
   const { debounced } = useDebouncedCallback(async (q: string) => {
-    if (q.length === 0) {
-      setSearchResults([]);
-      return;
-    }
-    if (q.length < 3) {
-      setSnackbar({
-        type: 'info',
-        message: '3글자 이상 입력해야 검색이 가능합니다.',
-      });
-      setSearchResults([]);
-      return;
-    }
+    if (q.length < 3) return;
     try {
       const response = await searchSkillWords(q);
       setSearchResults(response);
