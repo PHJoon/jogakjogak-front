@@ -117,11 +117,7 @@ export default function MyPage() {
 
     withdrawalMutation(undefined, {
       onSuccess: () => {
-        setSnackbar({
-          type: 'success',
-          message: '탈퇴가 완료되었습니다.',
-        });
-        router.replace('/');
+        window.location.href = `/?error=${ERROR_CODES.WITHDRAWAL_COMPLETED}`;
       },
     });
   };
