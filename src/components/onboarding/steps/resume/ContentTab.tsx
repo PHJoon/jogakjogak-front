@@ -5,10 +5,12 @@ import { useShallow } from 'zustand/shallow';
 
 import Button from '@/components/common/Button';
 import Textarea from '@/components/common/Textarea';
+import { ERROR_CODES } from '@/constants/errorCode';
 import useCreateResumeMutation from '@/hooks/mutations/resume/useCreateResumeMutation';
 import useDebouncedCallback from '@/hooks/useDebouncedCallback';
+import { HttpError } from '@/lib/HttpError';
 import { useBoundStore } from '@/stores/useBoundStore';
-import { ResumeFormInput } from '@/types/resume';
+import { ResumeFormInput, ResumeRequestBody } from '@/types/resume';
 
 import styles from './ContentTab.module.css';
 
@@ -42,33 +44,31 @@ export default function ContentTab() {
 
   // 폼 제출
   const onSubmit: SubmitHandler<ResumeFormInput> = (data) => {
-    console.log(data);
-    useBoundStore.persist.clearStorage();
-    resetOnboardingStore();
-    router.replace('/dashboard');
-    // if (data.isNewcomer === null) return;
+    if (data.isNewcomer === null) return;
 
-    // const formData: ResumeRequestBody = {
-    //   isNewcomer: data.isNewcomer,
-    //   careerList: data.careerList,
-    //   educationList: data.educationList,
-    //   content: data.content,
-    //   skillList: data.skillList.map((skill) => skill.name),
-    // };
+    const formData: ResumeRequestBody = {
+      isNewcomer: data.isNewcomer,
+      careerList: data.careerList,
+      educationList: data.educationList,
+      content: data.content,
+      skillList: data.skillList.map((skill) => skill.name),
+    };
 
-    // createResumeMutate(formData, {
-    //   onSuccess: () => {
-    //     setSnackbar({ message: '이력서가 등록되었어요.', type: 'success' });
-    //     router.replace('/dashboard');
-    //   },
-    //   onError: (error) => {
-    //     if (error instanceof HttpError) {
-    //       if (error.errorCode === ERROR_CODES.REPLAY_REQUIRED) {
-    //         return;
-    //       }
-    //     }
-    //   },
-    // });
+    createResumeMutate(formData, {
+      onSuccess: () => {
+        setSnackbar({ message: '이력서가 등록되었어요.', type: 'success' });
+        useBoundStore.persist.clearStorage();
+        resetOnboardingStore();
+        router.replace('/dashboard?onboarding=true');
+      },
+      onError: (error) => {
+        if (error instanceof HttpError) {
+          if (error.errorCode === ERROR_CODES.REPLAY_REQUIRED) {
+            return;
+          }
+        }
+      },
+    });
   };
 
   const { debounced, cancel } = useDebouncedCallback((value: string) => {
@@ -101,7 +101,12 @@ export default function ContentTab() {
           field={register('content')}
           value={contentWatch}
           maxLength={5000}
-          style={{ width: '100%', height: '540px' }}
+          style={{
+            width: '100%',
+            minHeight: '400px',
+            maxHeight: '480px',
+            height: '100%',
+          }}
         />
       </div>
       <div className={styles.stepNavigationButtonGroup}>

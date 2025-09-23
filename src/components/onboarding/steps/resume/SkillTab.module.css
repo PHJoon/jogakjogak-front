@@ -58,7 +58,7 @@
   flex-wrap: wrap;
   gap: 8px;
   width: 100%;
-  min-height: 88px;
+  min-height: 0px;
   max-height: 400px;
   overflow: auto;
   margin-bottom: 16px;

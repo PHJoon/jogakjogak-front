@@ -50,7 +50,6 @@ export default function ResumeTabs({
   const [active, setActive] = useState(0);
 
   const handleClickTab = (tab: ResumeTab) => {
-    if (isOnboarding) return;
     onClickTab(tab);
   };
 

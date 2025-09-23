@@ -11,7 +11,7 @@
   position: relative;
   min-width: 950px;
   flex: 1 1 950px; /* basis=950px, 줄어들 수 있고(1), 커질 수도(1) */
-  padding: 32px 0 64px 0;
+  padding: 32px 0 32px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
