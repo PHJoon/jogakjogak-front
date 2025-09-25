@@ -52,7 +52,7 @@
   display: none;
 }
 
-@media screen and (max-width: 760px) {
+@media screen and (max-width: 745px) {
   .showMoreButton {
     all: unset;
     box-sizing: border-box;

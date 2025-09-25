@@ -256,19 +256,21 @@ export default function JobDetailPage() {
 
   return (
     <main className={styles.main}>
-      <JobDetailTopBar
-        jdDetail={jdDetail}
-        handleClickJobUrl={handleClickJobUrl}
-        toggleBookmark={() =>
-          handleBookmarkToggle(jdDetail?.jd_id, !jdDetail?.bookmark)
-        }
-        onSelect={(action) => {
-          if (action === 'edit') return handleJobEdit(jdDetail?.jd_id);
-          if (action === 'delete') return setIsJdDeleting(true);
-          if (action === 'apply')
-            return handleMarkAsApplied(jdDetail?.jd_id, jdDetail?.applyAt);
-        }}
-      />
+      <div className={styles.topBar}>
+        <JobDetailTopBar
+          jdDetail={jdDetail}
+          handleClickJobUrl={handleClickJobUrl}
+          toggleBookmark={() =>
+            handleBookmarkToggle(jdDetail?.jd_id, !jdDetail?.bookmark)
+          }
+          onSelect={(action) => {
+            if (action === 'edit') return handleJobEdit(jdDetail?.jd_id);
+            if (action === 'delete') return setIsJdDeleting(true);
+            if (action === 'apply')
+              return handleMarkAsApplied(jdDetail?.jd_id, jdDetail?.applyAt);
+          }}
+        />
+      </div>
 
       <div className={styles.content}>
         <JobDetailSummaryBar
@@ -302,14 +304,16 @@ export default function JobDetailPage() {
               해당 조각을 완료하셨나요?
               <span>합격에 한걸음 더 ! 🎉</span>
             </div>
-            <Button
-              onClick={handleClickTodoComplete}
-              disabled={isToggleCompleteMultipleTodoPending}
-              isLoading={isToggleCompleteMultipleTodoPending}
-              style={{ width: '220px', height: '48px' }}
-            >
-              완료하기
-            </Button>
+            <div className={styles.checkedButton}>
+              <Button
+                onClick={handleClickTodoComplete}
+                disabled={isToggleCompleteMultipleTodoPending}
+                isLoading={isToggleCompleteMultipleTodoPending}
+                style={{ width: '100%', height: '48px' }}
+              >
+                완료하기
+              </Button>
+            </div>
           </div>
         )}
       </div>

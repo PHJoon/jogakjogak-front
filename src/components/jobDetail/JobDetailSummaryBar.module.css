@@ -214,7 +214,7 @@
   }
 }
 
-@media screen and (max-width: 760px) {
+@media screen and (max-width: 745px) {
   .leftSection,
   .rightSection {
     max-width: 507px;
