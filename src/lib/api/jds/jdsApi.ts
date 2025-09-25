@@ -35,12 +35,12 @@ export async function getJdsData(
   const data: ApiResponse<JdsResponse> = await response.json();
   return {
     resume: data.data?.resume || null,
-    isOnborded: data.data?.isOnboarded || false,
+    isOnboarded: data.data?.isOnboarded || false,
     jdSummary: {
       postedJdCount: data.data?.postedJdCount || 0,
       applyJdCount: data.data?.applyJdCount || 0,
-      completedPiecesCount: data.data?.completedPiecesCount || 0,
-      totalPiecesCount: data.data?.totalPiecesCount || 0,
+      completedPieces: data.data?.completedPieces || 0,
+      totalPieces: data.data?.totalPieces || 0,
       perfectJdCount: data.data?.perfectJdCount || 0,
     },
     jds: data.data?.jds || [],

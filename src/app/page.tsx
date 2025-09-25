@@ -2,7 +2,6 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, Suspense } from 'react';
-import { useShallow } from 'zustand/shallow';
 
 import section1 from '@/assets/images/section1.png';
 import section2 from '@/assets/images/section2.png';
@@ -22,12 +21,8 @@ import styles from './page.module.css';
 function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { setSnackbar, resetOnboardingStore } = useBoundStore(
-    useShallow((state) => ({
-      setSnackbar: state.setSnackbar,
-      resetOnboardingStore: state.reset,
-    }))
-  );
+  const setSnackbar = useBoundStore((state) => state.setSnackbar);
+
   const { isLoggedIn } = useSession();
 
   useEffect(() => {
@@ -39,7 +34,9 @@ function HomeContent() {
     setSnackbar({ type: 'error', message });
 
     // URL에서 에러 파라미터 제거
-    router.replace('/');
+    const url = new URL(window.location.href);
+    url.searchParams.delete('error'); // 필요에 맞게 수정/추가
+    window.history.replaceState(null, '', url.toString());
   }, [searchParams, setSnackbar, router]);
 
   // 로그아웃, 회원탈퇴 시 쿼리 캐시 제거
@@ -51,8 +48,7 @@ function HomeContent() {
 
     if (hasCleanupCookie) {
       queryClient.clear();
-      useBoundStore.persist.clearStorage();
-      resetOnboardingStore();
+      localStorage.removeItem('bound-store');
       document.cookie = 'clear_cache=; Max-Age=0; path=/; SameSite=Lax; Secure';
     }
   }, []);

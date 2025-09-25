@@ -46,34 +46,31 @@ export default function AskCreateSimpleResume() {
       return;
     }
 
-    useBoundStore.persist.clearStorage();
-    resetOnboardingStore();
-    router.replace('/dashboard');
-    // try {
-    //   setIsUpdateOnboarding(true);
-    //   await updateIsOnboarded(true);
-    //   // 온보딩 종료 (대시보드로)
-    //   useBoundStore.persist.clearStorage();
-    //   resetOnboardingStore();
-    //   router.replace('/dashboard');
-    // } catch (error) {
-    //   if (error instanceof HttpError) {
-    //     setSnackbar({
-    //       type: 'error',
-    //       message:
-    //         ERROR_MESSAGES[error.errorCode as keyof typeof ERROR_CODES] ||
-    //         '오류가 발생했어요. 다시 시도해주세요.',
-    //     });
-    //     return;
-    //   }
+    try {
+      setIsUpdateOnboarding(true);
+      await updateIsOnboarded(true);
+      // 온보딩 종료 (대시보드로)
+      useBoundStore.persist.clearStorage();
+      resetOnboardingStore();
+      router.replace('/dashboard?onboarding=true');
+    } catch (error) {
+      if (error instanceof HttpError) {
+        setSnackbar({
+          type: 'error',
+          message:
+            ERROR_MESSAGES[error.errorCode as keyof typeof ERROR_CODES] ||
+            '오류가 발생했어요. 다시 시도해주세요.',
+        });
+        return;
+      }
 
-    //   setSnackbar({
-    //     type: 'error',
-    //     message: '오류가 발생했어요. 다시 시도해주세요.',
-    //   });
-    // } finally {
-    //   setIsUpdateOnboarding(false);
-    // }
+      setSnackbar({
+        type: 'error',
+        message: '오류가 발생했어요. 다시 시도해주세요.',
+      });
+    } finally {
+      setIsUpdateOnboarding(false);
+    }
   };
 
   const handleOptionClick = (option: boolean) => {

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { FormProvider } from 'react-hook-form';
+import { FormProvider, set } from 'react-hook-form';
 import { useShallow } from 'zustand/shallow';
 
 import CareerTab from '@/components/onboarding/steps/resume/CareerTab';
@@ -21,6 +21,18 @@ export default function CreateResume() {
   );
   const { methods } = useResumeForm({ isOnboarding: true });
 
+  const handleClickTab = async (tab: string) => {
+    if (currentTab === 'career') {
+      const ok = await methods.trigger(['isNewcomer', 'careerList']);
+      if (!ok) return;
+    }
+    if (currentTab === 'education') {
+      const ok = await methods.trigger('educationList');
+      if (!ok) return;
+    }
+    setCurrentTab(tab as typeof currentTab);
+  };
+
   // 마운트 시에만 초기값이 이상할 경우 null로 초기화
   useEffect(() => {
     if (!isValidTab(currentTab)) {
@@ -30,7 +42,11 @@ export default function CreateResume() {
 
   return (
     <div className={styles.mainContent}>
-      <ResumeTabs isOnboarding currentTab={currentTab} onClickTab={() => {}} />
+      <ResumeTabs
+        isOnboarding
+        currentTab={currentTab}
+        onClickTab={handleClickTab}
+      />
       <FormProvider {...methods}>
         {currentTab === 'career' && <CareerTab />}
         {currentTab === 'education' && <EducationTab />}

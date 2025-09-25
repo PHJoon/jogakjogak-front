@@ -209,19 +209,16 @@ export default function JobItem({
                   <span
                     className={`${styles.countDone} ${jdState === 'dayover' ? styles.dayover : ''}`}
                   >
-                    {jd.completed_pieces}
+                    {jd.completedPieces}
                   </span>
-                  <span className={styles.countTotal}>
-                    {' '}
-                    / {jd.total_pieces}
-                  </span>
+                  <span className={styles.countTotal}> / {jd.totalPieces}</span>
                 </span>
               </div>
             </div>
 
             <ProgressBar
-              total={jd.total_pieces}
-              completed={jd.completed_pieces}
+              total={jd.totalPieces}
+              completed={jd.completedPieces}
               className={styles.progressBar}
               isDayover={jdState === 'dayover'}
             />

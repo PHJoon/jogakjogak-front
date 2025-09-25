@@ -1,7 +1,7 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useRef, useState } from 'react';
 
 import JobItem from '@/components/dashboard/JobItem';
 import JobItemAdd from '@/components/dashboard/JobItemAdd';
@@ -13,7 +13,6 @@ import useJdsQuery from '@/hooks/queries/useJdsQuery';
 import useClientMeta from '@/hooks/useClientMeta';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { useBoundStore } from '@/stores/useBoundStore';
-import { JobDescription, Sort } from '@/types/jds';
 import trackEvent from '@/utils/trackEventGA';
 
 import styles from './page.module.css';
@@ -25,7 +24,7 @@ function LoadingSkeleton() {
         <div className={`${styles.skeleton} ${styles.resumeLoading}`} />
         <div className={`${styles.skeleton} ${styles.sortContainerLoading}`} />
         <div className={styles.jobSectionLoading}>
-          <JobItemAdd />
+          <JobItemAdd jdsCount={0} />
           <div className={`${styles.skeleton} ${styles.jobLoading}`} />
           <div className={`${styles.skeleton} ${styles.jobLoading}`} />
           <div className={`${styles.skeleton} ${styles.jobLoading}`} />
@@ -37,7 +36,10 @@ function LoadingSkeleton() {
 
 function DashboardContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const onboarding = searchParams.get('onboarding');
   const [showNoResumeModal, setShowNoResumeModal] = useState(false);
+  const ranRef = useRef(false);
 
   const {
     setSort,
@@ -47,7 +49,7 @@ function DashboardContent() {
     isPending: paginationPending,
   } = useQueryParams();
 
-  const { data, isLoading } = useJdsQuery();
+  const { data, isLoading, refetch } = useJdsQuery();
 
   const setResume = useBoundStore((state) => state.setResume);
 
@@ -58,19 +60,30 @@ function DashboardContent() {
   );
 
   useEffect(() => {
-    if (data) {
+    if (!data) return;
+    if (ranRef.current) return;
+    ranRef.current = true;
+
+    (async () => {
+      if (onboarding === 'true') {
+        await refetch(); // 캐시 갱신
+        router.replace('/dashboard'); // 그 다음 이동
+        return;
+      }
+
+      if (data.isOnboarded === false) {
+        router.replace('/onboarding');
+        return;
+      }
+
       if (!data.resume) {
         setShowNoResumeModal(true);
         return;
       }
-      // // 온보딩이 완료되지 않은 경우 온보딩 페이지로 이동
-      // if (data.isOnborded === false) {
-      //   router.replace('/onboarding');
-      //   return;
-      // }
+
       setResume(data.resume);
-    }
-  }, [data, setResume, router]);
+    })();
+  }, [data, setResume, router, onboarding, refetch, isLoading]);
 
   const handleResumeRegisterClick = () => {
     trackEvent({
@@ -103,7 +116,9 @@ function DashboardContent() {
 
           {/* job list */}
           <div className={styles.jobSection}>
-            {data.pageInfo.currentPage === 0 && <JobItemAdd />}
+            {data.pageInfo.currentPage === 0 && (
+              <JobItemAdd jdsCount={data.jds.length} />
+            )}
             {data.jds.length > 0 &&
               data.jds.map((jd) => <JobItem key={jd.jd_id} jd={jd} />)}
           </div>

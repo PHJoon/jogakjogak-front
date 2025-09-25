@@ -11,7 +11,7 @@ export default function useJdsQuery() {
   const sort = (searchParams.get('sort') as Sort) || '';
   const showOnly = (searchParams.get('showOnly') as ShowOnly) || '';
 
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error, refetch } = useQuery({
     queryFn: () => getJdsData(page, sort, showOnly),
     queryKey: [
       'jds-list',
@@ -21,5 +21,5 @@ export default function useJdsQuery() {
     ],
   });
 
-  return { data, isLoading, isError, error };
+  return { data, isLoading, isError, error, refetch };
 }

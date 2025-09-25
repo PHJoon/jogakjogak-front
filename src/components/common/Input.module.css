@@ -46,6 +46,7 @@
   line-height: var(--body-2-reading-medium-line-height);
   color: var(--n-800);
   background-color: transparent;
+  cursor: text;
 }
 
 .input:focus {
