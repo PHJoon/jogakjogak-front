@@ -68,7 +68,8 @@ export default function JobItem({
     originalState: jdState,
   });
   const router = useRouter();
-  const moreMenuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
   const setSnackbar = useBoundStore((state) => state.setSnackbar);
@@ -79,21 +80,22 @@ export default function JobItem({
 
   // 외부 클릭 시 메뉴 닫기
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (e: MouseEvent) => {
       if (
-        moreMenuRef.current &&
-        !moreMenuRef.current.contains(event.target as Node)
+        menuRef.current &&
+        !menuRef.current.contains(e.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(e.target as Node)
       ) {
         setShowMoreMenu(false);
       }
     };
-    if (showMoreMenu) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
+
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showMoreMenu]);
+  }, [menuRef, buttonRef]);
 
   const handleJobClick = () => {
     router.push(`/job/${jd.jd_id}`);
@@ -138,7 +140,7 @@ export default function JobItem({
                 />
               </div>
 
-              <div className={styles.menuWrapper} ref={moreMenuRef}>
+              <div className={styles.menuWrapper}>
                 <button
                   className={styles.menuTrigger}
                   onClick={(e) => {
@@ -146,24 +148,16 @@ export default function JobItem({
                     handleBookmarkToggle(jd.jd_id, !jd.bookmark);
                   }}
                 >
-                  {jd.bookmark ? (
-                    <Image
-                      src={bookmarkCheckIcon}
-                      alt="add-bookmark"
-                      width={24}
-                      height={24}
-                    />
-                  ) : (
-                    <Image
-                      src={bookmarkIcon}
-                      alt="add-bookmark"
-                      width={24}
-                      height={24}
-                    />
-                  )}
+                  <Image
+                    src={jd.bookmark ? bookmarkCheckIcon : bookmarkIcon}
+                    alt="add-bookmark"
+                    width={24}
+                    height={24}
+                  />
                 </button>
                 <button
                   className={styles.menuTrigger}
+                  ref={buttonRef}
                   onClick={(e) => {
                     e.stopPropagation();
                     setShowMoreMenu(!showMoreMenu);
@@ -179,21 +173,22 @@ export default function JobItem({
 
                 {/* More menu dropdown */}
                 {showMoreMenu && (
-                  <JobActionMenu
-                    applyStatus={!!jd.applyAt}
-                    onClose={() => setShowMoreMenu(false)}
-                    onSelect={(action) => {
-                      if (action === 'edit') {
-                        handleJobEdit(jd.jd_id);
-                      }
-                      if (action === 'apply') {
-                        handleMarkAsApplied(jd.jd_id, jd.applyAt);
-                      }
-                      if (action === 'delete') {
-                        handleJobDelete(jd.jd_id);
-                      }
-                    }}
-                  />
+                  <div className={styles.moreMenuWrapper} ref={menuRef}>
+                    <JobActionMenu
+                      applyStatus={!!jd.applyAt}
+                      onSelect={(action) => {
+                        if (action === 'edit') {
+                          handleJobEdit(jd.jd_id);
+                        }
+                        if (action === 'apply') {
+                          handleMarkAsApplied(jd.jd_id, jd.applyAt);
+                        }
+                        if (action === 'delete') {
+                          handleJobDelete(jd.jd_id);
+                        }
+                      }}
+                    />
+                  </div>
                 )}
               </div>
             </div>

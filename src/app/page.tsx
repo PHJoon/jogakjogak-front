@@ -12,6 +12,7 @@ import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import { ERROR_MESSAGES } from '@/constants/errorCode';
+import useClientMeta from '@/hooks/useClientMeta';
 import useSession from '@/hooks/useSession';
 import { queryClient } from '@/lib/queryClient';
 import { useBoundStore } from '@/stores/useBoundStore';
@@ -24,6 +25,9 @@ function HomeContent() {
   const setSnackbar = useBoundStore((state) => state.setSnackbar);
 
   const { isLoggedIn } = useSession();
+
+  // 클라이언트 메타 설정
+  useClientMeta('조각조각 홈 | 조각조각', '조각조각 홈입니다.');
 
   useEffect(() => {
     const error = searchParams.get('error');

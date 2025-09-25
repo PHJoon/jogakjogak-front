@@ -33,6 +33,7 @@ export default function useDeleteTodoMutation() {
     },
     onSuccess: (data, variables, context) => {
       if (!context) return;
+      queryClient.invalidateQueries({ queryKey: context.jobDetailKey });
       queryClient.invalidateQueries({ queryKey: ['jds-list'] });
     },
   });

@@ -395,6 +395,22 @@
   --title-3-regular-font-weight: 400;
   --title-3-regular-letter-spacing: -0.5519999885559081px;
   --title-3-regular-line-height: 133.39999914169312%;
+
+  /* brand colors */
+  --Spec-purple-100: #f5e9fe;
+  --Spec-purple-200: #d9a9f9;
+  --Spec-purple-300: #cb7eff;
+  --Spec-purple-400: #bd68f7;
+
+  --Content-yellow-100: #fff6cf;
+  --Content-yellow-200: #ffe57e;
+  --Content-yellow-300: #ffd00e;
+  --Content-yellow-400: #eabc00;
+
+  --Plan-green-100: #daf7f1;
+  --Plan-green-200: #a0eadc;
+  --Plan-green-300: #44d8bb;
+  --Plan-green-400: #3cc1a9;
 }
 
 * {

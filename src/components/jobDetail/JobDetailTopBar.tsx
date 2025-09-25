@@ -1,11 +1,11 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
+import arrowBackIcon from '@/assets/images/ic_back.svg';
 import bookmarkIcon from '@/assets/images/ic_bookmark.svg';
 import bookmarkCheckIcon from '@/assets/images/ic_bookmark_check.svg';
-import moreIcon from '@/assets/images/ic_more.svg';
+import moreIcon from '@/assets/images/ic_meatballs_menu.svg';
 import { JDDetail } from '@/types/jds';
 
 import JobActionMenu from '../JobActionMenu';
@@ -27,20 +27,35 @@ export default function JobDetailTopBar({
 }: Props) {
   const router = useRouter();
   const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
   const handleBack = () => {
     router.back();
   };
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(e.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(e.target as Node)
+      ) {
+        setShowMoreMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuRef, buttonRef]);
 
   return (
     <div className={styles.JobDetailTopBar}>
       <div className={styles.leftSection}>
         <button className={styles.backButton} onClick={handleBack}>
-          <Image
-            src={arrowBackIcon}
-            alt="뒤로가기"
-            width={18.17}
-            height={17.69}
-          />
+          <Image src={arrowBackIcon} alt="뒤로가기" width={28} height={28} />
         </button>
       </div>
 
@@ -49,36 +64,36 @@ export default function JobDetailTopBar({
           <span className={styles.urlButtonText}>채용공고 보기</span>
         </button>
 
-        <button className={styles.iconButton} onClick={toggleBookmark}>
-          {jdDetail.bookmark ? (
+        <div className={styles.iconGroup}>
+          <button className={styles.iconButton} onClick={toggleBookmark}>
             <Image
-              src={bookmarkCheckIcon}
-              alt="북마크 체크됨"
-              width={24}
-              height={24}
+              src={jdDetail.bookmark ? bookmarkCheckIcon : bookmarkIcon}
+              alt={jdDetail.bookmark ? '북마크 체크됨' : '북마크'}
+              width={32}
+              height={32}
             />
-          ) : (
-            <Image src={bookmarkIcon} alt="북마크" width={24} height={24} />
-          )}
-        </button>
-
-        <>
+          </button>
           <button
             className={styles.iconButton}
-            onClick={() => setShowMoreMenu(!showMoreMenu)}
+            ref={buttonRef}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowMoreMenu((prev) => !prev);
+            }}
           >
-            <Image src={moreIcon} alt="더보기" width={21.33} height={5.33} />
+            <Image src={moreIcon} alt="더보기" width={32} height={32} />
           </button>
 
           {/* More menu dropdown */}
           {showMoreMenu && (
-            <JobActionMenu
-              applyStatus={!!jdDetail.applyAt}
-              onClose={() => setShowMoreMenu(false)}
-              onSelect={onSelect}
-            />
+            <div className={styles.moreMenuWrapper} ref={menuRef}>
+              <JobActionMenu
+                applyStatus={!!jdDetail.applyAt}
+                onSelect={onSelect}
+              />
+            </div>
           )}
-        </>
+        </div>
       </div>
     </div>
   );

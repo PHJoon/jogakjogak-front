@@ -40,8 +40,8 @@ export async function createResume(formData: ResumeRequestBody) {
   });
 
   await throwIfNotOk(response, '이력서를 생성하는 중 오류가 발생했습니다.');
-  const data = await response.json();
-  return data;
+  const data: ApiResponse<ResumeResponse> = await response.json();
+  return data.data;
 }
 
 export async function updateResume(formData: ResumeRequestBody) {
@@ -54,8 +54,8 @@ export async function updateResume(formData: ResumeRequestBody) {
   });
 
   await throwIfNotOk(response, '이력서를 수정하는 중 오류가 발생했습니다.');
-  const data = await response.json();
-  return data;
+  const data: ApiResponse<ResumeResponse> = await response.json();
+  return data.data;
 }
 
 export async function searchSkillWords(query: string) {

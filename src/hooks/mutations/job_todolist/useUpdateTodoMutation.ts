@@ -5,7 +5,7 @@ import { queryClient } from '@/lib/queryClient';
 import { JDDetail, UpdateTodoRequestData } from '@/types/jds';
 
 export default function useUpdateTodoMutation() {
-  const { mutate: updateTodoMutate } = useMutation({
+  const { mutate: updateTodoMutate, isPending: isUpdating } = useMutation({
     mutationFn: ({
       jdId,
       todoId,
@@ -67,5 +67,5 @@ export default function useUpdateTodoMutation() {
     },
   });
 
-  return { updateTodoMutate };
+  return { updateTodoMutate, isUpdating };
 }

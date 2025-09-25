@@ -100,3 +100,26 @@ export async function updateTodoNotification(
     await response.json();
   return data.data;
 }
+
+// 여러 Todo 완료 상태 토글
+export async function toggleCompleteMultipleTodos(
+  jdId: number,
+  toDoListIds: number[]
+) {
+  const response = await fetchWithAuth(
+    `/api/jds/${jdId}/to-do-lists/update-is-done`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ toDoListIds, done: true }),
+    }
+  );
+  await throwIfNotOk(
+    response,
+    '여러 할 일을 완료 상태로 변경하는 중 오류가 발생했습니다.'
+  );
+  const data: ApiResponse<TodoItem[]> = await response.json();
+  return data.data;
+}

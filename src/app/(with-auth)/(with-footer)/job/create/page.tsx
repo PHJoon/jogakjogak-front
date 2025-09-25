@@ -1,13 +1,14 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
 import JobPostingForm from '@/components/job/form/JobPostingForm';
 import LoadingModal from '@/components/LoadingModal';
 import useCreateJdMutation from '@/hooks/mutations/job/useCreateJdMutation';
+import useJdQuery from '@/hooks/queries/useJdQuery';
 import useClientMeta from '@/hooks/useClientMeta';
 import { JobPostingFormInput } from '@/types/jds';
 
@@ -15,6 +16,13 @@ import styles from './page.module.css';
 
 export default function CreateJobPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const rawJobId = searchParams.get('id');
+  const jobId =
+    rawJobId !== null && rawJobId.trim() !== '' && !isNaN(Number(rawJobId))
+      ? Number(rawJobId)
+      : null;
+  const { data, isLoading, isError, error } = useJdQuery({ jobId });
   const [nextJdId, setNextJdId] = useState<number | null>(null);
 
   const { createJdMutate, isCreatePending, isCreateSuccess } =
@@ -62,6 +70,18 @@ export default function CreateJobPage() {
 
           <JobPostingForm
             mode={'create'}
+            originData={
+              jobId && data && !isLoading && !isError && !error
+                ? {
+                    title: data.title,
+                    companyName: data.companyName,
+                    job: data.job,
+                    endDate: data.endedAt?.split('T')[0] || '',
+                    content: data.content,
+                    link: data.jdUrl,
+                  }
+                : undefined
+            }
             onCreate={onCreate}
             isPending={isCreatePending}
           />

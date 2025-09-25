@@ -1,12 +1,6 @@
 import { fetchWithAuth } from '@/lib/api/fetchWithAuth';
 import { ApiResponse, PaginatedData } from '@/types';
-import {
-  JdsResponse,
-  JobDescription,
-  Resume,
-  ShowOnly,
-  Sort,
-} from '@/types/jds';
+import { JdsResponse, ShowOnly, Sort } from '@/types/jds';
 import throwIfNotOk from '@/utils/throwIfNotOk';
 
 // 채용공고 전체 데이터 가져오기

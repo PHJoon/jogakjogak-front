@@ -53,8 +53,12 @@ export default function useToggleCompleteTodoMutation() {
       if (!context) return;
       queryClient.setQueryData(context.jobDetailKey, (prev?: JDDetail) => {
         if (!prev) return prev;
+        console.log('data from server', data, prev);
         return {
           ...prev,
+          completedPieces: data.done
+            ? prev.completedPieces + 1
+            : prev.completedPieces - 1,
           toDoLists: prev.toDoLists.map((todo) =>
             todo.checklist_id === data.checklist_id ? data : todo
           ),

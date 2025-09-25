@@ -12,6 +12,7 @@ import {
   createGlobalErrorSlice,
   GlobalErrorSlice,
 } from './slices/globalErrorSlice';
+import { createJobDetailSlice, JobDetailSlice } from './slices/jobDetailSlice';
 import {
   createOnboardingSlice,
   OnboardingSlice,
@@ -85,7 +86,8 @@ export const isValidSkillList = (
 type BoundStore = ResumeSlice &
   SnackbarSlice &
   GlobalErrorSlice &
-  OnboardingSlice;
+  OnboardingSlice &
+  JobDetailSlice;
 
 type Persisted = Pick<
   BoundStore,
@@ -98,6 +100,7 @@ type Persisted = Pick<
   | 'educationListAnswer'
   | 'skillListAnswer'
   | 'contentAnswer'
+  | 'resume'
 >;
 
 export const useBoundStore = create<BoundStore>()(
@@ -107,6 +110,7 @@ export const useBoundStore = create<BoundStore>()(
       ...createSnackbarSlice(...args),
       ...createGlobalErrorSlice(...args),
       ...createOnboardingSlice(...args),
+      ...createJobDetailSlice(...args),
     }),
     {
       name: 'bound-store',
@@ -120,6 +124,7 @@ export const useBoundStore = create<BoundStore>()(
         educationListAnswer: state.educationListAnswer,
         skillListAnswer: state.skillListAnswer,
         contentAnswer: state.contentAnswer,
+        resume: state.resume,
       }),
       version: 1,
       migrate: (state, fromVersion) => {

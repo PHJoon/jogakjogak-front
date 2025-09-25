@@ -8,12 +8,19 @@ import AskCreateSimpleResume from '@/components/onboarding/steps/AskCreateSimple
 import AskHasResume from '@/components/onboarding/steps/AskHasResume';
 import CreateResume from '@/components/onboarding/steps/CreateResume';
 import Nickname from '@/components/onboarding/steps/Nickname';
+import useClientMeta from '@/hooks/useClientMeta';
 import { useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './page.module.css';
 
 export default function Onboarding() {
   const currentStep = useBoundStore((state) => state.currentStep);
+
+  // 클라이언트 메타 설정
+  useClientMeta(
+    '온보딩 | 조각조각',
+    '조각조각 서비스를 시작하기 위한 온보딩을 진행합니다. 닉네임 설정과 이력서 작성을 안내합니다.'
+  );
 
   return (
     <>

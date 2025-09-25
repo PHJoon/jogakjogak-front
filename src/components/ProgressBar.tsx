@@ -1,7 +1,37 @@
+import Image from 'next/image';
 import React from 'react';
 
+import progressIcon from '@/assets/images/ic_progress.svg';
+
 import styles from './ProgressBar.module.css';
-import { ProgressSegment } from './ProgressSegment';
+
+function ProgressSegment({
+  isActive = false,
+  isActiveLast = false,
+  className = '',
+  isDayover = false,
+}: {
+  isActive?: boolean;
+  isActiveLast?: boolean;
+  className?: string;
+  isDayover?: boolean;
+}) {
+  return (
+    <div
+      className={`${styles.segment} ${isActive ? styles.active : styles.default} ${isDayover ? styles.dayover : ''} ${className}`}
+    >
+      {isActiveLast && isActive && (
+        <Image
+          src={progressIcon}
+          alt={'progress active icon'}
+          width={20}
+          height={20}
+          className={styles.activeLast}
+        />
+      )}
+    </div>
+  );
+}
 
 interface Props {
   total: number;
@@ -22,6 +52,7 @@ export function ProgressBar({
         <ProgressSegment
           key={index}
           isActive={index < completed}
+          isActiveLast={index === completed - 1}
           className={styles.segmentInstance}
           isDayover={isDayover}
         />

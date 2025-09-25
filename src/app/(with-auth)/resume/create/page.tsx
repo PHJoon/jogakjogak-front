@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FormProvider, type SubmitHandler } from 'react-hook-form';
+import { useShallow } from 'zustand/shallow';
 
 import arrowBackIcon from '@/assets/images/ic_back.svg';
 import Button from '@/components/common/Button';
@@ -15,9 +16,11 @@ import SkillTab from '@/components/resume/SkillTab';
 import { ERROR_CODES } from '@/constants/errorCode';
 import useCreateResumeMutation from '@/hooks/mutations/resume/useCreateResumeMutation';
 import useResumeForm from '@/hooks/resume/useResumeForm';
+import useClientMeta from '@/hooks/useClientMeta';
 import useScrollDirection from '@/hooks/useScrollDirection';
 import { HttpError } from '@/lib/HttpError';
 import { useBoundStore } from '@/stores/useBoundStore';
+import { useSessionStore } from '@/stores/useSessionStore';
 import { ResumeFormInput, ResumeRequestBody, ResumeTab } from '@/types/resume';
 import getDistanceFromCenter from '@/utils/getDistanceFromCenter';
 
@@ -33,6 +36,13 @@ export default function CreateResumePage() {
 
   const { methods } = useResumeForm();
   const { createResumeMutate, isResumeCreating } = useCreateResumeMutation();
+
+  const { redirectAfterResume, clearRedirect } = useSessionStore(
+    useShallow((state) => ({
+      redirectAfterResume: state.redirectAfterResume,
+      clearRedirect: state.clearRedirect,
+    }))
+  );
 
   const setRef = useCallback((el: HTMLDivElement | null) => {
     if (el) {
@@ -63,6 +73,11 @@ export default function CreateResumePage() {
     createResumeMutate(formData, {
       onSuccess: () => {
         setSnackbar({ message: '이력서가 등록되었어요.', type: 'success' });
+        if (redirectAfterResume) {
+          router.replace(redirectAfterResume);
+          clearRedirect();
+          return;
+        }
         router.push('/dashboard');
       },
       onError: (error) => {
@@ -74,6 +89,12 @@ export default function CreateResumePage() {
       },
     });
   };
+
+  // 클라이언트 메타 설정
+  useClientMeta(
+    '이력서 등록 | 조각조각',
+    '채용공고 분석에 활용될 이력서를 등록합니다.'
+  );
 
   // Intersection Observer 설정
   useEffect(() => {
