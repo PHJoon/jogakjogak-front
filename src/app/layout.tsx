@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 
 import { GoogleAnalytics } from '@next/third-parties/google';
 import localFont from 'next/font/local';
+import Script from 'next/script';
+
 import './globals.css';
 
 import GlobalErrorRedirector from '@/components/GlobalErrorRedirector';
@@ -40,6 +42,7 @@ export const metadata: Metadata = {
   description: 'AI와 함께하는 나의 취업 성공 투두리스트',
   creator: 'JogakJogak',
   applicationName: '조각조각',
+  keywords: ['조각조각', '취업 성공 투두리스트', '취업', '투두리스트', 'AI'],
   authors: [
     { name: 'JogakJogak Team', url: 'mailto:jogakjogakhelp@gmail.com' },
   ],
@@ -56,6 +59,8 @@ export const metadata: Metadata = {
     description: 'AI와 함께하는 나의 취업 성공 투두리스트',
     url: 'https://jogakjogak.com',
     siteName: '조각조각',
+    locale: 'ko_KR',
+    type: 'website',
     images: [
       {
         url: 'https://jogakjogak.com/og_image_v1.png',
@@ -72,6 +77,23 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const websiteJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: '조각조각',
+    alternateName: ['조각 조각', 'JOGAK JOGAK', 'jogakjogak'],
+    url: 'https://jogakjogak.com/',
+    inLanguage: 'ko',
+  };
+
+  const orgJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: '조각조각',
+    url: 'https://jogakjogak.com/',
+    logo: 'https://jogakjogak.com/logo.png',
+  };
+
   const gaId =
     process.env.NODE_ENV === 'development'
       ? process.env.NEXT_PUBLIC_GA_ID_DEV
@@ -79,6 +101,20 @@ export default async function RootLayout({
 
   return (
     <html lang="ko">
+      <head>
+        <Script
+          id="ld-website"
+          type="application/ld+json"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        <Script
+          id="ld-organization"
+          type="application/ld+json"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+        />
+      </head>
       <body className={pretendard.variable}>
         <ReactQueryProvider>
           {children}
