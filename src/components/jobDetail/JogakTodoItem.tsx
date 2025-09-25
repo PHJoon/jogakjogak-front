@@ -10,9 +10,8 @@ import TodoModal from '@/components/TodoModal';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
 import useDeleteTodoMutation from '@/hooks/mutations/job_todolist/useDeleteTodoMutation';
 import useToggleCompleteTodoMutation from '@/hooks/mutations/job_todolist/useToggleCompleteTodoMutation';
-import useUpdateTodoMutation from '@/hooks/mutations/job_todolist/useUpdateTodoMutation';
 import { useBoundStore } from '@/stores/useBoundStore';
-import { TodoCategory, TodoItem } from '@/types/jds';
+import { TodoItem } from '@/types/jds';
 import trackEvent from '@/utils/trackEventGA';
 
 import styles from './JogakTodoItem.module.css';
@@ -184,6 +183,7 @@ export default function JogakTodoItem({ category, todoItem }: Props) {
         <TodoModal
           isOpen={showUpdateTodoModal}
           onClose={() => setShowUpdateTodoModal(false)}
+          jdId={todoItem.jdId}
           mode="edit"
           todoItem={todoItem}
         />

@@ -20,6 +20,7 @@ interface Props {
   icon: string | StaticImport;
   plusIcon: string | StaticImport | null;
   todoList: TodoItem[];
+  jdId: number;
 }
 
 export default function JogakTodoList({
@@ -29,6 +30,7 @@ export default function JogakTodoList({
   icon,
   plusIcon,
   todoList,
+  jdId,
 }: Props) {
   const [showAddTodoModal, setShowAddTodoModal] = useState(false);
   const [showTodoList, setShowTodoList] = useState(true);
@@ -79,7 +81,7 @@ export default function JogakTodoList({
           ))}
 
           {category === 'CONTENT_EMPHASIS_REORGANIZATION_PROPOSAL' &&
-            resume === null && <NoResumeTodoItem />}
+            resume === null && <NoResumeTodoItem jdId={jdId} />}
         </>
       )}
 
@@ -87,6 +89,7 @@ export default function JogakTodoList({
         <TodoModal
           isOpen={showAddTodoModal}
           onClose={() => setShowAddTodoModal(false)}
+          jdId={jdId}
           mode="create"
         />
       )}

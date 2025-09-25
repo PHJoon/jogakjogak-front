@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
 import { Controller, useWatch } from 'react-hook-form';
-import { useShallow } from 'zustand/shallow';
 
 import closeIcon from '@/assets/images/ic_close.svg';
 import Button from '@/components/common/Button';
@@ -25,6 +24,7 @@ const CATEGORY_LABEL = {
 interface BaseProps {
   isOpen: boolean;
   onClose: () => void;
+  jdId: number;
 }
 
 interface CreateProps extends BaseProps {
@@ -39,7 +39,7 @@ interface EditProps extends BaseProps {
 type Props = CreateProps | EditProps;
 
 export default function TodoModal(props: Props) {
-  const { isOpen, onClose, mode } = props;
+  const { isOpen, onClose, jdId, mode } = props;
   const todoItem = mode === 'edit' ? props.todoItem : undefined;
 
   const { handleSubmit, control } = useTodoItemForm({
@@ -61,12 +61,7 @@ export default function TodoModal(props: Props) {
   const titleWatch = useWatch({ control, name: 'title' });
   const contentWatch = useWatch({ control, name: 'content' });
 
-  const { jdId, setSnackbar } = useBoundStore(
-    useShallow((state) => ({
-      jdId: state.currentJobId,
-      setSnackbar: state.setSnackbar,
-    }))
-  );
+  const setSnackbar = useBoundStore((state) => state.setSnackbar);
 
   const isFormDirty = () => {
     if (mode === 'edit') {
@@ -87,8 +82,6 @@ export default function TodoModal(props: Props) {
     title: string;
     content: string;
   }) => {
-    if (!jdId) return;
-
     trackEvent({
       event: GAEvent.TodoList.ADD_TODO,
       event_category: GACategory.TODO,
@@ -111,7 +104,7 @@ export default function TodoModal(props: Props) {
     title: string;
     content: string;
   }) => {
-    if (!jdId || !todoItem) return;
+    if (!todoItem) return;
     if (!isFormDirty()) {
       setSnackbar({ type: 'info', message: '변경된 내용이 없습니다.' });
       return;
