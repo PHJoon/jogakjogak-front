@@ -1,0 +1,147 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--n-0);
+  border-radius: 12px;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  z-index: 1001;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 24px;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 15px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 24px;
+}
+
+.modalTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.closeButton {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.closeButton:hover {
+  background-color: var(--n-200);
+}
+
+.modalContent {
+  width: 100%;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.contentLabel {
+  font-family: var(--body-2-reading-regular-font-family);
+  font-size: var(--body-2-reading-regular-font-size);
+  font-style: var(--body-2-reading-regular-font-style);
+  font-weight: var(--body-2-reading-regular-font-weight);
+  letter-spacing: var(--body-2-reading-regular-letter-spacing);
+  line-height: var(--body-2-reading-regular-line-height);
+  color: var(--n-900);
+  padding-left: 4px;
+}
+
+.categorySelect {
+  padding: 10px;
+}
+
+.titleInput {
+  padding: 10px 15px;
+}
+
+.contentTextarea {
+  padding: 10px 15px;
+  resize: vertical;
+  min-height: 120px;
+}
+
+.categorySelect,
+.titleInput,
+.contentTextarea {
+  width: 100%;
+  border-radius: 8px;
+  font-family: var(--body-2-reading-regular-font-family);
+  font-size: var(--body-2-reading-regular-font-size);
+  font-style: var(--body-2-reading-regular-font-style);
+  font-weight: var(--body-2-reading-regular-font-weight);
+  letter-spacing: var(--body-2-reading-regular-letter-spacing);
+  line-height: var(--body-2-reading-regular-line-height);
+  color: var(--n-800);
+  outline: none;
+  border: 1px solid var(--n-500);
+  background-color: transparent;
+}
+
+.categorySelect:focus,
+.titleInput:focus,
+.contentTextarea:focus {
+  border-color: var(--primarymain-800);
+  box-shadow: 0 0 0 1px var(--primary-500);
+}
+
+.charCount {
+  font-family: var(--caption-1-medium-font-family);
+  font-size: var(--caption-1-medium-font-size);
+  font-style: var(--caption-1-medium-font-style);
+  font-weight: var(--caption-1-medium-font-weight);
+  letter-spacing: var(--caption-1-medium-letter-spacing);
+  color: var(--n-600);
+  text-align: right;
+}
+
+.modalFooter {
+  width: calc(100% - 48px);
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
