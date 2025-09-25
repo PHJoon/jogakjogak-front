@@ -16,6 +16,7 @@ import SkillTab from '@/components/resume/SkillTab';
 import { ERROR_CODES } from '@/constants/errorCode';
 import useCreateResumeMutation from '@/hooks/mutations/resume/useCreateResumeMutation';
 import useResumeForm from '@/hooks/resume/useResumeForm';
+import useClientMeta from '@/hooks/useClientMeta';
 import useScrollDirection from '@/hooks/useScrollDirection';
 import { HttpError } from '@/lib/HttpError';
 import { useBoundStore } from '@/stores/useBoundStore';
@@ -88,6 +89,12 @@ export default function CreateResumePage() {
       },
     });
   };
+
+  // 클라이언트 메타 설정
+  useClientMeta(
+    '이력서 등록 | 조각조각',
+    '채용공고 분석에 활용될 이력서를 등록합니다.'
+  );
 
   // Intersection Observer 설정
   useEffect(() => {

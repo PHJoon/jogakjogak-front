@@ -229,19 +229,25 @@ export default function JobDetailPage() {
               alignItems: 'center',
               textAlign: 'center',
               fontSize: '25px',
-              padding: '100px',
+              paddingTop: '150px',
+              gap: '40px',
             }}
           >
             <div
               style={{
                 textAlign: 'center',
                 fontSize: '25px',
-                padding: '100px',
+                padding: '20px',
               }}
             >
               채용공고를 찾을 수 없습니다.
             </div>
-            <Button onClick={() => router.push('/dashboard')}>돌아가기</Button>
+            <Button
+              onClick={() => router.push('/dashboard')}
+              style={{ width: '300px', height: '60px' }}
+            >
+              돌아가기
+            </Button>
           </div>
         </div>
       </main>

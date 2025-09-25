@@ -18,6 +18,7 @@ import useProfileMutation from '@/hooks/mutations/mypage/useProfileMutation';
 import useWithdrawalMutation from '@/hooks/mutations/mypage/useWithdrawalMutation';
 import useProfileForm from '@/hooks/mypage/useProfileForm';
 import useMyProfileQuery from '@/hooks/queries/useMyProfileQuery';
+import useClientMeta from '@/hooks/useClientMeta';
 import { HttpError } from '@/lib/HttpError';
 import { useBoundStore } from '@/stores/useBoundStore';
 import { ProfileFormInput } from '@/types/profile';
@@ -86,6 +87,12 @@ export default function MyPage() {
   };
 
   const { withdrawalMutation } = useWithdrawalMutation();
+
+  // 클라이언트 메타 설정
+  useClientMeta(
+    '마이페이지 | 조각조각',
+    '닉네임과 이메일 알림 설정을 관리합니다.'
+  );
 
   // 프로필 데이터 세팅
   useEffect(() => {
