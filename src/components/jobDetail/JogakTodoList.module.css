@@ -1,6 +1,7 @@
 .todoList {
   display: flex;
   flex-direction: column;
+  max-width: 507px;
   width: 100%;
   height: auto;
   gap: 8px;
@@ -26,6 +27,13 @@
   color: var(--n-900);
 }
 
+.todoCategoryButtons {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
 .addTodoItemButton {
   all: unset;
   box-sizing: border-box;
@@ -38,4 +46,30 @@
   border-radius: 4px;
   background-color: var(--n-0);
   cursor: pointer;
+}
+
+.showMoreButton {
+  display: none;
+}
+
+@media screen and (max-width: 760px) {
+  .showMoreButton {
+    all: unset;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24;
+    height: 24;
+    cursor: pointer;
+  }
+
+  .arrowIcon {
+    transform: rotate(270deg);
+    transition: transform 0.3s ease;
+  }
+
+  .arrowIcon.up {
+    transform: rotate(90deg);
+  }
 }

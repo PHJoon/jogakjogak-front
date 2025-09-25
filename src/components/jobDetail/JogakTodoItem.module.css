@@ -23,13 +23,16 @@
   gap: 6px;
 }
 
-.todoCompletedIcon {
+.todoCompletedBadge {
+  all: unset;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   gap: 2px;
   padding: 2px 6px 2px 4px;
   border-radius: 6px;
   background-color: var(--primarymain-200);
+  cursor: pointer;
 }
 
 .todoCompletedText {
@@ -88,6 +91,7 @@
   letter-spacing: var(--body-2-reading-regular-letter-spacing);
   line-height: var(--body-2-reading-regular-line-height);
   color: var(--n-800);
+  transition: max-height 0.3s ease-in-out;
 }
 
 .todoItemContent.completed {
