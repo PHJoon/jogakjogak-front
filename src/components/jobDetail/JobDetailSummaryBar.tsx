@@ -57,7 +57,7 @@ export default function JobDetailSummaryBar({
               </p>
             </div>
             <span className={styles.lastUpdatedText}>
-              {formatLastUpdated(jdDetail.updatedAt)} 수정
+              {formatLastUpdated(jdDetail.updatedAt)}
             </span>
           </div>
           <ProgressBar
