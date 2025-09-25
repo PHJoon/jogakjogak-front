@@ -122,3 +122,10 @@
     margin-bottom: 8px;
   }
 }
+
+@media screen and (max-width: 425px) {
+  .todoListSection {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+  }
+}
