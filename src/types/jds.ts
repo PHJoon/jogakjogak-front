@@ -68,6 +68,8 @@ export interface JDDetail {
   endedAt: string;
   createdAt: string;
   updatedAt: string;
+  totalPiecesCount: number;
+  completedPiecesCount: number;
   toDoLists: TodoItem[];
 }
 
@@ -99,3 +101,8 @@ export type CreateTodoRequestData = {
 export type UpdateTodoRequestData = CreateTodoRequestData & {
   is_done: boolean;
 };
+
+export type TodoCategory =
+  | 'STRUCTURAL_COMPLEMENT_PLAN'
+  | 'CONTENT_EMPHASIS_REORGANIZATION_PROPOSAL'
+  | 'SCHEDULE_MISC_ERROR';
