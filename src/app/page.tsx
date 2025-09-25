@@ -27,7 +27,7 @@ function HomeContent() {
   const { isLoggedIn } = useSession();
 
   // 클라이언트 메타 설정
-  useClientMeta('조각조각 홈 | 조각조각', '조각조각 홈입니다.');
+  useClientMeta('조각조각', 'AI와 함께하는 나의 취업 성공 투두리스트');
 
   useEffect(() => {
     const error = searchParams.get('error');
