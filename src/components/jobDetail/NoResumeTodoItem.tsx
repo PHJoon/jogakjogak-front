@@ -10,7 +10,7 @@ import { useSessionStore } from '@/stores/useSessionStore';
 import styles from './NoResumeTodoItem.module.css';
 
 interface Props {
-  jdId?: number;
+  jdId: number;
 }
 
 export default function NoResumeTodoItem({ jdId }: Props) {
@@ -19,7 +19,7 @@ export default function NoResumeTodoItem({ jdId }: Props) {
   const router = useRouter();
 
   const clickUnlockWithResume = () => {
-    setRedirect(`/job/edit?id=${jdId}`);
+    setRedirect(`/job/create?id=${jdId}`);
     router.push('/resume/create');
   };
 
