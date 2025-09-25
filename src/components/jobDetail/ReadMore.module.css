@@ -1,0 +1,43 @@
+.wrap {
+  position: relative;
+}
+
+.content {
+  font-family: var(--body-2-reading-regular-font-family);
+  font-size: var(--body-2-reading-regular-font-size);
+  font-style: var(--body-2-reading-regular-font-style);
+  font-weight: var(--body-2-reading-regular-font-weight);
+  letter-spacing: var(--body-2-reading-regular-letter-spacing);
+  line-height: var(--body-2-reading-regular-line-height);
+  color: var(--n-800);
+  transition: max-height 0.3s ease-in-out;
+}
+
+.btn {
+  all: unset;
+  box-sizing: border-box;
+  width: 100%;
+  text-align: center;
+  margin-top: 8px;
+  font: inherit;
+  color: var(--n-700);
+
+  font-family: var(--label-1-normal-medium-font-family);
+  font-size: var(--label-1-normal-medium-font-size);
+  font-style: var(--label-1-normal-medium-font-style);
+  font-weight: var(--label-1-normal-medium-font-weight);
+  letter-spacing: var(--label-1-normal-medium-letter-spacing);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.arrowIcon {
+  transform: rotate(90deg);
+}
+
+.arrowIcon.up {
+  transform: rotate(-90deg);
+}
