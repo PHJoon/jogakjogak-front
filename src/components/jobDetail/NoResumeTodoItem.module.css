@@ -1,0 +1,107 @@
+.todoItem {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 20px;
+  gap: 8px;
+  border-radius: 12px;
+  height: auto;
+  background-color: transparent;
+}
+
+.todoItemHeader {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  filter: blur(5px);
+}
+
+.todoCheckbox {
+  all: unset;
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  cursor: none;
+}
+
+.todoItemTitle {
+  font-family: var(--body-2-normal-bold-font-family);
+  font-size: var(--body-2-normal-bold-font-size);
+  font-style: var(--body-2-normal-bold-font-style);
+  font-weight: var(--body-2-normal-bold-font-weight);
+  letter-spacing: var(--body-2-normal-bold-letter-spacing);
+  color: var(--n-900);
+}
+
+.todoItemMenuButton {
+  all: unset;
+  box-sizing: border-box;
+  margin-left: auto;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  cursor: none;
+}
+
+.todoItemContent {
+  font-family: var(--body-2-reading-regular-font-family);
+  font-size: var(--body-2-reading-regular-font-size);
+  font-style: var(--body-2-reading-regular-font-style);
+  font-weight: var(--body-2-reading-regular-font-weight);
+  letter-spacing: var(--body-2-reading-regular-letter-spacing);
+  line-height: var(--body-2-reading-regular-line-height);
+  color: var(--n-800);
+  filter: blur(5px);
+}
+
+.todoLocked {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  height: 156px;
+  width: 100%;
+  background-color: var(--n-0);
+  border-radius: 12px;
+  box-shadow: 0px 2px 8px 0 rgba(93, 156, 251, 0.04);
+}
+
+.lockedTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--body-2-normal-bold-font-family);
+  font-size: var(--body-2-normal-bold-font-size);
+  font-style: var(--body-2-normal-bold-font-style);
+  font-weight: var(--body-2-normal-bold-font-weight);
+  letter-spacing: var(--body-2-normal-bold-letter-spacing);
+  color: var(--n-900);
+  margin-bottom: 8px;
+}
+
+.lockedDescription {
+  font-family: var(--body-2-reading-regular-font-family);
+  font-size: var(--body-2-reading-regular-font-size);
+  font-style: var(--body-2-reading-regular-font-style);
+  font-weight: var(--body-2-reading-regular-font-weight);
+  letter-spacing: var(--body-2-reading-regular-letter-spacing);
+  line-height: var(--body-2-reading-regular-line-height);
+  color: var(--n-800);
+  margin-bottom: 12px;
+}
