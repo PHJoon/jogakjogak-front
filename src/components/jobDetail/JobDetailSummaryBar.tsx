@@ -48,11 +48,11 @@ export default function JobDetailSummaryBar({
               <div className={styles.progressCounterText}>이력서 완성도</div>
               <p className={styles.progressCount}>
                 <span className={styles.completedCount}>
-                  {jdDetail.completedPiecesCount}
+                  {jdDetail.completedPieces}
                 </span>
                 <span className={styles.totalCount}>
                   {' '}
-                  / {jdDetail.totalPiecesCount}
+                  / {jdDetail.totalPieces}
                 </span>
               </p>
             </div>
@@ -61,8 +61,8 @@ export default function JobDetailSummaryBar({
             </span>
           </div>
           <ProgressBar
-            total={jdDetail.totalPiecesCount}
-            completed={jdDetail.completedPiecesCount}
+            total={jdDetail.totalPieces}
+            completed={jdDetail.completedPieces}
           />
         </div>
         <button

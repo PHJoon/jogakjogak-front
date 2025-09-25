@@ -70,8 +70,6 @@ export interface JDDetail {
   endedAt: string;
   createdAt: string;
   updatedAt: string;
-  totalPiecesCount: number;
-  completedPiecesCount: number;
   toDoLists: TodoItem[];
   completedPieces: number;
   totalPieces: number;
