@@ -39,6 +39,7 @@ export const metadata: Metadata = {
   title: '조각조각',
   description: 'AI와 함께하는 나의 취업 성공 투두리스트',
   creator: 'JogakJogak',
+  applicationName: '조각조각',
   authors: [
     { name: 'JogakJogak Team', url: 'mailto:jogakjogakhelp@gmail.com' },
   ],
