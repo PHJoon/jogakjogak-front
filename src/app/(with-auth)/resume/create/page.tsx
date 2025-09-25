@@ -74,7 +74,7 @@ export default function CreateResumePage() {
       onSuccess: () => {
         setSnackbar({ message: '이력서가 등록되었어요.', type: 'success' });
         if (redirectAfterResume) {
-          router.push(redirectAfterResume);
+          router.replace(redirectAfterResume);
           clearRedirect();
           return;
         }
