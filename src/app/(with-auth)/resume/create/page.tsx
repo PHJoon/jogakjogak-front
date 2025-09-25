@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FormProvider, type SubmitHandler } from 'react-hook-form';
+import { useShallow } from 'zustand/shallow';
 
 import arrowBackIcon from '@/assets/images/ic_back.svg';
 import Button from '@/components/common/Button';
@@ -18,6 +19,7 @@ import useResumeForm from '@/hooks/resume/useResumeForm';
 import useScrollDirection from '@/hooks/useScrollDirection';
 import { HttpError } from '@/lib/HttpError';
 import { useBoundStore } from '@/stores/useBoundStore';
+import { useSessionStore } from '@/stores/useSessionStore';
 import { ResumeFormInput, ResumeRequestBody, ResumeTab } from '@/types/resume';
 import getDistanceFromCenter from '@/utils/getDistanceFromCenter';
 
@@ -33,6 +35,13 @@ export default function CreateResumePage() {
 
   const { methods } = useResumeForm();
   const { createResumeMutate, isResumeCreating } = useCreateResumeMutation();
+
+  const { redirectAfterResume, clearRedirect } = useSessionStore(
+    useShallow((state) => ({
+      redirectAfterResume: state.redirectAfterResume,
+      clearRedirect: state.clearRedirect,
+    }))
+  );
 
   const setRef = useCallback((el: HTMLDivElement | null) => {
     if (el) {
@@ -63,6 +72,11 @@ export default function CreateResumePage() {
     createResumeMutate(formData, {
       onSuccess: () => {
         setSnackbar({ message: '이력서가 등록되었어요.', type: 'success' });
+        if (redirectAfterResume) {
+          router.push(redirectAfterResume);
+          clearRedirect();
+          return;
+        }
         router.push('/dashboard');
       },
       onError: (error) => {
