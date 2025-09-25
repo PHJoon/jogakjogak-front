@@ -40,8 +40,8 @@ export async function createJd({
       companyName,
       job,
       content,
-      link,
-      endDate,
+      jdUrl: link,
+      endedAt: endDate ? `${endDate}T23:59:59` : undefined,
     }),
   });
 
@@ -76,8 +76,8 @@ export async function updateJd({
       title,
       companyName,
       job,
-      link,
-      endDate,
+      jdUrl: link,
+      endedAt: endDate ? `${endDate}T23:59:59` : undefined,
     }),
   });
   await throwIfNotOk(response, '채용공고를 수정하는 중 오류가 발생했습니다.');

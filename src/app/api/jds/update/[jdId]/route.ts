@@ -21,7 +21,6 @@ export async function PATCH(
 
     const { jdId } = await params;
     const body = await request.json();
-    const { title, companyName, job, link, endDate } = body;
 
     // 백엔드 서버로 채용공고 생성 요청
     const response = await fetch(`${API_BASE_URL}/jds/${jdId}`, {
@@ -30,13 +29,7 @@ export async function PATCH(
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        title,
-        companyName,
-        job,
-        jdUrl: link || '', // link → jdUrl, 빈 문자열 기본값
-        ...(endDate && { endedAt: `${endDate}T23:59:59` }), // endDate가 있을 때만 추가
-      }),
+      body: JSON.stringify(body),
     });
 
     const data = await response.json();
