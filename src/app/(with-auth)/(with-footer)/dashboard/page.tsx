@@ -39,7 +39,6 @@ function DashboardContent() {
   const searchParams = useSearchParams();
   const onboarding = searchParams.get('onboarding');
   const [showNoResumeModal, setShowNoResumeModal] = useState(false);
-  const ranRef = useRef(false);
 
   const {
     setSort,
@@ -49,7 +48,7 @@ function DashboardContent() {
     isPending: paginationPending,
   } = useQueryParams();
 
-  const { data, isLoading, refetch } = useJdsQuery();
+  const { data, isLoading, isFetching } = useJdsQuery();
 
   const setResume = useBoundStore((state) => state.setResume);
 
@@ -60,14 +59,13 @@ function DashboardContent() {
   );
 
   useEffect(() => {
-    if (!data) return;
-    if (ranRef.current) return;
-    ranRef.current = true;
+    if (!data || isLoading || isFetching) return;
+
+    setResume(data.resume);
 
     (async () => {
       if (onboarding === 'true') {
-        await refetch(); // 캐시 갱신
-        router.replace('/dashboard'); // 그 다음 이동
+        router.replace('/dashboard');
         return;
       }
 
@@ -80,10 +78,8 @@ function DashboardContent() {
         setShowNoResumeModal(true);
         return;
       }
-
-      setResume(data.resume);
     })();
-  }, [data, setResume, router, onboarding, refetch, isLoading]);
+  }, [data, setResume, router, onboarding, isLoading, isFetching]);
 
   const handleResumeRegisterClick = () => {
     trackEvent({
@@ -95,7 +91,7 @@ function DashboardContent() {
     router.push('/resume/create');
   };
 
-  if (isLoading || paginationPending) {
+  if (isLoading || paginationPending || isFetching) {
     return <LoadingSkeleton />;
   }
 
