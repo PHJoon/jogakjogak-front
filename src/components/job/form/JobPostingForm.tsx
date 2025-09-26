@@ -95,9 +95,9 @@ export default function JobPostingForm({
     }
   };
 
-  // edit 페이지일 때 기존 값으로 세팅
+  // 기존 값으로 세팅
   useEffect(() => {
-    if (mode === 'edit' && originData) {
+    if (originData) {
       setValue('title', originData.title || '');
       setValue('companyName', originData.companyName || '');
       setValue('job', originData.job || '');
@@ -105,7 +105,7 @@ export default function JobPostingForm({
       setValue('content', originData.content || '');
       setValue('link', originData.link || '');
     }
-  }, [originData, setValue, mode]);
+  }, [originData, setValue]);
 
   return (
     <>
