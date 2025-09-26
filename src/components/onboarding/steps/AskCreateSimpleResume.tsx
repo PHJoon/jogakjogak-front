@@ -9,6 +9,7 @@ import Button from '@/components/common/Button';
 import { ERROR_CODES, ERROR_MESSAGES } from '@/constants/errorCode';
 import { updateIsOnboarded } from '@/lib/api/mypage/profile';
 import { HttpError } from '@/lib/HttpError';
+import { queryClient } from '@/lib/queryClient';
 import { isValidBooleanNull, useBoundStore } from '@/stores/useBoundStore';
 
 import styles from './AskCreateSimpleResume.module.css';
@@ -52,6 +53,7 @@ export default function AskCreateSimpleResume() {
       // 온보딩 종료 (대시보드로)
       useBoundStore.persist.clearStorage();
       resetOnboardingStore();
+      queryClient.invalidateQueries({ queryKey: ['jds-list'] });
       router.replace('/dashboard?onboarding=true');
     } catch (error) {
       if (error instanceof HttpError) {

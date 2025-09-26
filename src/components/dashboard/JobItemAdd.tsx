@@ -26,7 +26,7 @@ export default function JobItemAdd({ jdsCount }: Props) {
       event: GAEvent.JobPosting.CREATE_PAGE_VIEW,
       event_category: GACategory.JOB_POSTING,
     });
-    if (!hasResume && jdsCount === 1) {
+    if (!hasResume && jdsCount > 1) {
       setSnackbar({
         message: '채용공고를 추가하기 전에 먼저 이력서를 등록해주세요.',
         type: 'info',
