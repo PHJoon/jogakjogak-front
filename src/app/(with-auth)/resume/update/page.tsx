@@ -129,15 +129,15 @@ export default function UpdateResumePage() {
     };
   }, [isResumeLoading]);
 
-  useEffect(() => {
-    const onScroll = () => {
-      const nearBottom =
-        window.innerHeight + window.scrollY >= document.body.scrollHeight;
-      if (nearBottom) setCurrentTab('content');
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  // useEffect(() => {
+  //   const onScroll = () => {
+  //     const nearBottom =
+  //       window.innerHeight + window.scrollY >= document.body.scrollHeight;
+  //     if (nearBottom) setCurrentTab('content');
+  //   };
+  //   window.addEventListener('scroll', onScroll, { passive: true });
+  //   return () => window.removeEventListener('scroll', onScroll);
+  // }, []);
 
   return (
     <main className={styles.main}>
@@ -158,16 +158,36 @@ export default function UpdateResumePage() {
 
       <div className={styles.formContainer}>
         <FormProvider {...methods}>
-          <div className={styles.tabContentWrapper} ref={setRef} id="career">
+          <div
+            className={styles.tabContentWrapper}
+            ref={setRef}
+            id="career"
+            onClick={() => handleClickTab('career')}
+          >
             <CareerTab />
           </div>
-          <div className={styles.tabContentWrapper} ref={setRef} id="education">
+          <div
+            className={styles.tabContentWrapper}
+            ref={setRef}
+            id="education"
+            onClick={() => handleClickTab('education')}
+          >
             <EducationTab />
           </div>
-          <div className={styles.tabContentWrapper} ref={setRef} id="skill">
+          <div
+            className={styles.tabContentWrapper}
+            ref={setRef}
+            id="skill"
+            onClick={() => handleClickTab('skill')}
+          >
             <SkillTab />
           </div>
-          <div className={styles.tabContentWrapper} ref={setRef} id="content">
+          <div
+            className={styles.tabContentWrapper}
+            ref={setRef}
+            id="content"
+            onClick={() => handleClickTab('content')}
+          >
             <ContentTab />
           </div>
         </FormProvider>

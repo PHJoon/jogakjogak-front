@@ -168,7 +168,7 @@ export default function SkillTab() {
                       if (
                         !Object.values(skillsFields)
                           .map((skill) => skill.name)
-                          .includes(search)
+                          .includes(result)
                       ) {
                         appendSkills({ id: crypto.randomUUID(), name: result });
                       }

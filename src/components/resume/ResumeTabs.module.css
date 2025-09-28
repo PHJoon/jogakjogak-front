@@ -12,10 +12,6 @@
   grid-template-columns: repeat(var(--count), 1fr);
 }
 
-.resumeTabs.onboarding {
-  margin-bottom: 40px;
-}
-
 .tab {
   all: unset;
   box-sizing: border-box;

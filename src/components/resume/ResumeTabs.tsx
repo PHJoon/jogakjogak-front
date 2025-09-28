@@ -39,14 +39,9 @@ const tabs = {
 interface Props {
   currentTab: ResumeTab;
   onClickTab: (tab: ResumeTab) => void;
-  isOnboarding?: boolean;
 }
 
-export default function ResumeTabs({
-  currentTab,
-  onClickTab,
-  isOnboarding = false,
-}: Props) {
+export default function ResumeTabs({ currentTab, onClickTab }: Props) {
   const [active, setActive] = useState(0);
 
   const handleClickTab = (tab: ResumeTab) => {
@@ -60,9 +55,7 @@ export default function ResumeTabs({
   }, [currentTab]);
 
   return (
-    <div
-      className={`${styles.resumeTabs} ${isOnboarding ? styles.onboarding : ''}`}
-    >
+    <div className={`${styles.resumeTabs}`}>
       {Object.entries(tabs).map(([tab, { label, icon, activeIcon }]) => (
         <button
           key={tab}

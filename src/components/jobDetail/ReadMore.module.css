@@ -13,7 +13,7 @@
   color: var(--n-800);
   transition: max-height 0.3s ease-in-out;
   width: 100%;
-  word-break: keep-all;
+  word-break: break-all;
   overflow-wrap: break-word;
   white-space: pre-wrap;
 }

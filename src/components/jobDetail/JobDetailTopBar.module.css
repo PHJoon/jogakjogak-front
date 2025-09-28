@@ -3,27 +3,29 @@
   align-items: center;
   justify-content: space-between;
   background-color: transparent;
-  max-width: 1560px;
+  max-width: 1561px;
   width: 100%;
-  height: 76px;
+  height: 48px;
 }
 
 .leftSection {
   display: flex;
   align-items: center;
+  padding-left: 4px;
 }
 
 .backButton {
-  height: 48px;
-  width: 48px;
-  border: none;
+  all: unset;
+  box-sizing: border-box;
+  border-radius: 8px;
+  height: 32px;
+  width: 32px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
   background-color: transparent;
-  border-radius: 16px;
 }
 
 .backButton:hover {
@@ -34,15 +36,19 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
 }
 
 .urlButton {
   background-color: var(--primarymain-200);
   border: 1px solid var(--primarymain-200);
   border-radius: 4px;
-  height: 26px;
-  padding: 2px 8px;
+  width: 98px;
+  height: 32px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   cursor: pointer;
   transition: background-color 0.2s;
@@ -70,20 +76,22 @@
 }
 
 .iconButton {
-  border-radius: 16px;
-  height: 48px;
-  width: 48px;
-  border: none;
-  cursor: pointer;
+  all: unset;
+  box-sizing: border-box;
+  height: 32px;
+  width: 32px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
   background-color: transparent;
+  cursor: pointer;
+  background-color: var(--n-200);
 }
 
 .iconButton:hover {
-  background-color: var(--n-200);
+  background-color: var(--n-300);
 }
 
 .moreMenuWrapper {
@@ -101,8 +109,8 @@
   }
 }
 
-@media (max-width: 547px) {
+/* @media (max-width: 547px) {
   .JobDetailTopBar {
     height: 48px;
   }
-}
+} */

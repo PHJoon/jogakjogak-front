@@ -35,7 +35,7 @@ export default function CareerTab() {
     <div className={styles.tabContent}>
       <div className={styles.titleSection}>
         <h1 className={styles.title}>
-          직무와 관련된 <span>경력</span>이 있나요?
+          직무와 관련된 <span>경력</span>
         </h1>
         <p className={styles.subTitle}>담당 업무는 채용공고와 가장 직결돼요.</p>
       </div>
@@ -100,7 +100,6 @@ export default function CareerTab() {
             </>
           )}
         />
-        {!isNewcomer && <div className={styles.noCareerListContainer}></div>}
 
         {isNewcomer && (
           <>

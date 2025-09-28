@@ -5,26 +5,10 @@
   justify-content: center;
   align-items: center;
   border-radius: 12px;
-  padding: 36px 24px;
+  padding: 24px 24px 48px 24px;
   cursor: text;
   background-color: var(--n-50);
   border: 1px solid transparent;
-}
-
-.floatingLabel {
-  position: absolute;
-  top: 0;
-  left: 24px;
-  transform: translateY(24px);
-  font-family: var(--label-1-reading-regular-font-family);
-  font-size: var(--label-1-reading-regular-font-size);
-  font-style: var(--label-1-reading-regular-font-style);
-  font-weight: var(--label-1-reading-regular-font-weight);
-  letter-spacing: var(--label-1-reading-regular-letter-spacing);
-  color: var(--n-600);
-  transition:
-    transform 0.25s ease-out,
-    color 0.3s ease;
 }
 
 .textareaWrapper {
@@ -64,13 +48,19 @@
   outline: none;
 }
 
+.textarea::placeholder {
+  color: var(--n-600);
+}
+
 .textareaCounter {
   position: absolute;
-  top: calc(100% - 12px);
-  right: 32px;
-  transform: translate(-100%, -100%);
-  width: 33px;
-  height: 22px;
+  width: calc(100% - 48px);
+  height: 20px;
+  top: calc(100% - 32px);
+  /* bottom: 16px; */
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   font-family: var(--body-2-normal-regular-font-family);
   font-size: var(--body-2-normal-regular-font-size);
   font-style: var(--body-2-normal-regular-font-style);
@@ -82,9 +72,6 @@
 
 .textareaContainer[data-readonly='true'] {
   pointer-events: none;
-  & .floatingLabel {
-    color: var(--n-600);
-  }
   & .textarea {
     color: var(--n-600);
   }
@@ -96,34 +83,12 @@
 
 .textareaContainer[data-focused='true'] {
   border: 1px solid var(--primaryjogak-1);
-  & .floatingLabel {
-    color: var(--n-600);
-    transform: translateY(12px);
-    font-family: var(--caption-1-regular-font-family);
-    font-size: var(--caption-1-regular-font-size);
-    font-style: var(--caption-1-regular-font-style);
-    font-weight: var(--caption-1-regular-font-weight);
-    letter-spacing: var(--caption-1-regular-letter-spacing);
-    line-height: var(--caption-1-regular-line-height);
-    color: var(--n-700);
-  }
   & .textarea {
     color: var(--n-800);
   }
 }
 
 .textareaContainer[data-has-value='true'] {
-  & .floatingLabel {
-    color: var(--n-600);
-    transform: translateY(12px);
-    font-family: var(--caption-1-regular-font-family);
-    font-size: var(--caption-1-regular-font-size);
-    font-style: var(--caption-1-regular-font-style);
-    font-weight: var(--caption-1-regular-font-weight);
-    letter-spacing: var(--caption-1-regular-letter-spacing);
-    line-height: var(--caption-1-regular-line-height);
-    color: var(--n-700);
-  }
   & .textarea {
     color: var(--n-800);
   }
@@ -132,32 +97,5 @@
 .textareaContainer[data-readonly='true'][data-has-value='true'] {
   & .textarea {
     color: var(--n-600);
-  }
-}
-
-/* 반응형 */
-@media screen and (max-width: 768px) {
-  .textareaContainer {
-    padding: 24px 16px;
-  }
-
-  .floatingLabel {
-    transform: translateY(16px);
-  }
-
-  .textareaContainer[data-focused='true'] {
-    & .floatingLabel {
-      transform: translateY(8px);
-    }
-  }
-
-  .textareaContainer[data-has-value='true'] {
-    & .floatingLabel {
-      transform: translateY(8px);
-    }
-  }
-
-  .textareaCounter {
-    top: calc(100% - 2px);
   }
 }

@@ -42,11 +42,7 @@ export default function CreateResume() {
 
   return (
     <div className={styles.mainContent}>
-      <ResumeTabs
-        isOnboarding
-        currentTab={currentTab}
-        onClickTab={handleClickTab}
-      />
+      <ResumeTabs currentTab={currentTab} onClickTab={handleClickTab} />
       <FormProvider {...methods}>
         {currentTab === 'career' && <CareerTab />}
         {currentTab === 'education' && <EducationTab />}

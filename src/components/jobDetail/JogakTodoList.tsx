@@ -2,7 +2,7 @@ import { todo } from 'node:test';
 
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import arrowIcon from '@/assets/images/ic_navigate_next.svg';
 import JogakTodoItem from '@/components/jobDetail/JogakTodoItem';
@@ -35,6 +35,17 @@ export default function JogakTodoList({
   const [showAddTodoModal, setShowAddTodoModal] = useState(false);
   const [showTodoList, setShowTodoList] = useState(true);
   const resume = useBoundStore((state) => state.resume);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 745) {
+        setShowTodoList(true);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <div key={category} className={styles.todoList}>

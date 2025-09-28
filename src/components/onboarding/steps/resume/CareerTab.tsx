@@ -39,7 +39,7 @@ export default function CareerTab() {
     }))
   );
 
-  const { control, trigger } = useFormContext<ResumeFormInput>();
+  const { control, trigger, setValue } = useFormContext<ResumeFormInput>();
   const {
     fields: careerFields,
     append: appendCareer,
@@ -130,6 +130,7 @@ export default function CareerTab() {
                       return;
                     }
                     onChange(false);
+                    setValue('careerList', []);
                   }}
                   style={{ width: '160px', height: '56px' }}
                   isActive={value === false}
@@ -145,9 +146,6 @@ export default function CareerTab() {
             </>
           )}
         />
-        {!isNewcomerWatch && (
-          <div className={styles.noCareerListContainer}></div>
-        )}
 
         {isNewcomerWatch && (
           <>

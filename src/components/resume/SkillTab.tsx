@@ -59,7 +59,7 @@ export default function SkillTab() {
     <div className={styles.tabContent}>
       <div className={styles.titleSection}>
         <h1 className={styles.title}>
-          직무 관련 <span>스킬</span>을 추가해주세요.
+          직무와 관련된 <span>스킬</span>
         </h1>
         <p className={styles.subTitle}>
           업무와 관련된 전문 지식, 기술 등이 좋아요.
@@ -67,44 +67,42 @@ export default function SkillTab() {
       </div>
 
       <div className={styles.inputSection}>
-        <div className={styles.addedSkillList}>
-          {skillFields.length === 0 && (
-            <div className={styles.noSkillListContainer}></div>
-          )}
-
-          {skillFields.map((skill, index) => (
-            <Button
-              key={skill.id}
-              variant={'neutral'}
-              style={{
-                width: 'fit-content',
-                height: '40px',
-                padding: '12px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                cursor: 'default',
-              }}
-            >
-              {skill.name}
-              <div
-                role="button"
-                className={styles.removeSkillButton}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeSkill(index);
+        {skillFields.length > 0 && (
+          <div className={styles.addedSkillList}>
+            {skillFields.map((skill, index) => (
+              <Button
+                key={skill.id}
+                variant={'neutral'}
+                style={{
+                  width: 'fit-content',
+                  height: '40px',
+                  padding: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  cursor: 'default',
                 }}
               >
-                <Image
-                  src={closeIcon}
-                  alt="Remove skill"
-                  width={20}
-                  height={20}
-                />
-              </div>
-            </Button>
-          ))}
-        </div>
+                {skill.name}
+                <div
+                  role="button"
+                  className={styles.removeSkillButton}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeSkill(index);
+                  }}
+                >
+                  <Image
+                    src={closeIcon}
+                    alt="Remove skill"
+                    width={20}
+                    height={20}
+                  />
+                </div>
+              </Button>
+            ))}
+          </div>
+        )}
 
         <div className={styles.searchSection}>
           <Input
