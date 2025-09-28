@@ -56,7 +56,8 @@
   position: absolute;
   width: calc(100% - 48px);
   height: 20px;
-  bottom: 16px;
+  top: calc(100% - 32px);
+  /* bottom: 16px; */
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -96,16 +97,5 @@
 .textareaContainer[data-readonly='true'][data-has-value='true'] {
   & .textarea {
     color: var(--n-600);
-  }
-}
-
-/* 반응형 */
-@media screen and (max-width: 768px) {
-  .textareaContainer {
-    padding: 24px 16px;
-  }
-
-  .textareaCounter {
-    top: calc(100% - 2px);
   }
 }
