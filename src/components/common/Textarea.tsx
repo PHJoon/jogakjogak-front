@@ -6,7 +6,7 @@ import styles from './Textarea.module.css';
 
 type BaseProps = {
   id: string;
-  label: string;
+  placeholder?: string;
   value?: string; // RHF에서는 watch 값 내려줌(표시/스타일용)
   readOnly?: boolean;
   warning?: boolean;
@@ -35,7 +35,7 @@ type ControlledProps = BaseProps & {
 type Props = RHFProps | ControlledProps;
 
 export default function Textarea(props: Props) {
-  const { id, label, readOnly, warning, maxLength, style, value } = props;
+  const { id, placeholder, readOnly, warning, maxLength, style, value } = props;
 
   const isRHFMode = 'field' in props && props.field !== undefined;
   const isControlledMode = 'onChange' in props && props.onChange !== undefined;
@@ -51,10 +51,6 @@ export default function Textarea(props: Props) {
       data-has-value={Boolean(value?.length) || undefined}
       style={style}
     >
-      <label htmlFor={id} className={styles.floatingLabel}>
-        {label}
-      </label>
-
       <div className={styles.textareaWrapper}>
         <textarea
           {...(isRHFMode ? props.field : {})}
@@ -69,6 +65,7 @@ export default function Textarea(props: Props) {
           className={styles.textarea}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
+          placeholder={placeholder}
           readOnly={readOnly}
           maxLength={maxLength}
         />
