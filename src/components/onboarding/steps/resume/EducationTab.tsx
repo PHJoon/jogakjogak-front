@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { Fragment, useState } from 'react';
 import {
   Controller,
   useFieldArray,
@@ -26,10 +27,13 @@ export default function EducationTab() {
     }))
   );
 
+  const [selectedEducationLevel, setSelectedEducationLevel] = useState('none');
+
   const {
     control,
     formState: { errors },
     trigger,
+    setValue,
   } = useFormContext<ResumeFormInput>();
   const {
     fields: educationFields,
@@ -67,116 +71,182 @@ export default function EducationTab() {
       <div className={styles.inputSection}>
         <div className={styles.scrollWrapper}>
           <div className={styles.educationList}>
-            {educationFields.map((field, index) => (
-              <Controller
-                key={field.id}
-                name={`educationList.${index}`}
-                control={control}
-                rules={{
-                  validate: (edu) => {
-                    if (!edu.level || !edu.majorField || !edu.status) {
-                      return '학력 정보를 모두 입력해주세요.';
-                    }
-                    return true;
-                  },
-                }}
-                render={({
-                  field: { onChange, value },
-                  fieldState: { error },
-                }) => (
-                  <div className={styles.educationItem}>
-                    <div className={styles.educationLevelSelect}>
-                      {EDUCATION_LEVELS.map(({ label, value: levelValue }) => (
-                        <Button
-                          key={levelValue}
-                          variant={'secondary'}
-                          style={{
-                            width: 'fit-content',
-                            height: '44px',
-                            padding: '10px 16px',
-                          }}
-                          onClick={() =>
-                            onChange({ ...value, level: levelValue })
-                          }
-                          isActive={value.level === levelValue}
-                        >
-                          {label}
-                        </Button>
-                      ))}
-                    </div>
+            {educationFields.length === 0 && (
+              <div className={styles.educationLevelSelect}>
+                {EDUCATION_LEVELS.map(({ label, value: levelValue }) => (
+                  <Button
+                    key={levelValue}
+                    variant={'secondary'}
+                    style={{
+                      width: 'fit-content',
+                      height: '44px',
+                      padding: '10px 16px',
+                    }}
+                    onClick={() => {
+                      setSelectedEducationLevel(levelValue);
+                      appendEducation({
+                        level: levelValue,
+                        majorField: '',
+                        status: '',
+                      });
+                    }}
+                    isActive={selectedEducationLevel === levelValue}
+                  >
+                    {label}
+                  </Button>
+                ))}
+                <Button
+                  variant={'neutral'}
+                  style={{
+                    width: 'fit-content',
+                    height: '44px',
+                    padding: '10px 16px',
+                  }}
+                  onClick={() => setSelectedEducationLevel('none')}
+                  isActive={selectedEducationLevel === 'none'}
+                >
+                  해당없음
+                </Button>
+              </div>
+            )}
 
-                    <Input
-                      id={`educationList${index}.major`}
-                      label={'학과명 혹은 계열'}
-                      style={{ width: '100%' }}
-                      onChange={(e) =>
-                        onChange({ ...value, majorField: e.target.value })
+            {educationFields.length > 0 &&
+              educationFields.map((field, index) => (
+                <Controller
+                  key={field.id}
+                  name={`educationList.${index}`}
+                  control={control}
+                  rules={{
+                    validate: (edu) => {
+                      if (!edu.level || !edu.majorField || !edu.status) {
+                        return '학력 정보를 모두 입력해주세요.';
                       }
-                      value={value.majorField}
-                    />
-
-                    <div className={styles.educationStatusSelect}>
-                      {EDUCATION_STATUSES.map(
-                        ({ label, value: statusValue }) => (
+                      return true;
+                    },
+                  }}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <div className={styles.educationItem}>
+                      <div className={styles.educationLevelSelect}>
+                        {EDUCATION_LEVELS.map(
+                          ({ label, value: levelValue }) => (
+                            <Button
+                              key={levelValue}
+                              variant={'secondary'}
+                              style={{
+                                width: 'fit-content',
+                                height: '44px',
+                                padding: '10px 16px',
+                              }}
+                              onClick={() => {
+                                if (index === 0) {
+                                  setSelectedEducationLevel(levelValue);
+                                }
+                                onChange({ ...value, level: levelValue });
+                              }}
+                              isActive={value.level === levelValue}
+                            >
+                              {label}
+                            </Button>
+                          )
+                        )}
+                        {index === 0 && (
                           <Button
-                            key={statusValue}
                             variant={'neutral'}
                             style={{
                               width: 'fit-content',
                               height: '44px',
                               padding: '10px 16px',
                             }}
-                            onClick={() =>
-                              onChange({ ...value, status: statusValue })
-                            }
-                            isActive={value.status === statusValue}
+                            onClick={() => {
+                              setSelectedEducationLevel('none');
+                              setValue('educationList', []);
+                            }}
+                            isActive={selectedEducationLevel === 'none'}
                           >
-                            {label}
+                            해당없음
                           </Button>
-                        )
+                        )}
+                      </div>
+
+                      <Input
+                        id={`educationList${index}.major`}
+                        label={'학과명 혹은 계열'}
+                        style={{ width: '100%' }}
+                        onChange={(e) =>
+                          onChange({ ...value, majorField: e.target.value })
+                        }
+                        value={value.majorField}
+                      />
+
+                      <div className={styles.educationStatusSelect}>
+                        {EDUCATION_STATUSES.map(
+                          ({ label, value: statusValue }) => (
+                            <Button
+                              key={statusValue}
+                              variant={'neutral'}
+                              style={{
+                                width: 'fit-content',
+                                height: '44px',
+                                padding: '10px 16px',
+                              }}
+                              onClick={() =>
+                                onChange({ ...value, status: statusValue })
+                              }
+                              isActive={value.status === statusValue}
+                            >
+                              {label}
+                            </Button>
+                          )
+                        )}
+                      </div>
+                      {/* 에러 메세지 */}
+                      {error && (
+                        <ErrorMessage
+                          message={
+                            error.message ?? '학력 정보를 모두 입력해주세요.'
+                          }
+                        />
+                      )}
+                      {/* 삭제 버튼 */}
+                      {educationFields.length > 1 && (
+                        <button
+                          className={styles.deleteButton}
+                          onClick={() => removeEducation(index)}
+                        >
+                          <Image
+                            src={deleteIcon}
+                            alt="삭제 아이콘"
+                            width={24}
+                            height={24}
+                          />
+                          <span>삭제</span>
+                        </button>
                       )}
                     </div>
-                    {/* 에러 메세지 */}
-                    {error && (
-                      <ErrorMessage
-                        message={
-                          error.message ?? '학력 정보를 모두 입력해주세요.'
-                        }
-                      />
-                    )}
-                    {/* 삭제 버튼 */}
-                    <button
-                      className={styles.deleteButton}
-                      onClick={() => removeEducation(index)}
-                    >
-                      <Image
-                        src={deleteIcon}
-                        alt="삭제 아이콘"
-                        width={24}
-                        height={24}
-                      />
-                      <span>삭제</span>
-                    </button>
-                  </div>
-                )}
-              />
-            ))}
+                  )}
+                />
+              ))}
           </div>
         </div>
 
-        <button
-          className={styles.addEducationButton}
-          onClick={() =>
-            appendEducation({
-              level: '',
-              majorField: '',
-              status: '',
-            })
-          }
-        >
-          <Image src={plusIcon} alt="추가 아이콘" />
-          학력 추가하기
-        </button>
+        {educationFields.length > 0 && (
+          <button
+            className={styles.addEducationButton}
+            onClick={() =>
+              appendEducation({
+                level: '',
+                majorField: '',
+                status: '',
+              })
+            }
+          >
+            <Image src={plusIcon} alt="추가 아이콘" />
+            학력 추가하기
+          </button>
+        )}
       </div>
       <div className={styles.stepNavigationButtonGroup}>
         <div className={styles.previousButtonWrapper}>
