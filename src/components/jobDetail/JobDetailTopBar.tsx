@@ -55,7 +55,7 @@ export default function JobDetailTopBar({
     <div className={styles.JobDetailTopBar}>
       <div className={styles.leftSection}>
         <button className={styles.backButton} onClick={handleBack}>
-          <Image src={arrowBackIcon} alt="뒤로가기" width={28} height={28} />
+          <Image src={arrowBackIcon} alt="뒤로가기" width={24} height={24} />
         </button>
       </div>
 
@@ -69,8 +69,8 @@ export default function JobDetailTopBar({
             <Image
               src={jdDetail.bookmark ? bookmarkCheckIcon : bookmarkIcon}
               alt={jdDetail.bookmark ? '북마크 체크됨' : '북마크'}
-              width={32}
-              height={32}
+              width={20}
+              height={20}
             />
           </button>
           <button
@@ -81,7 +81,7 @@ export default function JobDetailTopBar({
               setShowMoreMenu((prev) => !prev);
             }}
           >
-            <Image src={moreIcon} alt="더보기" width={32} height={32} />
+            <Image src={moreIcon} alt="더보기" width={20} height={20} />
           </button>
 
           {/* More menu dropdown */}
