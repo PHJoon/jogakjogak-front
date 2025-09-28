@@ -104,7 +104,6 @@ export default function ContentTab() {
             maxHeight: '480px',
             height: '100%',
           }}
-          placeholder="내용입력"
         />
       </div>
       <div className={styles.stepNavigationButtonGroup}>
