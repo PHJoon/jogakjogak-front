@@ -145,9 +145,6 @@ export default function CareerTab() {
             </>
           )}
         />
-        {!isNewcomerWatch && (
-          <div className={styles.noCareerListContainer}></div>
-        )}
 
         {isNewcomerWatch && (
           <>
