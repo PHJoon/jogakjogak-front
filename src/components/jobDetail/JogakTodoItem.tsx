@@ -39,8 +39,6 @@ export default function JogakTodoItem({ category, todoItem }: Props) {
   const { deleteTodoMutate } = useDeleteTodoMutation();
   const { toggleCompleteTodoMutate } = useToggleCompleteTodoMutation();
 
-  const contentRef = useRef<HTMLDivElement | null>(null);
-
   // Todo 여러개 완료 체크
   const handleClickCheckbox = (prev: boolean) => {
     if (prev) {
@@ -178,7 +176,7 @@ export default function JogakTodoItem({ category, todoItem }: Props) {
           </div>
         )}
       </div>
-      <ReadMore lines={4} content={todoItem.content} />
+      <ReadMore lines={6} content={todoItem.content} />
       {showUpdateTodoModal && (
         <TodoModal
           isOpen={showUpdateTodoModal}
