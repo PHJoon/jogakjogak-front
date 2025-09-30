@@ -12,6 +12,10 @@ import {
   createGlobalErrorSlice,
   GlobalErrorSlice,
 } from './slices/globalErrorSlice';
+import {
+  createJDSSummarySlice,
+  JDSSummarySlice,
+} from './slices/jdsSummarySlice';
 import { createJobDetailSlice, JobDetailSlice } from './slices/jobDetailSlice';
 import {
   createOnboardingSlice,
@@ -87,7 +91,8 @@ type BoundStore = ResumeSlice &
   SnackbarSlice &
   GlobalErrorSlice &
   OnboardingSlice &
-  JobDetailSlice;
+  JobDetailSlice &
+  JDSSummarySlice;
 
 type Persisted = Pick<
   BoundStore,
@@ -101,6 +106,7 @@ type Persisted = Pick<
   | 'skillListAnswer'
   | 'contentAnswer'
   | 'resume'
+  | 'allCompletedPieces'
 >;
 
 export const useBoundStore = create<BoundStore>()(
@@ -111,6 +117,7 @@ export const useBoundStore = create<BoundStore>()(
       ...createGlobalErrorSlice(...args),
       ...createOnboardingSlice(...args),
       ...createJobDetailSlice(...args),
+      ...createJDSSummarySlice(...args),
     }),
     {
       name: 'bound-store',
@@ -125,6 +132,7 @@ export const useBoundStore = create<BoundStore>()(
         skillListAnswer: state.skillListAnswer,
         contentAnswer: state.contentAnswer,
         resume: state.resume,
+        allCompletedPieces: state.allCompletedPieces,
       }),
       version: 1,
       migrate: (state, fromVersion) => {
