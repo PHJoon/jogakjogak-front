@@ -33,14 +33,14 @@ export default function FirstCompleteEventModal({
   };
 
   const handleClickInstagram = () => {
-    window.open('https://www.instagram.com/jogakjogak_official/', '__blank');
+    window.open(
+      'https://www.instagram.com/p/DPPHezIk1F9/?utm_source=ig_web_copy_link&igsh=enA0ZWUydXhhb2x4',
+      '__blank'
+    );
   };
 
   const handleClickFacebook = () => {
-    window.open(
-      'https://www.facebook.com/profile.php?id=61578251634709',
-      '__blank'
-    );
+    window.open('https://www.facebook.com/share/p/1BB3tcTGXE/', '__blank');
   };
 
   if (!isOpen) return null;
