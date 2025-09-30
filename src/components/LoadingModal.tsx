@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -42,12 +40,14 @@ const LOADING_TIPS = [
 
 interface LoadingModalProps {
   isOpen: boolean;
+  onClose: () => void;
   isComplete?: boolean;
   onCompleteAnimationEnd?: () => void;
 }
 
 export default function LoadingModal({
   isOpen,
+  onClose,
   isComplete = false,
   onCompleteAnimationEnd,
 }: LoadingModalProps) {
@@ -62,13 +62,14 @@ export default function LoadingModal({
       // 완료 애니메이션 후 콜백 실행
       const timer = setTimeout(() => {
         onCompleteAnimationEnd?.();
-      }, 1500); // 1.5초 후 이동
+        onClose();
+      }, 500); // 0.5초 후 이동
 
       return () => clearTimeout(timer);
     }
-  }, [isComplete, onCompleteAnimationEnd]);
+  }, [isComplete, onCompleteAnimationEnd, onClose]);
 
-  // 10초마다 팁 변경
+  // 2초마다 팁 변경
   useEffect(() => {
     if (!isOpen || isComplete) return;
 
@@ -81,7 +82,7 @@ export default function LoadingModal({
         }
         return newIndex;
       });
-    }, 10000); // 10초
+    }, 2000); // 2초
 
     return () => clearInterval(interval);
   }, [isOpen, isComplete]);
