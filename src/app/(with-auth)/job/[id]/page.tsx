@@ -17,6 +17,7 @@ import JobDetailLoading from '@/components/jobDetail/JobDetailLoading';
 import JobDetailSummaryBar from '@/components/jobDetail/JobDetailSummaryBar';
 import JobDetailTopBar from '@/components/jobDetail/JobDetailTopBar';
 import JogakTodoList from '@/components/jobDetail/JogakTodoList';
+import FirstCompleteEventModal from '@/components/modal/FirstCompleteEventModal';
 import NotificationModal from '@/components/NotificationModal';
 import { ERROR_CODES } from '@/constants/errorCode';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
@@ -26,6 +27,7 @@ import useToggleCompleteMultipleTodoMutation from '@/hooks/mutations/job_todolis
 import useUpdateTodoAlarmMutation from '@/hooks/mutations/job_todolist/useUpdateTodoAlarmMutation';
 import useJdQuery from '@/hooks/queries/useJdQuery';
 import useClientMeta from '@/hooks/useClientMeta';
+import { getEvent } from '@/lib/api/event/eventApi';
 import { HttpError } from '@/lib/HttpError';
 import { useBoundStore } from '@/stores/useBoundStore';
 import { JDDetail, TodoItem } from '@/types/jds';
@@ -77,11 +79,23 @@ export default function JobDetailPage() {
   const [isJdDeleting, setIsJdDeleting] = useState(false);
   const [showNotificationModal, setShowNotificationModal] = useState(false);
 
-  const { checkedTodoList, clearCheckedTodo, setSnackbar } = useBoundStore(
+  const [firstCompleteEventModalState, setFirstCompleteEventModalState] =
+    useState<'none' | 'ready' | 'open'>('none');
+  const [eventCode, setEventCode] = useState<string>('');
+
+  const {
+    checkedTodoList,
+    clearCheckedTodo,
+    setSnackbar,
+    allCompletedPieces,
+    setAllCompletedPieces,
+  } = useBoundStore(
     useShallow((state) => ({
       checkedTodoList: state.checkedTodoList,
       clearCheckedTodo: state.clearCheckedTodo,
       setSnackbar: state.setSnackbar,
+      allCompletedPieces: state.allCompletedPieces,
+      setAllCompletedPieces: state.setAllCompletedPieces,
     }))
   );
 
@@ -122,6 +136,14 @@ export default function JobDetailPage() {
       setTodosByCategory(grouped);
     }
   }, [jdData]);
+
+  useEffect(() => {
+    if (allCompletedPieces === 0) {
+      setFirstCompleteEventModalState('ready');
+      return;
+    }
+    setFirstCompleteEventModalState('none');
+  }, [allCompletedPieces]);
 
   // 알림 버튼 클릭 핸들러
   const handleAlarmButtonClick = () => {
@@ -195,6 +217,7 @@ export default function JobDetailPage() {
   const { handleJobEdit, handleMarkAsApplied, handleBookmarkToggle } =
     useJobActions();
 
+  // 조각 완료하기 버튼 클릭 핸들러
   const handleClickTodoComplete = () => {
     toggleCompleteMultipleTodoMutate(
       {
@@ -202,12 +225,27 @@ export default function JobDetailPage() {
         toDoListIds: checkedTodoList,
       },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           setSnackbar({
             type: 'success',
             message: '조각이 완료 처리되었어요!',
           });
           clearCheckedTodo();
+          setAllCompletedPieces((prev) => prev + checkedTodoList.length);
+
+          if (firstCompleteEventModalState === 'ready') {
+            try {
+              const eventRes = await getEvent();
+              if (eventRes.isFirst) {
+                setEventCode(eventRes.code);
+                setFirstCompleteEventModalState('open');
+              }
+            } catch (error) {
+              if (process.env.NODE_ENV === 'development') {
+                console.error('getEvent error: ', error);
+              }
+            }
+          }
         },
       }
     );
@@ -318,6 +356,14 @@ export default function JobDetailPage() {
           </div>
         )}
       </div>
+
+      {/* First complete event modal */}
+      <FirstCompleteEventModal
+        isOpen={firstCompleteEventModalState === 'open'}
+        onClose={() => setFirstCompleteEventModalState('none')}
+        eventCode={eventCode}
+      />
+
       {/* Delete confirmation modal */}
       <DeleteConfirmModal
         isOpen={isJdDeleting}
