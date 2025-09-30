@@ -6,7 +6,7 @@ import { fetchWithAuth } from '../fetchWithAuth';
 
 // 마이페이지 정보 조회
 export async function getMyProfile() {
-  const response = await fetchWithAuth('/api/member/my_page', {
+  const response = await fetchWithAuth('/api/member/my-page', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -20,7 +20,7 @@ export async function getMyProfile() {
 
 // 유저 정보 패치
 export async function updateMyProfile({ nickname }: { nickname: string }) {
-  const response = await fetchWithAuth('/api/member/my_page/update', {
+  const response = await fetchWithAuth('/api/member/my-page/update', {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export async function toggleUserNotification() {
 // 온보딩 완료 처리
 export async function updateIsOnboarded(onboarded: boolean) {
   const response = await fetchWithAuth(
-    '/api/member/my_page/update_is_onboarded',
+    '/api/member/my-page/update-is-onboarded',
     {
       method: 'PATCH',
       headers: {

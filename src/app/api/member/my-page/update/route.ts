@@ -31,7 +31,7 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
     console.error(
-      'Next server error [PATCH /api/member/my_page/update]: ',
+      'Next server error [PATCH /api/member/my-page/update]: ',
       error
     );
     return NextResponse.json(
