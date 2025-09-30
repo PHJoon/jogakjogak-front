@@ -12,14 +12,11 @@ import useSession from '@/hooks/useSession';
 import trackEvent from '@/utils/trackEventGA';
 
 import styles from './Header.module.css';
-import SurveyBanner from './SurveyBanner';
 
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const isLandingPage = pathname === '/';
-  const isOnboardingPage = pathname === '/onboarding';
-  const isLoginPage = pathname === '/login';
   const [headerBackgroundColor, setHeaderBackgroundColor] = useState<
     'transparent' | 'white'
   >('white');
@@ -91,9 +88,6 @@ export default function Header() {
           </button>
         )}
       </header>
-
-      {/* 설문조사 배너 */}
-      {!isLandingPage && !isOnboardingPage && !isLoginPage && <SurveyBanner />}
     </>
   );
 }
