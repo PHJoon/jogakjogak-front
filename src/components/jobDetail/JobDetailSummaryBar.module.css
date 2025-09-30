@@ -116,6 +116,10 @@
   color: var(--primaryjogak-1);
 }
 
+.completedCount.dayover {
+  color: var(--n-600);
+}
+
 .lastUpdatedText {
   font-family: var(--caption-1-medium-font-family);
   font-size: var(--caption-1-medium-font-size);

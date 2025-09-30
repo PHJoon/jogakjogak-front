@@ -22,6 +22,10 @@ export default function JobDetailSummaryBar({
   isTogglingAlarm,
   handleAlarmButtonClick,
 }: Props) {
+  const isDayover =
+    calculateDDay(jdDetail.endedAt) !== null &&
+    calculateDDay(jdDetail.endedAt)! < 0;
+
   return (
     <div className={styles.jobSummaryBarContainer}>
       <div className={styles.leftSection}>
@@ -47,7 +51,9 @@ export default function JobDetailSummaryBar({
             <div className={styles.progressCounter}>
               <div className={styles.progressCounterText}>이력서 완성도</div>
               <p className={styles.progressCount}>
-                <span className={styles.completedCount}>
+                <span
+                  className={`${styles.completedCount} ${isDayover ? styles.dayover : ''}`}
+                >
                   {jdDetail.completedPieces}
                 </span>
                 <span className={styles.totalCount}>
@@ -63,6 +69,7 @@ export default function JobDetailSummaryBar({
           <ProgressBar
             total={jdDetail.totalPieces}
             completed={jdDetail.completedPieces}
+            isDayover={isDayover}
           />
         </div>
         <button

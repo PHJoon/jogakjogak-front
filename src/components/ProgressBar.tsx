@@ -20,7 +20,7 @@ function ProgressSegment({
     <div
       className={`${styles.segment} ${isActive ? styles.active : styles.default} ${isDayover ? styles.dayover : ''} ${className}`}
     >
-      {isActiveLast && isActive && (
+      {isActiveLast && isActive && !isDayover && (
         <Image
           src={progressIcon}
           alt={'progress active icon'}
