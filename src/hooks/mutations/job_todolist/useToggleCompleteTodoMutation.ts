@@ -2,9 +2,14 @@ import { useMutation } from '@tanstack/react-query';
 
 import { toggleCompleteTodo } from '@/lib/api/jds/todoApi';
 import { queryClient } from '@/lib/queryClient';
+import { useBoundStore } from '@/stores/useBoundStore';
 import { JDDetail } from '@/types/jds';
 
 export default function useToggleCompleteTodoMutation() {
+  const setAllCompletedPieces = useBoundStore(
+    (state) => state.setAllCompletedPieces
+  );
+
   const { mutate: toggleCompleteTodoMutate } = useMutation({
     mutationFn: ({
       jdId,
@@ -53,7 +58,6 @@ export default function useToggleCompleteTodoMutation() {
       if (!context) return;
       queryClient.setQueryData(context.jobDetailKey, (prev?: JDDetail) => {
         if (!prev) return prev;
-        console.log('data from server', data, prev);
         return {
           ...prev,
           completedPieces: data.done
@@ -65,6 +69,8 @@ export default function useToggleCompleteTodoMutation() {
         };
       });
       queryClient.invalidateQueries({ queryKey: ['jds-list'] });
+
+      setAllCompletedPieces((prev) => (data.done ? prev + 1 : prev - 1));
     },
   });
 

@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useRef, useState } from 'react';
+import { useShallow } from 'zustand/shallow';
 
 import JobItem from '@/components/dashboard/JobItem';
 import JobItemAdd from '@/components/dashboard/JobItemAdd';
@@ -50,7 +51,12 @@ function DashboardContent() {
 
   const { data, isLoading, isFetching } = useJdsQuery();
 
-  const setResume = useBoundStore((state) => state.setResume);
+  const { setResume, setAllCompletedPieces } = useBoundStore(
+    useShallow((state) => ({
+      setResume: state.setResume,
+      setAllCompletedPieces: state.setAllCompletedPieces,
+    }))
+  );
 
   // 클라이언트 메타 설정
   useClientMeta(
@@ -62,6 +68,7 @@ function DashboardContent() {
     if (!data || isLoading || isFetching) return;
 
     setResume(data.resume);
+    setAllCompletedPieces(data.jdSummary.allCompletedPieces);
 
     (async () => {
       if (onboarding === 'true') {
@@ -79,7 +86,15 @@ function DashboardContent() {
         return;
       }
     })();
-  }, [data, setResume, router, onboarding, isLoading, isFetching]);
+  }, [
+    data,
+    setResume,
+    setAllCompletedPieces,
+    router,
+    onboarding,
+    isLoading,
+    isFetching,
+  ]);
 
   const handleResumeRegisterClick = () => {
     trackEvent({

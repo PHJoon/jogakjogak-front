@@ -32,12 +32,10 @@ export interface JdsResponse {
   pageSize: number;
   hasNext: boolean;
   hasPrevious: boolean;
-  postedJdCount: number;
   last: true;
   first: true;
+  postedJdCount: number;
   applyJdCount: number;
-  completedPieces: number;
-  totalPieces: number;
   perfectJdCount: number;
   allCompletedPieces: number;
   allTotalPieces: number;

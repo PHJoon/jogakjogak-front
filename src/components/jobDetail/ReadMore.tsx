@@ -35,7 +35,6 @@ export default function ReadMore({
 
       // unitless(예: "1.5") 또는 "normal" 대응
       const fontSizePx = parseFloat(cs.fontSize); // px
-      console.log(fontSizePx, cs.fontSize);
       const ratio = lh === 'normal' ? 1.2 : parseFloat(lh) || 1.2; // 관례상 normal≈1.2
       return fontSizePx * ratio;
     };
