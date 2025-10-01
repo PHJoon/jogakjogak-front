@@ -8,7 +8,7 @@ import JobItem from '@/components/dashboard/JobItem';
 import JobItemAdd from '@/components/dashboard/JobItemAdd';
 import ResumeRegistration from '@/components/dashboard/ResumeRegistration';
 import SortDropdown from '@/components/dashboard/SortDropdown';
-import NoResumeModal from '@/components/NoResumeModal';
+import NoJobItemModal from '@/components/NoJobItemModal';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
 import useJdsQuery from '@/hooks/queries/useJdsQuery';
 import useClientMeta from '@/hooks/useClientMeta';
@@ -39,7 +39,7 @@ function DashboardContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const onboarding = searchParams.get('onboarding');
-  const [showNoResumeModal, setShowNoResumeModal] = useState(false);
+  const [showNoJobItemModal, setShowNoJobItemModal] = useState(false);
 
   const {
     setSort,
@@ -81,8 +81,8 @@ function DashboardContent() {
         return;
       }
 
-      if (!data.resume) {
-        setShowNoResumeModal(true);
+      if (!data.jds.length) {
+        setShowNoJobItemModal(true);
         return;
       }
     })();
@@ -96,14 +96,9 @@ function DashboardContent() {
     isFetching,
   ]);
 
-  const handleResumeRegisterClick = () => {
-    trackEvent({
-      event: GAEvent.Resume.CREATE_PAGE_VIEW_ON_MODAL,
-      event_category: GACategory.RESUME,
-    });
-    setShowNoResumeModal(false);
-    // 이력서 등록 페이지로 이동
-    router.push('/resume/create');
+  const handleJobItemRegisterClick = () => {
+    setShowNoJobItemModal(false);
+    router.push('/job/create');
   };
 
   if (isLoading || paginationPending || isFetching) {
@@ -153,10 +148,10 @@ function DashboardContent() {
         </div>
       </main>
 
-      <NoResumeModal
-        isOpen={showNoResumeModal}
-        onClose={() => setShowNoResumeModal(false)}
-        onRegisterClick={handleResumeRegisterClick}
+      <NoJobItemModal
+        isOpen={showNoJobItemModal}
+        onClose={() => setShowNoJobItemModal(false)}
+        onRegisterClick={handleJobItemRegisterClick}
       />
     </>
   );

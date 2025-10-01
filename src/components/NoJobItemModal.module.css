@@ -73,12 +73,6 @@
   overflow: hidden;
 }
 
-.emptyImage {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
 .registerButton {
   width: 100%;
   height: 56px;
