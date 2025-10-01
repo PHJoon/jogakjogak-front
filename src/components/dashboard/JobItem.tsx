@@ -184,7 +184,7 @@ export default function JobItem({
                           handleMarkAsApplied(jd.jd_id, jd.applyAt);
                         }
                         if (action === 'delete') {
-                          handleJobDelete(jd.jd_id);
+                          setShowDeleteConfirmModal(true);
                         }
                       }}
                     />
