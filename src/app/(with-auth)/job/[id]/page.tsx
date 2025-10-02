@@ -256,20 +256,22 @@ export default function JobDetailPage() {
 
   return (
     <main className={styles.main}>
-      <div className={styles.topBar}>
-        <JobDetailTopBar
-          jdDetail={jdDetail}
-          handleClickJobUrl={handleClickJobUrl}
-          toggleBookmark={() =>
-            handleBookmarkToggle(jdDetail?.jd_id, !jdDetail?.bookmark)
-          }
-          onSelect={(action) => {
-            if (action === 'edit') return handleJobEdit(jdDetail?.jd_id);
-            if (action === 'delete') return setIsJdDeleting(true);
-            if (action === 'apply')
-              return handleMarkAsApplied(jdDetail?.jd_id, jdDetail?.applyAt);
-          }}
-        />
+      <div className={styles.topBarContainer}>
+        <div className={styles.topBar}>
+          <JobDetailTopBar
+            jdDetail={jdDetail}
+            handleClickJobUrl={handleClickJobUrl}
+            toggleBookmark={() =>
+              handleBookmarkToggle(jdDetail?.jd_id, !jdDetail?.bookmark)
+            }
+            onSelect={(action) => {
+              if (action === 'edit') return handleJobEdit(jdDetail?.jd_id);
+              if (action === 'delete') return setIsJdDeleting(true);
+              if (action === 'apply')
+                return handleMarkAsApplied(jdDetail?.jd_id, jdDetail?.applyAt);
+            }}
+          />
+        </div>
       </div>
 
       <div className={styles.content}>

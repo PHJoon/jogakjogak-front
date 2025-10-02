@@ -164,20 +164,25 @@
 
 /* Alarm button styles */
 .notificationBtn.alarmOn {
-  background-color: var(--primaryjogak-1);
-  border-color: var(--primaryjogak-1);
+  background-color: var(--n-0);
+  border: 1px solid var(--n-300);
 }
 
 .notificationBtn.alarmOn:hover {
-  background-color: var(--primaryjogak-2);
+  background-color: var(--n-100);
 }
 
 .notificationBtn.alarmOn .notificationBtnText {
-  color: #ffffff;
+  font-family: var(--body-2-normal-medium-font-family);
+  font-size: var(--body-2-normal-medium-font-size);
+  font-style: var(--body-2-normal-medium-font-style);
+  font-weight: var(--body-2-normal-medium-font-weight);
+  letter-spacing: var(--body-2-normal-medium-letter-spacing);
+  color: var(--n-800);
 }
 
 /* Mobile responsive */
-@media (max-width: 1079px) {
+@media (max-width: 1599px) {
   .jobSummaryBarContainer {
     flex-direction: column;
     height: auto;

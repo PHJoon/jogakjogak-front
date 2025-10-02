@@ -11,6 +11,13 @@
   padding-bottom: 60px;
 }
 
+.topBarContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .topBar {
   position: relative;
   box-sizing: border-box;
@@ -20,6 +27,7 @@
   max-width: 1561px;
   width: 100%;
   padding: 0 20px;
+  background-color: transparent;
 }
 
 .content {
@@ -86,6 +94,16 @@
   height: 48px;
 }
 
+@media screen and (max-width: 1599px) {
+  .topBarContainer {
+    background-color: var(--n-0);
+  }
+
+  .content {
+    max-width: 809px;
+  }
+}
+
 @media screen and (max-width: 1079px) {
   .main {
     padding-bottom: 150px;
@@ -118,7 +136,6 @@
 @media screen and (max-width: 547px) {
   .topBar {
     padding: 0 8px;
-    background-color: var(--n-0);
     margin-bottom: 8px;
   }
 }
