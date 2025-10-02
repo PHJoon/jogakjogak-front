@@ -90,6 +90,14 @@ export type JdsData = {
   resume: Resume | null;
   jds: JobDescription[];
   pageInfo: PageInfo;
+  isOnboarded: boolean;
+  jdSummary: {
+    postedJdCount: number;
+    applyJdCount: number;
+    perfectJdCount: number;
+    allCompletedPieces: number;
+    allTotalPieces: number;
+  };
 };
 
 export type CreateTodoRequestData = {

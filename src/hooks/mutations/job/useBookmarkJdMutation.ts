@@ -46,6 +46,8 @@ export default function useBookmarkJdMutation() {
               }
               return jd;
             }),
+            isOnboarded: previousJds.isOnboarded,
+            jdSummary: previousJds.jdSummary,
           }
         );
       }
@@ -83,9 +85,11 @@ export default function useBookmarkJdMutation() {
           : prev
       );
 
-      queryClient.invalidateQueries({
-        queryKey: ['jds-list'],
-      });
+      if (showOnly === 'bookmark') {
+        queryClient.invalidateQueries({
+          queryKey: ['jds-list'],
+        });
+      }
     },
   });
 

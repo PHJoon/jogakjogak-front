@@ -38,6 +38,8 @@ export default function useApplyJdMutation() {
             }
             return jd;
           }),
+          isOnboarded: previousJds.isOnboarded,
+          jdSummary: previousJds.jdSummary,
         });
       }
 
