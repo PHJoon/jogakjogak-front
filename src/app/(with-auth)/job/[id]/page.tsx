@@ -292,6 +292,7 @@ export default function JobDetailPage() {
                   icon={icon}
                   plusIcon={plusIcon}
                   todoList={todoList}
+                  originalTodoList={jdDetail.toDoLists}
                   jdId={jdDetail.jd_id}
                 />
               );
