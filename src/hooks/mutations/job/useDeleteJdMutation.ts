@@ -26,6 +26,8 @@ export default function useDeleteJdMutation() {
             resume: previousJds.resume,
             pageInfo: previousJds.pageInfo,
             jds: [...previousJds.jds].filter((jd) => jd.jd_id !== jobId),
+            isOnboarded: previousJds.isOnboarded,
+            jdSummary: previousJds.jdSummary,
           }
         );
       }
@@ -55,7 +57,7 @@ export default function useDeleteJdMutation() {
 
     onSuccess: (data, jobId, context) => {
       queryClient.removeQueries({ queryKey: ['jd', jobId], exact: true });
-      queryClient.invalidateQueries({ queryKey: ['jds-list'] });
+      // queryClient.invalidateQueries({ queryKey: ['jds-list'] });
     },
   });
 
