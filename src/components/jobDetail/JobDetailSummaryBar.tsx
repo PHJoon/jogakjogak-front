@@ -1,7 +1,6 @@
 import Image from 'next/image';
 
 import alarmIcon from '@/assets/images/ic_alarm_on_blue.svg';
-import alarmOnIcon from '@/assets/images/ic_alarm_on_white.svg';
 import { DDayChip } from '@/components/DDayChip';
 import { ProgressBar } from '@/components/ProgressBar';
 import { JDDetail } from '@/types/jds';
@@ -77,12 +76,10 @@ export default function JobDetailSummaryBar({
           onClick={handleAlarmButtonClick}
           disabled={isTogglingAlarm}
         >
-          <Image
-            src={jdDetail.alarmOn ? alarmOnIcon : alarmIcon}
-            alt={jdDetail.alarmOn ? '알림 중' : '알림 신청'}
-            width={16}
-            height={16}
-          />
+          {!jdDetail.alarmOn && (
+            <Image src={alarmIcon} alt={'알림 신청'} width={16} height={16} />
+          )}
+
           <div className={styles.notificationBtnText}>
             {jdDetail.alarmOn ? '알림 중' : '알림 신청'}
           </div>
