@@ -148,6 +148,7 @@ export default function JogakTodoList({
           onClose={() => setShowAddTodoModal(false)}
           jdId={jdId}
           mode="create"
+          listCategory={category as TodoCategory}
         />
       )}
     </div>
