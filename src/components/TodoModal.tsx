@@ -16,9 +16,9 @@ import ErrorMessage from './common/ErrorMessage';
 import styles from './TodoModal.module.css';
 
 const CATEGORY_LABEL = {
-  STRUCTURAL_COMPLEMENT_PLAN: '구조적 보완 계획',
-  CONTENT_EMPHASIS_REORGANIZATION_PROPOSAL: '내용 강조 및 재구성 제안',
-  SCHEDULE_MISC_ERROR: '일정 및 기타 오류',
+  STRUCTURAL_COMPLEMENT_PLAN: '필요한 경험과 역량',
+  CONTENT_EMPHASIS_REORGANIZATION_PROPOSAL: '내용 강조 및 재구성',
+  SCHEDULE_MISC_ERROR: '취업 일정 및 기타',
 };
 
 interface BaseProps {
@@ -29,6 +29,7 @@ interface BaseProps {
 
 interface CreateProps extends BaseProps {
   mode: 'create';
+  listCategory: TodoCategory;
 }
 
 interface EditProps extends BaseProps {
@@ -40,6 +41,7 @@ type Props = CreateProps | EditProps;
 
 export default function TodoModal(props: Props) {
   const { isOpen, onClose, jdId, mode } = props;
+  const listCategory = mode === 'create' ? props.listCategory : undefined;
   const todoItem = mode === 'edit' ? props.todoItem : undefined;
 
   const { handleSubmit, control } = useTodoItemForm({
@@ -51,7 +53,7 @@ export default function TodoModal(props: Props) {
             content: todoItem.content,
           }
         : {
-            category: 'STRUCTURAL_COMPLEMENT_PLAN' as TodoCategory,
+            category: listCategory as TodoCategory,
             title: '',
             content: '',
           },

@@ -2,14 +2,16 @@ import { todo } from 'node:test';
 
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import arrowIcon from '@/assets/images/ic_navigate_next.svg';
 import JogakTodoItem from '@/components/jobDetail/JogakTodoItem';
 import TodoModal from '@/components/TodoModal';
 import { useBoundStore } from '@/stores/useBoundStore';
-import { TodoItem } from '@/types/jds';
+import { TodoCategory, TodoItem } from '@/types/jds';
 
+import JogakTodoEmptyItem from './JogakTodoEmptyItem';
 import styles from './JogakTodoList.module.css';
 import NoResumeTodoItem from './NoResumeTodoItem';
 
@@ -20,6 +22,7 @@ interface Props {
   icon: string | StaticImport;
   plusIcon: string | StaticImport | null;
   todoList: TodoItem[];
+  originalTodoList: TodoItem[];
   jdId: number;
 }
 
@@ -30,11 +33,27 @@ export default function JogakTodoList({
   icon,
   plusIcon,
   todoList,
+  originalTodoList,
   jdId,
 }: Props) {
+  const router = useRouter();
   const [showAddTodoModal, setShowAddTodoModal] = useState(false);
   const [showTodoList, setShowTodoList] = useState(true);
   const resume = useBoundStore((state) => state.resume);
+
+  const hasItems = (category: TodoCategory) => {
+    return (
+      originalTodoList?.some((item) => item.category === category) ?? false
+    );
+  };
+
+  const allItemsDone = (category: TodoCategory) => {
+    return (
+      originalTodoList
+        ?.filter((item) => item.category === category)
+        .every((item) => item.done) ?? false
+    );
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -83,16 +102,43 @@ export default function JogakTodoList({
 
       {showTodoList && (
         <>
-          {todoList.map((todo) => (
-            <JogakTodoItem
-              key={todo.checklist_id}
-              category={category}
-              todoItem={todo}
-            />
-          ))}
+          {todoList.length > 0 &&
+            todoList.map((todo) => (
+              <JogakTodoItem
+                key={todo.checklist_id}
+                category={category}
+                todoItem={todo}
+              />
+            ))}
 
-          {category === 'CONTENT_EMPHASIS_REORGANIZATION_PROPOSAL' &&
+          {/* 이력서 없을 때 내용 강조 및 재구성 아이템 */}
+          {todoList.length === 0 &&
+            category === 'CONTENT_EMPHASIS_REORGANIZATION_PROPOSAL' &&
             resume === null && <NoResumeTodoItem jdId={jdId} />}
+
+          {/* 이력서가 존재하지만 내용 강조 및 재구성 카테고리가 하나도 없을 때 */}
+          {todoList.length === 0 &&
+            category === 'CONTENT_EMPHASIS_REORGANIZATION_PROPOSAL' &&
+            !hasItems(category as TodoCategory) &&
+            !!resume && (
+              <JogakTodoEmptyItem
+                title={'이력서 내용이 부족해서 표시할 내용이 없어요.'}
+                buttonLabel={'이력서 수정하러 가기'}
+                onClick={() => router.push('/resume/update')}
+              />
+            )}
+
+          {/* 다른 카테고리에서 모든 항목이 완료되었을 때 (완료 카테고리 제외) */}
+          {todoList.length === 0 &&
+            category !== 'COMPLETED_JOGAK' &&
+            hasItems(category as TodoCategory) &&
+            allItemsDone(category as TodoCategory) && (
+              <JogakTodoEmptyItem
+                title={'모든 조각을 완료했어요 ! 🎉'}
+                buttonLabel="다른 채용공고 분석하기"
+                onClick={() => router.push('/dashboard')}
+              />
+            )}
         </>
       )}
 
@@ -102,6 +148,7 @@ export default function JogakTodoList({
           onClose={() => setShowAddTodoModal(false)}
           jdId={jdId}
           mode="create"
+          listCategory={category as TodoCategory}
         />
       )}
     </div>

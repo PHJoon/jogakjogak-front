@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ERROR_CODES, ERROR_MESSAGES } from '@/constants/errorCode';
 import { API_BASE_URL } from '@/lib/config';
 
-export async function GET(request: NextRequest) {
+export async function PATCH(request: NextRequest) {
   try {
     const accessToken = request.cookies.get('access_token')?.value ?? null;
     if (!accessToken) {
@@ -15,19 +15,28 @@ export async function GET(request: NextRequest) {
         { status: 401 }
       );
     }
+    const body = await request.json();
+
     // 백엔드 서버로 요청
-    const response = await fetch(`${API_BASE_URL}/member/my-page`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(
+      `${API_BASE_URL}/member/my-page/update-is-onboarded`,
+      {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      }
+    );
 
     const data = await response.json();
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
-    console.error('Next server error [GET /api/member/my_page]: ', error);
+    console.error(
+      'Next server error [PATCH /api/member/my-page/update-is-onboarded]: ',
+      error
+    );
     return NextResponse.json(
       {
         errorCode: ERROR_CODES.NEXT_SERVER_ERROR,

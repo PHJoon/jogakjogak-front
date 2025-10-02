@@ -1,7 +1,6 @@
 import Image from 'next/image';
 
 import alarmIcon from '@/assets/images/ic_alarm_on_blue.svg';
-import alarmOnIcon from '@/assets/images/ic_alarm_on_white.svg';
 import { DDayChip } from '@/components/DDayChip';
 import { ProgressBar } from '@/components/ProgressBar';
 import { JDDetail } from '@/types/jds';
@@ -22,6 +21,10 @@ export default function JobDetailSummaryBar({
   isTogglingAlarm,
   handleAlarmButtonClick,
 }: Props) {
+  const isDayover =
+    calculateDDay(jdDetail.endedAt) !== null &&
+    calculateDDay(jdDetail.endedAt)! < 0;
+
   return (
     <div className={styles.jobSummaryBarContainer}>
       <div className={styles.leftSection}>
@@ -47,7 +50,9 @@ export default function JobDetailSummaryBar({
             <div className={styles.progressCounter}>
               <div className={styles.progressCounterText}>이력서 완성도</div>
               <p className={styles.progressCount}>
-                <span className={styles.completedCount}>
+                <span
+                  className={`${styles.completedCount} ${isDayover ? styles.dayover : ''}`}
+                >
                   {jdDetail.completedPieces}
                 </span>
                 <span className={styles.totalCount}>
@@ -63,6 +68,7 @@ export default function JobDetailSummaryBar({
           <ProgressBar
             total={jdDetail.totalPieces}
             completed={jdDetail.completedPieces}
+            isDayover={isDayover}
           />
         </div>
         <button
@@ -70,12 +76,10 @@ export default function JobDetailSummaryBar({
           onClick={handleAlarmButtonClick}
           disabled={isTogglingAlarm}
         >
-          <Image
-            src={jdDetail.alarmOn ? alarmOnIcon : alarmIcon}
-            alt={jdDetail.alarmOn ? '알림 중' : '알림 신청'}
-            width={16}
-            height={16}
-          />
+          {!jdDetail.alarmOn && (
+            <Image src={alarmIcon} alt={'알림 신청'} width={16} height={16} />
+          )}
+
           <div className={styles.notificationBtnText}>
             {jdDetail.alarmOn ? '알림 중' : '알림 신청'}
           </div>

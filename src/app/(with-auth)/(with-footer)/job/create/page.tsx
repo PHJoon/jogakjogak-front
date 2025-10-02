@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import arrowBackIcon from '@/assets/images/ic_arrow_back.svg';
 import JobPostingForm from '@/components/job/form/JobPostingForm';
@@ -24,6 +24,7 @@ export default function CreateJobPage() {
       : null;
   const { data, isLoading, isError, error } = useJdQuery({ jobId });
   const [nextJdId, setNextJdId] = useState<number | null>(null);
+  const [showLoadingModal, setShowLoadingModal] = useState(false);
 
   const { createJdMutate, isCreatePending, isCreateSuccess } =
     useCreateJdMutation();
@@ -32,6 +33,9 @@ export default function CreateJobPage() {
     createJdMutate(data, {
       onSuccess: (data) => {
         setNextJdId(data.jd_id);
+      },
+      onError: () => {
+        setShowLoadingModal(false);
       },
     });
   };
@@ -51,6 +55,18 @@ export default function CreateJobPage() {
     `채용공고 등록 | 조각조각`,
     'AI가 분석할 채용공고를 등록합니다.'
   );
+
+  useEffect(() => {
+    if (isCreatePending) {
+      setShowLoadingModal(true);
+      return;
+    }
+
+    if (isError || error) {
+      setShowLoadingModal(false);
+      return;
+    }
+  }, [isCreatePending, isError, error]);
 
   return (
     <>
@@ -88,7 +104,8 @@ export default function CreateJobPage() {
         </div>
       </main>
       <LoadingModal
-        isOpen={isCreatePending}
+        isOpen={showLoadingModal}
+        onClose={() => setShowLoadingModal(false)}
         isComplete={isCreateSuccess}
         onCompleteAnimationEnd={handleCompleteAnimationEnd}
       />
