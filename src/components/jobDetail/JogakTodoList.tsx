@@ -41,10 +41,11 @@ export default function JogakTodoList({
   const [showTodoList, setShowTodoList] = useState(true);
   const resume = useBoundStore((state) => state.resume);
 
-  // CONTENT_EMPHASIS_REORGANIZATION_PROPOSAL 카테고리에 할 일 항목이 하나도 없을 때
-  const hasNoCERP = originalTodoList?.some(
-    (item) => item.category === 'CONTENT_EMPHASIS_REORGANIZATION_PROPOSAL'
-  );
+  const hasItems = (category: TodoCategory) => {
+    return (
+      originalTodoList?.some((item) => item.category === category) ?? false
+    );
+  };
 
   const allItemsDone = (category: TodoCategory) => {
     return (
@@ -118,6 +119,7 @@ export default function JogakTodoList({
           {/* 이력서가 존재하지만 내용 강조 및 재구성 카테고리가 하나도 없을 때 */}
           {todoList.length === 0 &&
             category === 'CONTENT_EMPHASIS_REORGANIZATION_PROPOSAL' &&
+            !hasItems(category as TodoCategory) &&
             !!resume && (
               <JogakTodoEmptyItem
                 title={'이력서 내용이 부족해서 표시할 내용이 없어요.'}
@@ -128,8 +130,8 @@ export default function JogakTodoList({
 
           {/* 다른 카테고리에서 모든 항목이 완료되었을 때 (완료 카테고리 제외) */}
           {todoList.length === 0 &&
-            category !== 'CONTENT_EMPHASIS_REORGANIZATION_PROPOSAL' &&
             category !== 'COMPLETED_JOGAK' &&
+            hasItems(category as TodoCategory) &&
             allItemsDone(category as TodoCategory) && (
               <JogakTodoEmptyItem
                 title={'모든 조각을 완료했어요 ! 🎉'}
