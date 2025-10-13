@@ -38,8 +38,8 @@ export default function useJobPostingForm() {
     content: register('content', {
       required: '채용공고 내용을 입력해주세요.',
       minLength: {
-        value: 300,
-        message: '공고 내용은 300자 이상이어야 합니다.',
+        value: 200,
+        message: '공고 내용은 200자 이상이어야 합니다.',
       },
       maxLength: {
         value: 5000,
