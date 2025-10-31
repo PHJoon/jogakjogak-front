@@ -1,11 +1,13 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 import introImage from '@/assets/images/intro.png';
 import googleIcon from '@/assets/images/login_modal/ic_google.svg';
 import kakaoIcon from '@/assets/images/login_modal/ic_kakao.svg';
 import logo from '@/assets/images/logo.svg';
+import Button from '@/components/common/Button';
 import Header from '@/components/Header';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
 import trackEvent from '@/utils/trackEventGA';
@@ -13,6 +15,8 @@ import trackEvent from '@/utils/trackEventGA';
 import styles from './page.module.css';
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const apiUrl =
     process.env.NODE_ENV === 'development'
       ? process.env.NEXT_PUBLIC_TEST_API_BASE_URL
@@ -34,6 +38,10 @@ export default function LoginPage() {
       login_method: 'google',
     });
     window.location.href = `${apiUrl}/oauth2/authorization/google`;
+  };
+
+  const handleClickGuestLogin = () => {
+    router.push('/tour/dashboard');
   };
 
   return (
@@ -70,6 +78,14 @@ export default function LoginPage() {
               <Image src={kakaoIcon} alt="Kakao" width={18} height={18} />
               <span>카카오톡으로 시작하기</span>
             </button>
+
+            <Button
+              variant="neutral"
+              style={{ width: '100%', height: '48px' }}
+              onClick={handleClickGuestLogin}
+            >
+              로그인하지 않고 둘러보기
+            </Button>
           </div>
         </section>
 

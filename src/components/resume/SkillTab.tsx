@@ -15,7 +15,11 @@ import { ResumeFormInput } from '@/types/resume';
 
 import styles from './SkillTab.module.css';
 
-export default function SkillTab() {
+export default function SkillTab({
+  mode = 'edit',
+}: {
+  mode?: 'view' | 'edit';
+}) {
   const setSnackbar = useBoundStore((state) => state.setSnackbar);
   const { control } = useFormContext<ResumeFormInput>();
 
@@ -29,6 +33,7 @@ export default function SkillTab() {
   });
 
   const { debounced } = useDebouncedCallback(async (q: string) => {
+    if (mode === 'view') return;
     if (q.length < 3) return;
     try {
       const response = await searchSkillWords(q);

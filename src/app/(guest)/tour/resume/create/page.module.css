@@ -1,0 +1,108 @@
+.main {
+  position: relative;
+  padding-top: 64px;
+  background-color: var(--n-100);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.titleBar {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 48px;
+  padding: 12px 6px;
+  background-color: var(--n-0);
+}
+
+.titleBarContent {
+  display: flex;
+  max-width: 506px;
+  min-width: 343px;
+  width: 100%;
+  align-items: center;
+  gap: 14px;
+}
+
+.backButton {
+  all: unset;
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.backButton:hover {
+  background-color: var(--n-50);
+  border-radius: 10px;
+}
+
+.title {
+  font-family: var(--body-1-normal-bold-font-family);
+  font-size: var(--body-1-normal-bold-font-size);
+  font-style: var(--body-1-normal-bold-font-style);
+  font-weight: var(--body-1-normal-bold-font-weight);
+  letter-spacing: var(--body-1-normal-bold-letter-spacing);
+  color: var(--n-800);
+}
+
+.tabBar {
+  position: sticky;
+  top: 64px;
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: var(--n-0);
+}
+
+.tabBar.hidden {
+  transform: translateY(-100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.formContainer {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.tabContentWrapper {
+  background-color: var(--n-0);
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 32px 0;
+}
+
+.buttonContainer {
+  max-width: 506px;
+  min-width: 343px;
+  height: 91px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (max-width: 575px) {
+  .titleBar {
+    padding: 12px 12px;
+  }
+
+  .tabBar {
+    padding: 0 16px;
+  }
+
+  .tab {
+    padding: 10px 13px;
+  }
+}
