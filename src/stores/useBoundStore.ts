@@ -23,6 +23,7 @@ import {
 } from './slices/onboardingSlice';
 import { createResumeSlice, ResumeSlice } from './slices/resumeSlice';
 import { createSnackbarSlice, SnackbarSlice } from './slices/snackbarSlice';
+import { createTourDummySlice, TourDummySlice } from './slices/tourDummySlice';
 
 export const DEFAULT_STEP = 'profile' as const;
 export const DEFAULT_TAB = 'career' as const;
@@ -92,7 +93,8 @@ type BoundStore = ResumeSlice &
   GlobalErrorSlice &
   OnboardingSlice &
   JobDetailSlice &
-  JDSSummarySlice;
+  JDSSummarySlice &
+  TourDummySlice;
 
 type Persisted = Pick<
   BoundStore,
@@ -118,6 +120,7 @@ export const useBoundStore = create<BoundStore>()(
       ...createOnboardingSlice(...args),
       ...createJobDetailSlice(...args),
       ...createJDSSummarySlice(...args),
+      ...createTourDummySlice(...args),
     }),
     {
       name: 'bound-store',
