@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import dropdownIcon from '@/assets/images/ic_drop_down.svg';
 import {
@@ -36,10 +36,10 @@ export default function SortDropdown({ setSort, setShowOnly }: Props) {
   const params = useSearchParams();
   const paramsOption =
     params.get('sort') || params.get('showOnly') || 'createdAt,desc';
-  const [optionLabel, setOptionLabel] = useState(paramsOption);
+  // const [optionLabel, setOptionLabel] = useState(paramsOption);
 
   const handleClick = (option: Option) => {
-    setOptionLabel(option.label);
+    // setOptionLabel(option.label);
     if (option.type === 'sort') {
       setSort(option.value as Sort, { resetPage: true });
     }
@@ -86,7 +86,7 @@ export default function SortDropdown({ setSort, setShowOnly }: Props) {
       <DropdownButton>
         <div className={`${styles.sortButton} ${isOpen ? styles.open : ''}`}>
           <div className={styles.sortButtonText}>
-            {sortOptions.find((opt) => opt.value === optionLabel)?.label}
+            {sortOptions.find((opt) => opt.value === paramsOption)?.label}
           </div>
           <Image
             src={dropdownIcon}
@@ -100,7 +100,7 @@ export default function SortDropdown({ setSort, setShowOnly }: Props) {
       <DropdownMenu>
         <div className={styles.dropdownMenu}>
           {sortOptions.map((opt) => {
-            if (opt.value === optionLabel) return null;
+            if (opt.value === paramsOption) return null;
             return (
               <button
                 className={styles.sortSelect}
