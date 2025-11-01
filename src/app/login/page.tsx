@@ -27,7 +27,7 @@ export default function LoginPage() {
   const handleClickLogin = () => {
     setSnackbar({
       type: 'info',
-      message: '조각조각의 로그인 서비스가 종료되었어요 🥲',
+      message: '조각조각 서비스가 종료되었어요 🥲',
     });
     setTimeout(() => {
       setSnackbar({
