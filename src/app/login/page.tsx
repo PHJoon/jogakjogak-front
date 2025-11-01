@@ -10,17 +10,32 @@ import logo from '@/assets/images/logo.svg';
 import Button from '@/components/common/Button';
 import Header from '@/components/Header';
 import { GACategory, GAEvent } from '@/constants/gaEvent';
+import { useBoundStore } from '@/stores/useBoundStore';
 import trackEvent from '@/utils/trackEventGA';
 
 import styles from './page.module.css';
 
 export default function LoginPage() {
   const router = useRouter();
+  const setSnackbar = useBoundStore((state) => state.setSnackbar);
 
   const apiUrl =
     process.env.NODE_ENV === 'development'
       ? process.env.NEXT_PUBLIC_TEST_API_BASE_URL
       : process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  const handleClickLogin = () => {
+    setSnackbar({
+      type: 'info',
+      message: '조각조각의 로그인 서비스가 종료되었어요 🥲',
+    });
+    setTimeout(() => {
+      setSnackbar({
+        type: 'success',
+        message: '조각조각 둘러보기 버튼을 통해 자유롭게 둘러보실 수 있어요.',
+      });
+    }, 1000);
+  };
 
   const handleKakaoLogin = () => {
     trackEvent({
@@ -65,7 +80,7 @@ export default function LoginPage() {
           <div className={styles.loginButtonContainer}>
             <button
               className={`${styles.loginButton} ${styles.googleButton}`}
-              onClick={handleGoogleLogin}
+              onClick={handleClickLogin}
             >
               <Image src={googleIcon} alt="Google" width={18} height={18} />
               <span>Google 계정으로 시작하기</span>
@@ -73,7 +88,7 @@ export default function LoginPage() {
 
             <button
               className={`${styles.loginButton} ${styles.kakaoButton}`}
-              onClick={handleKakaoLogin}
+              onClick={handleClickLogin}
             >
               <Image src={kakaoIcon} alt="Kakao" width={18} height={18} />
               <span>카카오톡으로 시작하기</span>
@@ -84,7 +99,7 @@ export default function LoginPage() {
               style={{ width: '100%', height: '48px' }}
               onClick={handleClickGuestLogin}
             >
-              로그인하지 않고 둘러보기
+              조각조각 둘러보기
             </Button>
           </div>
         </section>
